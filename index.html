@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S21+ Home Server | Diário de Dev</title>
+    
+    <!-- Fonte moderna do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>📱 S21+ HOME SERVER <br> <span>Diário de Desenvolvimento Web</span></h1>
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Meu Diário</a></li>
+                <li><a href="#">Mapa da Rede</a></li>
+                <li><a href="#">Dúvidas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="network-map">
+        <h2>📍 O Caminho do Pacote</h2>
+        <p>Você está acessando este site através do seguinte trajeto:</p>
+        <div class="map-path">
+            <div class="node">🌐 Navegador</div>
+            <div class="arrow">➡️</div>
+            <div class="node">🌍 IP Público (homelabs21)</div>
+            <div class="arrow">➡️</div>
+            <div class="node">🛜 Roteador (NAT)</div>
+            <div class="arrow">➡️</div>
+            <div class="node">🔒 NGINX :8443 (S21+)</div>
+            <div class="arrow">➡️</div>
+            <div class="node">⚙️ API Python :8090</div>
+        </div>
+    </section>
+<!-- Nova Seção de Maquetes e Esquemas -->
+    <section class="schematics-section">
+        <h2>📐 Arquitetura Interna do S21+ (Blueprint)</h2>
+        <p>Esquema tático de como os serviços estão isolados e se comunicam dentro do Termux.</p>
+        
+        <div class="blueprint-grid">
+            <!-- Bloco NGINX -->
+            <div class="blueprint-card">
+                <div class="tech-icon">🌐</div>
+                <div class="tech-info">
+                    <h3>NGINX (Reverse Proxy)</h3>
+                    <span class="badge public">Porta 8443</span>
+                    <ul class="tech-details">
+                        <li>Recebe tráfego externo</li>
+                        <li>Gerencia certificados TLS/SSL</li>
+                        <li>Bloqueia acessos indevidos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Setas de conexão -->
+            <div class="connection">
+                <div class="line"></div>
+                <span>Encaminha para (Localhost)</span>
+                <div class="arrow-down">⬇️</div>
+            </div>
+
+            <!-- Bloco Python -->
+            <div class="blueprint-card">
+                <div class="tech-icon">🐍</div>
+                <div class="tech-info">
+                    <h3>Servidor Python (API)</h3>
+                    <span class="badge private">Porta 8090</span>
+                    <ul class="tech-details">
+                        <li>Isolado da Internet</li>
+                        <li>Lê /proc/meminfo</li>
+                        <li>Gera JSON de status</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bloco SSH (Separado, pois não faz parte do fluxo web) -->
+            <div class="blueprint-card ssh-block">
+                <div class="tech-icon">🔑</div>
+                <div class="tech-info">
+                    <h3>Servidor OpenSSH</h3>
+                    <span class="badge private">Porta 8022</span>
+                    <ul class="tech-details">
+                        <li>Acesso apenas pela LAN</li>
+                        <li>Autenticação via chave Ed25519</li>
+                        <li>Senhas desativadas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <main class="diary-section">
+            <h2>📝 Diário de Estudos</h2>
+            
+            <article class="post">
+                <h3>🔹 Deixando o Nano para trás</h3>
+                <p>Hoje comecei a usar o Git no Fedora para versionar meu código e criar um ambiente de desenvolvimento separado da produção...</p>
+                <button class="read-more">Continuar lendo</button>
+            </article>
+
+            <article class="post">
+                <h3>🔹 O mistério do arquivo "down"</h3>
+                <p>Como o supervisor runit funciona e o que aprendi sobre o comportamento de serviços no Android/Termux durante o boot...</p>
+                <button class="read-more">Continuar lendo</button>
+            </article>
+        </main>
+
+        <aside class="status-panel">
+            <h2>📊 Status do Servidor</h2>
+            <ul class="status-list">
+                <li>🟢 NGINX: <span id="nginx-status">Aguardando...</span></li>
+                <li>🟢 API Python: <span id="api-status">Aguardando...</span></li>
+                <li>⏳ Uptime: <span id="uptime">Aguardando...</span></li>
+                <li>💾 RAM Livre: <span id="ram">Aguardando...</span></li>
+                <li class="disabled-metric">🌡️ CPU: Indisponível (Sem root)</li>
+            </ul>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="question-box">
+            <h2>❓ Área de Dúvidas e Discussão</h2>
+            <p>Tem alguma dúvida sobre redes, Python, Linux ou infraestrutura?</p>
+            <form id="question-form">
+                <textarea placeholder="Escreva sua dúvida aqui para discutirmos..."></textarea>
+                <button type="submit">Enviar Dúvida</button>
+            </form>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

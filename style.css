@@ -1,0 +1,346 @@
+/* Paleta de Cores e Variáveis */
+:root {
+    --bg-color: #0f172a; /* Azul muito escuro, mais moderno que o preto puro */
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent-blue: #38bdf8;
+    --accent-green: #10b981;
+    --border-color: #334155;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Cabeçalho */
+header {
+    background-color: var(--card-bg);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent-blue);
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    margin: 0;
+    color: var(--accent-blue);
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+}
+
+header h1 span {
+    font-size: 1rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--accent-blue);
+}
+
+/* Estrutura Principal */
+.network-map, .container, footer {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+/* Mapa da Rede com Animação */
+.map-path {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    gap: 10px;
+}
+
+.node {
+    background-color: rgba(56, 189, 248, 0.1);
+    color: var(--accent-blue);
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.arrow {
+    font-size: 1.2em;
+    color: var(--text-muted);
+    animation: pulseArrow 1.5s infinite;
+}
+
+/* Animação do fluxo de dados */
+@keyframes pulseArrow {
+    0% { opacity: 0.3; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(5px); color: var(--accent-green); }
+    100% { opacity: 0.3; transform: translateX(0); }
+}
+
+/* Layout em Colunas */
+.container {
+    display: flex;
+    gap: 30px;
+    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.diary-section {
+    flex: 2;
+}
+
+/* Cards do Diário com efeito Hover */
+.post {
+    background-color: var(--card-bg);
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-blue);
+}
+
+.post h3 {
+    margin-top: 0;
+    color: var(--accent-blue);
+}
+
+button {
+    background-color: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0284c7;
+}
+
+/* Painel de Status */
+.status-panel {
+    flex: 1;
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+}
+
+.status-list li {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.disabled-metric {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Área de Perguntas */
+.question-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    background-color: #0f172a;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 100px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+/* Responsividade (Para Celular) */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .map-path {
+        flex-direction: column;
+    }
+    .arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    @keyframes pulseArrow {
+        0% { opacity: 0.3; transform: translateY(0) rotate(90deg); }
+        50% { opacity: 1; transform: translateY(5px) rotate(90deg); color: var(--accent-green); }
+        100% { opacity: 0.3; transform: translateY(0) rotate(90deg); }
+    }
+}
+
+/* =========================================
+   ESTILOS DO BLUEPRINT (MAQUETES E ESQUEMAS)
+   ========================================= */
+.schematics-section {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 30px;
+    /* Efeito de papel milimetrado escuro */
+    background-color: #0f172a;
+    background-image: 
+        linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--accent-blue);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.blueprint-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.blueprint-card {
+    display: flex;
+    align-items: center;
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(5px);
+    border: 2px dashed var(--accent-blue);
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    transition: all 0.3s ease;
+}
+
+.blueprint-card:hover {
+    background: rgba(30, 41, 59, 1);
+    border-style: solid;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.tech-icon {
+    font-size: 3rem;
+    margin-right: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.tech-info h3 {
+    margin: 0 0 10px 0;
+    color: var(--text-main);
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge.public {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    border: 1px solid var(--accent-green);
+}
+
+.badge.private {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+}
+
+.tech-details {
+    margin-top: 10px;
+    padding-left: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+    color: var(--accent-blue);
+    font-family: monospace;
+}
+
+.connection .line {
+    height: 30px;
+    width: 2px;
+    background-color: var(--accent-blue);
+    margin-bottom: 5px;
+}
+
+.ssh-block {
+    margin-top: 40px;
+    border-color: #f59e0b;
+}
+
+.ssh-block:hover {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
