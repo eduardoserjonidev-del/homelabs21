@@ -1,0 +1,1191 @@
+[1mdiff --git a/index.html b/index.html[m
+[1mindex 319fd92..160930d 100644[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@ -1,139 +1,241 @@[m
+ <!DOCTYPE html>[m
+ <html lang="pt-BR">[m
+ <head>[m
+[31m-    <meta charset="UTF-8">[m
+[31m-    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[31m-    <title>S21+ Home Server | Diário de Dev</title>[m
+[31m-    [m
+[31m-    <!-- Fonte moderna do Google -->[m
+[31m-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">[m
+[31m-    [m
+[31m-    <link rel="stylesheet" href="style.css">[m
+[32m+[m[32m<meta charset="UTF-8">[m
+[32m+[m[32m<meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m<title>S21+ Home Server — Diário do projeto</title>[m
+[32m+[m[32m<link rel="preconnect" href="https://fonts.googleapis.com">[m
+[32m+[m[32m<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">[m
+[32m+[m[32m<link rel="stylesheet" href="style.css">[m
+ </head>[m
+ <body>[m
+[31m-    <header>[m
+[31m-        <h1>📱 S21+ HOME SERVER <br> <span>Diário de Desenvolvimento Web</span></h1>[m
+[31m-        <nav>[m
+[31m-            <ul>[m
+[31m-                <li><a href="#">Início</a></li>[m
+[31m-                <li><a href="#">Meu Diário</a></li>[m
+[31m-                <li><a href="#">Mapa da Rede</a></li>[m
+[31m-                <li><a href="#">Dúvidas</a></li>[m
+[31m-            </ul>[m
+[31m-        </nav>[m
+[31m-    </header>[m
+[31m-[m
+[31m-    <section class="network-map">[m
+[31m-        <h2>📍 O Caminho do Pacote</h2>[m
+[31m-        <p>Você está acessando este site através do seguinte trajeto:</p>[m
+[31m-        <div class="map-path">[m
+[31m-            <div class="node">🌐 Navegador</div>[m
+[31m-            <div class="arrow">➡️</div>[m
+[31m-            <div class="node">🌍 IP Público (homelabs21)</div>[m
+[31m-            <div class="arrow">➡️</div>[m
+[31m-            <div class="node">🛜 Roteador (NAT)</div>[m
+[31m-            <div class="arrow">➡️</div>[m
+[31m-            <div class="node">🔒 NGINX :8443 (S21+)</div>[m
+[31m-            <div class="arrow">➡️</div>[m
+[31m-            <div class="node">⚙️ API Python :8090</div>[m
+[32m+[m
+[32m+[m[32m<div class="statusbar">[m
+[32m+[m[32m  <div class="statusbar-inner">[m
+[32m+[m[32m    <div class="statusbar-left"><span class="dot"></span> homelabs21.duckdns.org</div>[m
+[32m+[m[32m    <div class="statusbar-right">[m
+[32m+[m[32m      <span><b>host</b> S21+ · SM-G996B</span>[m
+[32m+[m[32m      <span><b>env</b> Termux · Android 15</span>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </div>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m[32m<div class="wrap">[m
+[32m+[m
+[32m+[m[32m  <section class="hero">[m
+[32m+[m[32m    <div class="eyebrow">▲ diário técnico do projeto</div>[m
+[32m+[m[32m    <h1>Um celular com a tela quebrada virou <em>servidor doméstico</em>.</h1>[m
+[32m+[m[32m    <p class="lede">Este é o registro de como um Samsung Galaxy S21+ fora de uso passou a hospedar um site, uma API e um domínio próprio — e de todos os problemas reais que apareceram no caminho.</p>[m
+[32m+[m
+[32m+[m[32m    <div class="hero-meta">[m
+[32m+[m[32m      <div><span>servidor</span><b>Galaxy S21+ 5G · SM-G996B</b></div>[m
+[32m+[m[32m      <div><span>ambiente</span><b>Termux sobre Android 15</b></div>[m
+[32m+[m[32m      <div><span>domínio</span><b>homelabs21.duckdns.org</b></div>[m
+[32m+[m[32m      <div><span>oficina</span><b>Fedora Linux</b></div>[m
+[32m+[m[32m    </div>[m
+[32m+[m
+[32m+[m[32m    <div class="diagram">[m
+[32m+[m[32m      <div class="diagram-title"><span>o caminho de uma requisição</span><span class="hint">clique em cada ponto</span></div>[m
+[32m+[m[32m      <div class="path" id="path"></div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="origem">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">como começou</div>[m
+[32m+[m[32m      <h2>De aparelho quebrado a laboratório de estudo</h2>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="origin">[m
+[32m+[m[32m      <div>[m
+[32m+[m[32m        <p>A tela do S21+ parou de funcionar, mas o resto do aparelho continuava perfeito: processador, memória, rede, bateria. Em vez de deixar guardado, a ideia foi transformá-lo em um pequeno servidor doméstico.</p>[m
+[32m+[m[32m        <p>A primeira decisão importante veio logo no início: em vez de tentar dar root ou trocar o sistema operacional, o Android ficou como está — sem root, com SELinux em modo Enforcing. Todo o trabalho de servidor acontece dentro do Termux, um ambiente Linux de usuário que roda sobre o próprio kernel do Android.</p>[m
+[32m+[m[32m        <p>Isso manteve o aparelho estável e, ao mesmo tempo, deu acesso a um ambiente Linux completo: SSH, Python, NGINX, supervisor de serviços, tudo isso sem tocar no sistema base.</p>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m      <div class="spec-table">[m
+[32m+[m[32m        <div><span>modelo</span><span>Galaxy S21+ 5G (SM-G996B)</span></div>[m
+[32m+[m[32m        <div><span>arquitetura</span><span>ARM64 / aarch64</span></div>[m
+[32m+[m[32m        <div><span>android</span><span>15</span></div>[m
+[32m+[m[32m        <div><span>kernel</span><span>Linux 5.4.242</span></div>[m
+[32m+[m[32m        <div><span>ram</span><span>~7,4 GB</span></div>[m
+[32m+[m[32m        <div><span>armazenamento</span><span>~106 GB em /data</span></div>[m
+[32m+[m[32m        <div class="flag"><span>root</span><span>desativado (proposital)</span></div>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="jornada">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">a jornada, passo a passo</div>[m
+[32m+[m[32m      <h2>Da primeira porta aberta ao HTTPS válido</h2>[m
+[32m+[m[32m      <p>Cada etapa resolveu um problema criado pela etapa anterior. A ordem importa — é assim que um servidor de verdade evolui.</p>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="timeline" id="timeline"></div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="bugs">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">nem tudo funcionou de primeira</div>[m
+[32m+[m[32m      <h2>Três problemas reais (e o que eles ensinaram)</h2>[m
+[32m+[m[32m      <p>Um homelab de verdade não é só configuração bem-sucedida — é também diagnóstico. Estes foram os bugs mais instrutivos do projeto.</p>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="bugs" id="bugs-grid"></div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="arquitetura">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">como tudo se encaixa hoje</div>[m
+[32m+[m[32m      <h2>Arquitetura atual do servidor</h2>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="rack">[m
+[32m+[m[32m      <div class="rack-row"><div class="rack-box"><b>Internet</b>visitante → homelabs21.duckdns.org</div></div>[m
+[32m+[m[32m      <div class="rack-arrow">↓ DNS / DDNS ↓</div>[m
+[32m+[m[32m      <div class="rack-row"><div class="rack-box"><b>Roteador Huawei</b>NAT · 443 público → 8443 privado</div></div>[m
+[32m+[m[32m      <div class="rack-arrow">↓ LAN 192.168.100.0/24 ↓</div>[m
+[32m+[m[32m      <div class="rack-nest">[m
+[32m+[m[32m        <b style="font-family:var(--sans);font-size:.95rem;">S21+ · 192.168.100.4</b>[m
+[32m+[m[32m        <div class="rack-inner-row">[m
+[32m+[m[32m          <div class="rack-chip">runit</div>[m
+[32m+[m[32m          <div class="rack-chip">sshd :8022</div>[m
+[32m+[m[32m          <div class="rack-chip">nginx :8443</div>[m
+[32m+[m[32m          <div class="rack-chip">crond → DuckDNS</div>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m        <div class="rack-arrow">↓</div>[m
+[32m+[m[32m        <div class="rack-inner-row">[m
+[32m+[m[32m          <div class="rack-chip">site estático</div>[m
+[32m+[m[32m          <div class="rack-chip">/api/status → reverse proxy</div>[m
+         </div>[m
+[31m-    </section>[m
+[31m-<!-- Nova Seção de Maquetes e Esquemas -->[m
+[31m-    <section class="schematics-section">[m
+[31m-        <h2>📐 Arquitetura Interna do S21+ (Blueprint)</h2>[m
+[31m-        <p>Esquema tático de como os serviços estão isolados e se comunicam dentro do Termux.</p>[m
+[31m-        [m
+[31m-        <div class="blueprint-grid">[m
+[31m-            <!-- Bloco NGINX -->[m
+[31m-            <div class="blueprint-card">[m
+[31m-                <div class="tech-icon">🌐</div>[m
+[31m-                <div class="tech-info">[m
+[31m-                    <h3>NGINX (Reverse Proxy)</h3>[m
+[31m-                    <span class="badge public">Porta 8443</span>[m
+[31m-                    <ul class="tech-details">[m
+[31m-                        <li>Recebe tráfego externo</li>[m
+[31m-                        <li>Gerencia certificados TLS/SSL</li>[m
+[31m-                        <li>Bloqueia acessos indevidos</li>[m
+[31m-                    </ul>[m
+[31m-                </div>[m
+[31m-            </div>[m
+[31m-[m
+[31m-            <!-- Setas de conexão -->[m
+[31m-            <div class="connection">[m
+[31m-                <div class="line"></div>[m
+[31m-                <span>Encaminha para (Localhost)</span>[m
+[31m-                <div class="arrow-down">⬇️</div>[m
+[31m-            </div>[m
+[31m-[m
+[31m-            <!-- Bloco Python -->[m
+[31m-            <div class="blueprint-card">[m
+[31m-                <div class="tech-icon">🐍</div>[m
+[31m-                <div class="tech-info">[m
+[31m-                    <h3>Servidor Python (API)</h3>[m
+[31m-                    <span class="badge private">Porta 8090</span>[m
+[31m-                    <ul class="tech-details">[m
+[31m-                        <li>Isolado da Internet</li>[m
+[31m-                        <li>Lê /proc/meminfo</li>[m
+[31m-                        <li>Gera JSON de status</li>[m
+[31m-                    </ul>[m
+[31m-                </div>[m
+[31m-            </div>[m
+[31m-[m
+[31m-            <!-- Bloco SSH (Separado, pois não faz parte do fluxo web) -->[m
+[31m-            <div class="blueprint-card ssh-block">[m
+[31m-                <div class="tech-icon">🔑</div>[m
+[31m-                <div class="tech-info">[m
+[31m-                    <h3>Servidor OpenSSH</h3>[m
+[31m-                    <span class="badge private">Porta 8022</span>[m
+[31m-                    <ul class="tech-details">[m
+[31m-                        <li>Acesso apenas pela LAN</li>[m
+[31m-                        <li>Autenticação via chave Ed25519</li>[m
+[31m-                        <li>Senhas desativadas</li>[m
+[31m-                    </ul>[m
+[31m-                </div>[m
+[31m-            </div>[m
+[32m+[m[32m        <div class="rack-arrow">↓</div>[m
+[32m+[m[32m        <div class="rack-inner-row">[m
+[32m+[m[32m          <div class="rack-chip">Python :8090 (127.0.0.1 apenas)</div>[m
+         </div>[m
+[31m-    </section>[m
+[31m-    <div class="container">[m
+[31m-        <main class="diary-section">[m
+[31m-            <h2>📝 Diário de Estudos</h2>[m
+[31m-            [m
+[31m-            <article class="post">[m
+[31m-                <h3>🔹 Deixando o Nano para trás</h3>[m
+[31m-                <p>Hoje comecei a usar o Git no Fedora para versionar meu código e criar um ambiente de desenvolvimento separado da produção...</p>[m
+[31m-                <button class="read-more">Continuar lendo</button>[m
+[31m-            </article>[m
+[31m-[m
+[31m-            <article class="post">[m
+[31m-                <h3>🔹 O mistério do arquivo "down"</h3>[m
+[31m-                <p>Como o supervisor runit funciona e o que aprendi sobre o comportamento de serviços no Android/Termux durante o boot...</p>[m
+[31m-                <button class="read-more">Continuar lendo</button>[m
+[31m-            </article>[m
+[31m-        </main>[m
+[31m-[m
+[31m-        <aside class="status-panel">[m
+[31m-            <h2>📊 Status do Servidor</h2>[m
+[31m-            <ul class="status-list">[m
+[31m-                <li>🟢 NGINX: <span id="nginx-status">Aguardando...</span></li>[m
+[31m-                <li>🟢 API Python: <span id="api-status">Aguardando...</span></li>[m
+[31m-                <li>⏳ Uptime: <span id="uptime">Aguardando...</span></li>[m
+[31m-                <li>💾 RAM Livre: <span id="ram">Aguardando...</span></li>[m
+[31m-                <li class="disabled-metric">🌡️ CPU: Indisponível (Sem root)</li>[m
+[31m-            </ul>[m
+[31m-        </aside>[m
+[32m+[m[32m      </div>[m
+     </div>[m
+[32m+[m[32m  </section>[m
+ [m
+[31m-    <footer>[m
+[31m-        <div class="question-box">[m
+[31m-            <h2>❓ Área de Dúvidas e Discussão</h2>[m
+[31m-            <p>Tem alguma dúvida sobre redes, Python, Linux ou infraestrutura?</p>[m
+[31m-            <form id="question-form">[m
+[31m-                <textarea placeholder="Escreva sua dúvida aqui para discutirmos..."></textarea>[m
+[31m-                <button type="submit">Enviar Dúvida</button>[m
+[31m-            </form>[m
+[31m-        </div>[m
+[31m-    </footer>[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="monitor">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">o painel de status</div>[m
+[32m+[m[32m      <h2>Uma API que prefere dizer "não sei" a inventar um número</h2>[m
+[32m+[m[32m      <p>O Android 15 restringe o acesso a partes do <code>/proc</code>. Quando a API não consegue medir algo com confiança — como o uso de CPU — ela retorna <code>null</code> em vez de simular um valor.</p>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="term">[m
+[32m+[m[32m      <div class="term-bar"><i></i><i></i><i></i><span>GET /api/status</span></div>[m
+[32m+[m[32m      <div class="term-body">{[m
+[32m+[m[32m  <span class="p">"status"</span>: <span class="ok">"online"</span>,[m
+[32m+[m[32m  <span class="p">"cpu"</span>: <span class="warn2">null</span>,<span class="c">  // não medível com segurança no Android</span>[m
+[32m+[m[32m  <span class="p">"ram"</span>: 63.2,[m
+[32m+[m[32m  <span class="p">"storage"</span>: 20.2,[m
+[32m+[m[32m  <span class="p">"uptime"</span>: <span class="ok">"13m"</span>,[m
+[32m+[m[32m  <span class="p">"services"</span>: {[m
+[32m+[m[32m    <span class="p">"nginx"</span>: <span class="ok">true</span>,[m
+[32m+[m[32m    <span class="p">"python"</span>: <span class="ok">true</span>[m
+[32m+[m[32m  }[m
+[32m+[m[32m}</div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="roadmap">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">estado atual</div>[m
+[32m+[m[32m      <h2>O que já roda e o que ainda está em aberto</h2>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="roadmap">[m
+[32m+[m[32m      <div class="done">[m
+[32m+[m[32m        <h3>concluído</h3>[m
+[32m+[m[32m        <ul>[m
+[32m+[m[32m          <li>Termux + estrutura ~/lab</li>[m
+[32m+[m[32m          <li>servidor Python + NGINX</li>[m
+[32m+[m[32m          <li>SSH por chave Ed25519 (sem senha)</li>[m
+[32m+[m[32m          <li>IP fixo via reserva DHCP</li>[m
+[32m+[m[32m          <li>runit supervisionando os serviços</li>[m
+[32m+[m[32m          <li>NAT/port forwarding 443 → 8443</li>[m
+[32m+[m[32m          <li>domínio homelabs21.duckdns.org</li>[m
+[32m+[m[32m          <li>DDNS automático a cada 5 min</li>[m
+[32m+[m[32m          <li>HTTPS válido via Let's Encrypt</li>[m
+[32m+[m[32m          <li>API de monitoramento + reverse proxy</li>[m
+[32m+[m[32m          <li>Fedora com VS Code, Git, Node.js</li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m      <div class="pending">[m
+[32m+[m[32m        <h3>em aberto</h3>[m
+[32m+[m[32m        <ul>[m
+[32m+[m[32m          <li>persistência completa após reboot</li>[m
+[32m+[m[32m          <li>corrigir falso positivo do monitor NGINX</li>[m
+[32m+[m[32m          <li>VPN para administração remota</li>[m
+[32m+[m[32m          <li>HSTS e vhost TLS padrão</li>[m
+[32m+[m[32m          <li>repositório Git + primeiro commit</li>[m
+[32m+[m[32m          <li>API em Node.js + SQLite</li>[m
+[32m+[m[32m          <li>sistema de comentários com moderação</li>[m
+[32m+[m[32m          <li>site como diário de estudos completo</li>[m
+[32m+[m[32m          <li>jogo "Entregue o Pacote"</li>[m
+[32m+[m[32m          <li>bloqueador de anúncios para a LAN</li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m  <hr class="rule">[m
+[32m+[m
+[32m+[m[32m  <section id="proximo">[m
+[32m+[m[32m    <div class="section-head">[m
+[32m+[m[32m      <div class="kicker">o próximo capítulo</div>[m
+[32m+[m[32m      <h2>Duas máquinas, dois papéis</h2>[m
+[32m+[m[32m      <p>A decisão mais recente do projeto: separar onde se aprende de onde se serve.</p>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="split">[m
+[32m+[m[32m      <div>[m
+[32m+[m[32m        <div class="tag2">oficina</div>[m
+[32m+[m[32m        <h3>Fedora</h3>[m
+[32m+[m[32m        <p style="max-width:none;font-size:.9rem;">Onde o código nasce, é testado e versionado antes de ir para produção.</p>[m
+[32m+[m[32m        <ul>[m
+[32m+[m[32m          <li>VS Code + Git 2.55</li>[m
+[32m+[m[32m          <li>Node.js 24 + npm</li>[m
+[32m+[m[32m          <li>Insomnia e SQLite (planejados)</li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m      <div>[m
+[32m+[m[32m        <div class="tag2">produção</div>[m
+[32m+[m[32m        <h3>S21+</h3>[m
+[32m+[m[32m        <p style="max-width:none;font-size:.9rem;">Onde o site, a API e o HTTPS realmente ficam no ar para o mundo.</p>[m
+[32m+[m[32m        <ul>[m
+[32m+[m[32m          <li>NGINX + site + /api/status</li>[m
+[32m+[m[32m          <li>DuckDNS + Let's Encrypt</li>[m
+[32m+[m[32m          <li>runit supervisionando tudo</li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m      </div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="split-arrow">Fedora → git commit → deploy → S21+</div>[m
+[32m+[m[32m  </section>[m
+[32m+[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m[32m<footer>[m
+[32m+[m[32m  <div class="wrap foot-grid">[m
+[32m+[m[32m    <p>Próximo marco: criar o repositório <code>s21-homelab</code> no Fedora e fazer o primeiro commit — antes de transformar o site em um diário de estudos público sobre DNS, NAT, Linux, HTTPS e desenvolvimento web.</p>[m
+[32m+[m[32m    <p class="mono">homelabs21.duckdns.org</p>[m
+[32m+[m[32m  </div>[m
+[32m+[m[32m</footer>[m
+[32m+[m
+[32m+[m[32m<div class="overlay" id="overlay">[m
+[32m+[m[32m  <div class="modal" role="dialog" aria-modal="true">[m
+[32m+[m[32m    <div class="modal-bar"><span id="modal-tag">detalhe</span><button class="modal-close focus-ring" id="modal-close" aria-label="Fechar">✕</button></div>[m
+[32m+[m[32m    <div class="modal-body" id="modal-body"></div>[m
+[32m+[m[32m  </div>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m[32m<script src="script.js"></script>[m
+ [m
+[31m-    <script src="script.js"></script>[m
+ </body>[m
+[31m-</html>[m
+\ No newline at end of file[m
+[32m+[m[32m</html>[m
+[1mdiff --git a/script.js b/script.js[m
+[1mindex 46df6f9..5012cec 100644[m
+[1m--- a/script.js[m
+[1m+++ b/script.js[m
+[36m@@ -1,44 +1,139 @@[m
+[31m-document.addEventListener("DOMContentLoaded", () => {[m
+[31m-    // Pegamos os elementos do HTML onde vamos injetar os dados[m
+[31m-    const nginxStatus = document.getElementById('nginx-status');[m
+[31m-    const apiStatus = document.getElementById('api-status');[m
+[31m-    const uptimeStr = document.getElementById('uptime');[m
+[31m-    const ramStr = document.getElementById('ram');[m
+[32m+[m[32m// ---------- data ----------[m
+[32m+[m[32mconst nodes = [[m
+[32m+[m[32m  {icon:'👤', label:'Visitante', tag:'ponto 1',[m
+[32m+[m[32m   title:'Visitante digita o endereço',[m
+[32m+[m[32m   text:'Alguém acessa homelabs21.duckdns.org no navegador. Nesse momento, nenhuma conexão foi feita ainda — o navegador só sabe o nome do domínio.',[m
+[32m+[m[32m   kv:[['protocolo','HTTPS'],['porta esperada','443']]},[m
+[32m+[m[32m  {icon:'🌐', label:'DNS / DDNS', tag:'ponto 2',[m
+[32m+[m[32m   title:'O nome vira um endereço IP',[m
+[32m+[m[32m   text:'O DuckDNS resolve o domínio para o IP público atual da casa. Como esse IP muda com o tempo, um script próprio (update-duckdns.sh) roda a cada 5 minutos via cron e mantém o registro atualizado — foi criado depois de um incidente real de mudança de IP que derrubou o domínio antigo.',[m
+[32m+[m[32m   kv:[['domínio atual','homelabs21.duckdns.org'],['atualização','a cada 5 min via cron']],[m
+[32m+[m[32m   block:'lab/scripts/update-duckdns.sh\n → lê domínio e token (~/.duckdns-token, permissão 600)\n → contata DuckDNS via HTTPS\n → registra resultado em lab/logs/duckdns.log'},[m
+[32m+[m[32m  {icon:'📡', label:'Roteador', tag:'ponto 3',[m
+[32m+[m[32m   title:'NAT: da porta pública para a privada',[m
+[32m+[m[32m   text:'O roteador Huawei recebe a conexão HTTPS na porta pública 443 e a encaminha para a porta 8443 do S21+ dentro da rede local. Isso existe porque o Termux, sem root, não consegue abrir portas privilegiadas como 443 diretamente.',[m
+[32m+[m[32m   kv:[['porta pública','443'],['porta privada','8443'],['ip do S21+','192.168.100.4 (reserva DHCP)']]},[m
+[32m+[m[32m  {icon:'📱', label:'S21+', tag:'ponto 4',[m
+[32m+[m[32m   title:'O servidor recebe a conexão',[m
+[32m+[m[32m   text:'Dentro do Termux, o runit supervisiona todos os serviços (sshd, nginx, crond, s21monitor). Se algum processo cai, o runit percebe e reinicia automaticamente.',[m
+[32m+[m[32m   kv:[['supervisor','runit'],['administração','SSH :8022 por chave Ed25519']]},[m
+[32m+[m[32m  {icon:'🔒', label:'NGINX', tag:'ponto 5',[m
+[32m+[m[32m   title:'HTTPS válido e o site estático',[m
+[32m+[m[32m   text:'O NGINX termina o TLS (certificado real emitido via acme.sh + Let\'s Encrypt, usando o desafio DNS-01 pela DuckDNS) e serve os arquivos do site. Rotas como /api/status são encaminhadas internamente para a API Python.',[m
+[32m+[m[32m   kv:[['tls','1.2 / 1.3 apenas'],['certificado','Let\'s Encrypt ECC']]},[m
+[32m+[m[32m  {icon:'🐍', label:'API Python', tag:'ponto 6',[m
+[32m+[m[32m   title:'O painel de status, isolado',[m
+[32m+[m[32m   text:'A API de monitoramento escuta só em 127.0.0.1:8090 — nunca fica exposta diretamente à internet. O navegador só enxerga /api/status através do NGINX, nunca a porta 8090 em si.',[m
+[32m+[m[32m   kv:[['escuta em','127.0.0.1:8090 (local apenas)'],['exposta via','reverse proxy /api/status']]},[m
+[32m+[m[32m];[m
+ [m
+[31m-    // Função que busca os dados da sua API[m
+[31m-    async function updateStatus() {[m
+[31m-        try {[m
+[31m-            // Tenta se conectar à API real do seu S21+ passando pelo DuckDNS e NGINX[m
+[31m-            const response = await fetch('https://homelabs21.duckdns.org/api/status');[m
+[31m-            const data = await response.json();[m
+[32m+[m[32mconst timeline = [[m
+[32m+[m[32m  {n:1, title:'Primeiro servidor em Python', tag:'servidor',[m
+[32m+[m[32m   text:'O marco inicial: um servidor HTTP simples em Python rodando na porta 8080, provando que o telefone conseguia responder a outros dispositivos da rede local.',[m
+[32m+[m[32m   block:'~/lab/python/server.py → porta 8080\n192.168.100.4:8080 acessível pela LAN'},[m
+[32m+[m[32m  {n:2, title:'IP fixo dentro da rede', tag:'rede',[m
+[32m+[m[32m   text:'Em vez de configurar um IP estático manualmente no Android, foi feita uma reserva DHCP no roteador. O roteador continua no comando, mas sempre entrega o mesmo endereço ao S21+.',[m
+[32m+[m[32m   block:'reserva DHCP → 192.168.100.4 (sempre o mesmo IP)'},[m
+[32m+[m[32m  {n:3, title:'SSH com autenticação por chave', tag:'acesso',[m
+[32m+[m[32m   text:'OpenSSH instalado no Termux, na porta 8022 (não privilegiada, já que não há root). A autenticação por senha foi desativada em favor de uma chave Ed25519 gerada no Fedora.',[m
+[32m+[m[32m   block:'PasswordAuthentication no\nKbdInteractiveAuthentication no\nPubkeyAuthentication yes\n\nalias no Fedora: ssh s21'},[m
+[32m+[m[32m  {n:4, title:'runit e serviços supervisionados', tag:'confiabilidade',[m
+[32m+[m[32m   text:'Com termux-services, os processos deixaram de ser iniciados manualmente. O runit passou a vigiar sshd, o servidor do laboratório, o monitor, o NGINX e o crond — reiniciando qualquer um que caísse.',[m
+[32m+[m[32m   block:'processo cai → runit percebe → processo é reiniciado'},[m
+[32m+[m[32m  {n:5, title:'NGINX como servidor web de verdade', tag:'infraestrutura',[m
+[32m+[m[32m   text:'O site deixou de depender diretamente do servidor Python. O NGINX passou a servir os arquivos estáticos, escutando em 8081 (HTTP) e 8443 (HTTPS) — sem precisar das portas privilegiadas 80/443.',[m
+[32m+[m[32m   block:'NGINX 1.31.5 → ~/lab/web/site/'},[m
+[32m+[m[32m  {n:6, title:'NAT e a primeira exposição pública', tag:'rede',[m
+[32m+[m[32m   text:'O roteador passou a encaminhar a porta pública 443 para a porta 8443 do S21+, permitindo o primeiro acesso externo real ao servidor.',[m
+[32m+[m[32m   block:'Internet :443 → NAT → 192.168.100.4:8443'},[m
+[32m+[m[32m  {n:7, title:'DuckDNS e um domínio que quebrou', tag:'incidente',[m
+[32m+[m[32m   text:'O domínio inicial (egamsolucoes.duckdns.org) parou de funcionar quando o IP público da casa mudou e o registro não foi atualizado. A solução foi migrar para um novo domínio, homelabs21.duckdns.org, e nunca mais depender de atualização manual.',[m
+[32m+[m[32m   block:'IP antigo:  200.103.2.224\nIP novo:    200.140.9.172\n→ domínio antigo ficou apontando para o IP errado'},[m
+[32m+[m[32m  {n:8, title:'DDNS automático via cron', tag:'automação',[m
+[32m+[m[32m   text:'Um script próprio passou a atualizar o DuckDNS a cada 5 minutos, guardando o token de acesso fora do código-fonte — uma decisão que já nasceu pensando no futuro versionamento com Git.',[m
+[32m+[m[32m   block:'*/5 * * * * update-duckdns.sh\ntoken em ~/.duckdns-token (permissão 600)'},[m
+[32m+[m[32m  {n:9, title:'HTTPS real com Let\'s Encrypt', tag:'segurança',[m
+[32m+[m[32m   text:'Certificado emitido via acme.sh usando o desafio DNS-01 pela DuckDNS. TLS restrito às versões 1.2 e 1.3, com cabeçalhos de segurança adicionados e informações do servidor ocultadas.',[m
+[32m+[m[32m   block:'ssl_protocols TLSv1.2 TLSv1.3;\nserver_tokens off;\n+ X-Frame-Options, CSP, Referrer-Policy'},[m
+[32m+[m[32m  {n:10, title:'Fedora vira o ambiente de desenvolvimento', tag:'decisão',[m
+[32m+[m[32m   text:'A decisão mais recente: separar onde se programa de onde se serve. O Fedora ganhou VS Code, Git e Node.js para ser a oficina; o S21+ ficou dedicado a produção.',[m
+[32m+[m[32m   block:'escrever → testar → git commit → deploy → S21+'},[m
+[32m+[m[32m];[m
+ [m
+[31m-            // Injeta os dados reais no HTML[m
+[31m-            nginxStatus.textContent = data.services.nginx ? "Online" : "Offline";[m
+[31m-            apiStatus.textContent = data.services.python ? "Online" : "Offline";[m
+[31m-            uptimeStr.textContent = data.uptime;[m
+[31m-            ramStr.textContent = data.ram + "%";[m
+[32m+[m[32mconst bugs = [[m
+[32m+[m[32m  {tag:'runit', title:'O arquivo "down" escondido',[m[41m [m
+[32m+[m[32m   text:'Depois de um desligamento, o NGINX estava cadastrado no runit mas não iniciava. A causa era um arquivo down dentro do diretório do serviço — no runit, isso significa "supervisione, mas mantenha desligado". Bastou removê-lo e rodar sv up nginx.',[m
+[32m+[m[32m   block:'$PREFIX/var/service/nginx/down\n→ removido\n→ sv up nginx\n→ status: run'},[m
+[32m+[m[32m  {tag:'DuckDNS', title:'O domínio que sumiu com o IP',[m
+[32m+[m[32m   text:'O IP público da casa mudou e o domínio antigo (egamsolucoes.duckdns.org) continuou apontando para o endereço anterior — e nem aparecia mais na conta usada. A solução foi criar um novo domínio e nunca mais depender de atualização manual.',[m
+[32m+[m[32m   block:'antes: egamsolucoes.duckdns.org (parado)\ndepois: homelabs21.duckdns.org (com DDNS automático)'},[m
+[32m+[m[32m  {tag:'monitor', title:'"nginx: true" mesmo desligado',[m
+[32m+[m[32m   text:'A checagem do NGINX usava pgrep -f nginx. Só que processos internos do runit (runsv, svlogd) também contêm a palavra "nginx" no nome, então a API dizia que o serviço estava no ar mesmo quando não estava — a diferença entre "existe um processo com esse nome" e "o serviço responde de verdade".',[m
+[32m+[m[32m   block:'pgrep -f nginx → falso positivo\nsolução planejada: checar 127.0.0.1:8443 de verdade'},[m
+[32m+[m[32m];[m
+ [m
+[31m-            // Muda a cor dependendo do status[m
+[31m-            nginxStatus.style.color = data.services.nginx ? "#4CAF50" : "#ff5252";[m
+[31m-            apiStatus.style.color = data.services.python ? "#4CAF50" : "#ff5252";[m
+[32m+[m[32m// ---------- render ----------[m
+[32m+[m[32mconst pathEl = document.getElementById('path');[m
+[32m+[m[32mnodes.forEach((n, i) => {[m
+[32m+[m[32m  const btn = document.createElement('button');[m
+[32m+[m[32m  btn.className = 'node focus-ring';[m
+[32m+[m[32m  btn.innerHTML = `<span class="box">${n.icon}</span><span class="label">${n.label}</span>`;[m
+[32m+[m[32m  btn.addEventListener('click', () => openModal(n.tag, n.title, n.text, n.kv, n.block));[m
+[32m+[m[32m  pathEl.appendChild(btn);[m
+[32m+[m[32m  if (i < nodes.length - 1) {[m
+[32m+[m[32m    const link = document.createElement('div');[m
+[32m+[m[32m    link.className = 'link';[m
+[32m+[m[32m    pathEl.appendChild(link);[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
+ [m
+[31m-        } catch (error) {[m
+[31m-            console.warn("Aviso: Testando localmente. Carregando dados simulados.");[m
+[31m-            [m
+[31m-            // Dados simulados para você visualizar enquanto desenvolve no Fedora[m
+[31m-            nginxStatus.textContent = "Online (Dev)";[m
+[31m-            apiStatus.textContent = "Online (Dev)";[m
+[31m-            uptimeStr.textContent = "15 dias, 3h (Dev)";[m
+[31m-            ramStr.textContent = "58.2%";[m
+[31m-            [m
+[31m-            nginxStatus.style.color = "#007ACC";[m
+[31m-            apiStatus.style.color = "#007ACC";[m
+[31m-        }[m
+[31m-    }[m
+[32m+[m[32mconst tlEl = document.getElementById('timeline');[m
+[32m+[m[32mtimeline.forEach(t => {[m
+[32m+[m[32m  const item = document.createElement('div');[m
+[32m+[m[32m  item.className = 'tl-item focus-ring';[m
+[32m+[m[32m  item.tabIndex = 0;[m
+[32m+[m[32m  item.innerHTML = `<div class="tl-num">${String(t.n).padStart(2,'0')}</div>[m
+[32m+[m[32m    <h3>${t.title}</h3>[m
+[32m+[m[32m    <p>${t.text.slice(0, 100)}${t.text.length > 100 ? '…' : ''}</p>[m
+[32m+[m[32m    <span class="tag"></span>`;[m
+[32m+[m[32m  item.addEventListener('click', () => openModal(t.tag, t.title, t.text, null, t.block));[m
+[32m+[m[32m  item.addEventListener('keypress', e => { if (e.key === 'Enter') item.click(); });[m
+[32m+[m[32m  tlEl.appendChild(item);[m
+[32m+[m[32m});[m
+ [m
+[31m-    // Chama a função assim que o site carrega[m
+[31m-    updateStatus();[m
+[31m-    [m
+[31m-    // Configura para atualizar os dados automaticamente a cada 30 segundos[m
+[31m-    setInterval(updateStatus, 30000);[m
+[31m-});[m
+\ No newline at end of file[m
+[32m+[m[32mconst bugsEl = document.getElementById('bugs-grid');[m
+[32m+[m[32mbugs.forEach(b => {[m
+[32m+[m[32m  const card = document.createElement('div');[m
+[32m+[m[32m  card.className = 'bug-card focus-ring';[m
+[32m+[m[32m  card.tabIndex = 0;[m
+[32m+[m[32m  card.innerHTML = `<div class="bug-head"><span class="flag"></span><span>${b.tag}</span></div>[m
+[32m+[m[32m    <h3>${b.title}</h3>[m
+[32m+[m[32m    <p>${b.text.slice(0, 90)}…</p>`;[m
+[32m+[m[32m  card.addEventListener('click', () => openModal(b.tag, b.title, b.text, null, b.block));[m
+[32m+[m[32m  card.addEventListener('keypress', e => { if (e.key === 'Enter') card.click(); });[m
+[32m+[m[32m  bugsEl.appendChild(card);[m
+[32m+[m[32m});[m
+[32m+[m
+[32m+[m[32m// ---------- modal ----------[m
+[32m+[m[32mconst overlay = document.getElementById('overlay');[m
+[32m+[m[32mconst modalBody = document.getElementById('modal-body');[m
+[32m+[m[32mconst modalTag = document.getElementById('modal-tag');[m
+[32m+[m
+[32m+[m[32mfunction openModal(tag, title, text, kv, block) {[m
+[32m+[m[32m  modalTag.textContent = tag;[m
+[32m+[m[32m  let kvHtml = '';[m
+[32m+[m[32m  if (kv) {[m
+[32m+[m[32m    kvHtml = kv.map(pair => `<div class="kv"><b>${pair[0]}</b><span>${pair[1]}</span></div>`).join('');[m
+[32m+[m[32m  }[m
+[32m+[m[32m  let blockHtml = '';[m
+[32m+[m[32m  if (block) {[m
+[32m+[m[32m    blockHtml = `<div class="block"><span class="lab">detalhe técnico</span>${block}</div>`;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  modalBody.innerHTML = `<h3>${title}</h3><p>${text}</p>${kvHtml}${blockHtml}`;[m
+[32m+[m[32m  overlay.classList.add('open');[m
+[32m+[m[32m  document.getElementById('modal-close').focus();[m
+[32m+[m[32m}[m
+[32m+[m[32mfunction closeModal() { overlay.classList.remove('open'); }[m
+[32m+[m[32mdocument.getElementById('modal-close').addEventListener('click', closeModal);[m
+[32m+[m[32moverlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });[m
+[32m+[m[32mdocument.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });[m
+[1mdiff --git a/style.css b/style.css[m
+[1mindex e12327d..e0770ac 100644[m
+[1m--- a/style.css[m
+[1m+++ b/style.css[m
+[36m@@ -1,346 +1,280 @@[m
+[31m-/* Paleta de Cores e Variáveis */[m
+[31m-:root {[m
+[31m-    --bg-color: #0f172a; /* Azul muito escuro, mais moderno que o preto puro */[m
+[31m-    --card-bg: #1e293b;[m
+[31m-    --text-main: #f8fafc;[m
+[31m-    --text-muted: #94a3b8;[m
+[31m-    --accent-blue: #38bdf8;[m
+[31m-    --accent-green: #10b981;[m
+[31m-    --border-color: #334155;[m
+[31m-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);[m
+[31m-}[m
+[31m-[m
+[31m-body {[m
+[31m-    font-family: 'Inter', sans-serif;[m
+[31m-    background-color: var(--bg-color);[m
+[31m-    color: var(--text-main);[m
+[31m-    margin: 0;[m
+[31m-    padding: 0;[m
+[31m-    line-height: 1.6;[m
+[31m-}[m
+[31m-[m
+[31m-/* Cabeçalho */[m
+[31m-header {[m
+[31m-    background-color: var(--card-bg);[m
+[31m-    padding: 30px 20px;[m
+[31m-    text-align: center;[m
+[31m-    border-bottom: 2px solid var(--accent-blue);[m
+[31m-    box-shadow: var(--shadow);[m
+[31m-}[m
+[31m-[m
+[31m-header h1 {[m
+[31m-    margin: 0;[m
+[31m-    color: var(--accent-blue);[m
+[31m-    font-size: 2.2rem;[m
+[31m-    letter-spacing: -1px;[m
+[31m-}[m
+[31m-[m
+[31m-header h1 span {[m
+[31m-    font-size: 1rem;[m
+[31m-    color: var(--text-muted);[m
+[31m-    display: block;[m
+[31m-    margin-top: 5px;[m
+[31m-    font-weight: 400;[m
+[31m-}[m
+[31m-[m
+[31m-nav ul {[m
+[31m-    list-style: none;[m
+[31m-    padding: 0;[m
+[31m-    display: flex;[m
+[31m-    justify-content: center;[m
+[31m-    gap: 30px;[m
+[31m-    margin-top: 20px;[m
+[31m-}[m
+[31m-[m
+[31m-nav a {[m
+[31m-    color: var(--text-muted);[m
+[31m-    text-decoration: none;[m
+[31m-    font-weight: 600;[m
+[31m-    transition: color 0.3s ease;[m
+[31m-}[m
+[31m-[m
+[31m-nav a:hover {[m
+[31m-    color: var(--accent-blue);[m
+[31m-}[m
+[31m-[m
+[31m-/* Estrutura Principal */[m
+[31m-.network-map, .container, footer {[m
+[31m-    max-width: 1100px;[m
+[31m-    margin: 30px auto;[m
+[31m-    padding: 25px;[m
+[31m-    background-color: var(--card-bg);[m
+[31m-    border-radius: 12px;[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-    box-shadow: var(--shadow);[m
+[31m-}[m
+[31m-[m
+[31m-/* Mapa da Rede com Animação */[m
+[31m-.map-path {[m
+[31m-    display: flex;[m
+[31m-    align-items: center;[m
+[31m-    justify-content: space-between;[m
+[31m-    flex-wrap: wrap;[m
+[31m-    background-color: #0f172a;[m
+[31m-    padding: 20px;[m
+[31m-    border-radius: 8px;[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-    gap: 10px;[m
+[31m-}[m
+[31m-[m
+[31m-.node {[m
+[31m-    background-color: rgba(56, 189, 248, 0.1);[m
+[31m-    color: var(--accent-blue);[m
+[31m-    padding: 12px 18px;[m
+[31m-    border-radius: 6px;[m
+[31m-    font-weight: 600;[m
+[31m-    border: 1px solid rgba(56, 189, 248, 0.3);[m
+[31m-}[m
+[31m-[m
+[31m-.arrow {[m
+[31m-    font-size: 1.2em;[m
+[31m-    color: var(--text-muted);[m
+[31m-    animation: pulseArrow 1.5s infinite;[m
+[31m-}[m
+[31m-[m
+[31m-/* Animação do fluxo de dados */[m
+[31m-@keyframes pulseArrow {[m
+[31m-    0% { opacity: 0.3; transform: translateX(0); }[m
+[31m-    50% { opacity: 1; transform: translateX(5px); color: var(--accent-green); }[m
+[31m-    100% { opacity: 0.3; transform: translateX(0); }[m
+[31m-}[m
+[31m-[m
+[31m-/* Layout em Colunas */[m
+[31m-.container {[m
+[31m-    display: flex;[m
+[31m-    gap: 30px;[m
+[31m-    background: none;[m
+[31m-    border: none;[m
+[31m-    padding: 0;[m
+[31m-    box-shadow: none;[m
+[31m-}[m
+[31m-[m
+[31m-.diary-section {[m
+[31m-    flex: 2;[m
+[31m-}[m
+[31m-[m
+[31m-/* Cards do Diário com efeito Hover */[m
+[31m-.post {[m
+[31m-    background-color: var(--card-bg);[m
+[31m-    padding: 25px;[m
+[31m-    margin-bottom: 20px;[m
+[31m-    border-radius: 12px;[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-    transition: transform 0.3s ease, box-shadow 0.3s ease;[m
+[31m-}[m
+[31m-[m
+[31m-.post:hover {[m
+[31m-    transform: translateY(-5px);[m
+[31m-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);[m
+[31m-    border-color: var(--accent-blue);[m
+[31m-}[m
+[31m-[m
+[31m-.post h3 {[m
+[31m-    margin-top: 0;[m
+[31m-    color: var(--accent-blue);[m
+[31m-}[m
+[31m-[m
+[31m-button {[m
+[31m-    background-color: var(--accent-blue);[m
+[31m-    color: #fff;[m
+[31m-    border: none;[m
+[31m-    padding: 10px 20px;[m
+[31m-    cursor: pointer;[m
+[31m-    border-radius: 6px;[m
+[31m-    font-weight: 600;[m
+[31m-    transition: background-color 0.3s ease;[m
+[31m-}[m
+[31m-[m
+[31m-button:hover {[m
+[31m-    background-color: #0284c7;[m
+[31m-}[m
+[31m-[m
+[31m-/* Painel de Status */[m
+[31m-.status-panel {[m
+[31m-    flex: 1;[m
+[31m-    background-color: var(--card-bg);[m
+[31m-    padding: 25px;[m
+[31m-    border-radius: 12px;[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-    height: fit-content;[m
+[31m-    position: sticky;[m
+[31m-    top: 20px;[m
+[31m-}[m
+[31m-[m
+[31m-.status-list {[m
+[31m-    list-style: none;[m
+[31m-    padding: 0;[m
+[31m-}[m
+[31m-[m
+[31m-.status-list li {[m
+[31m-    margin-bottom: 15px;[m
+[31m-    padding-bottom: 15px;[m
+[31m-    border-bottom: 1px solid var(--border-color);[m
+[31m-    display: flex;[m
+[31m-    justify-content: space-between;[m
+[31m-}[m
+[31m-[m
+[31m-.disabled-metric {[m
+[31m-    color: var(--text-muted);[m
+[31m-    font-style: italic;[m
+[31m-}[m
+[31m-[m
+[31m-/* Área de Perguntas */[m
+[31m-.question-box form {[m
+[31m-    display: flex;[m
+[31m-    flex-direction: column;[m
+[31m-    gap: 15px;[m
+[31m-}[m
+[31m-[m
+[31m-textarea {[m
+[31m-    background-color: #0f172a;[m
+[31m-    color: var(--text-main);[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-    padding: 15px;[m
+[31m-    border-radius: 8px;[m
+[31m-    min-height: 100px;[m
+[31m-    font-family: inherit;[m
+[31m-    resize: vertical;[m
+[31m-}[m
+[31m-[m
+[31m-textarea:focus {[m
+[31m-    outline: none;[m
+[31m-    border-color: var(--accent-blue);[m
+[31m-}[m
+[31m-[m
+[31m-/* Responsividade (Para Celular) */[m
+[31m-@media (max-width: 768px) {[m
+[31m-    .container {[m
+[31m-        flex-direction: column;[m
+[31m-    }[m
+[31m-    nav ul {[m
+[31m-        flex-direction: column;[m
+[31m-        gap: 15px;[m
+[31m-    }[m
+[31m-    .map-path {[m
+[31m-        flex-direction: column;[m
+[31m-    }[m
+[31m-    .arrow {[m
+[31m-        transform: rotate(90deg);[m
+[31m-        margin: 10px 0;[m
+[31m-    }[m
+[31m-    @keyframes pulseArrow {[m
+[31m-        0% { opacity: 0.3; transform: translateY(0) rotate(90deg); }[m
+[31m-        50% { opacity: 1; transform: translateY(5px) rotate(90deg); color: var(--accent-green); }[m
+[31m-        100% { opacity: 0.3; transform: translateY(0) rotate(90deg); }[m
+[31m-    }[m
+[31m-}[m
+[31m-[m
+[31m-/* =========================================[m
+[31m-   ESTILOS DO BLUEPRINT (MAQUETES E ESQUEMAS)[m
+[31m-   ========================================= */[m
+[31m-.schematics-section {[m
+[31m-    max-width: 1100px;[m
+[31m-    margin: 30px auto;[m
+[31m-    padding: 30px;[m
+[31m-    /* Efeito de papel milimetrado escuro */[m
+[31m-    background-color: #0f172a;[m
+[31m-    background-image: [m
+[31m-        linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),[m
+[31m-        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);[m
+[31m-    background-size: 20px 20px;[m
+[31m-    border-radius: 12px;[m
+[31m-    border: 1px solid var(--accent-blue);[m
+[31m-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);[m
+[31m-}[m
+[31m-[m
+[31m-.blueprint-grid {[m
+[31m-    display: flex;[m
+[31m-    flex-direction: column;[m
+[31m-    align-items: center;[m
+[31m-    margin-top: 30px;[m
+[31m-}[m
+[31m-[m
+[31m-.blueprint-card {[m
+[31m-    display: flex;[m
+[31m-    align-items: center;[m
+[31m-    background: rgba(30, 41, 59, 0.8);[m
+[31m-    backdrop-filter: blur(5px);[m
+[31m-    border: 2px dashed var(--accent-blue);[m
+[31m-    border-radius: 8px;[m
+[31m-    padding: 20px;[m
+[31m-    width: 100%;[m
+[31m-    max-width: 500px;[m
+[31m-    transition: all 0.3s ease;[m
+[31m-}[m
+[31m-[m
+[31m-.blueprint-card:hover {[m
+[31m-    background: rgba(30, 41, 59, 1);[m
+[31m-    border-style: solid;[m
+[31m-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);[m
+[31m-}[m
+[31m-[m
+[31m-.tech-icon {[m
+[31m-    font-size: 3rem;[m
+[31m-    margin-right: 20px;[m
+[31m-    background: rgba(0, 0, 0, 0.3);[m
+[31m-    padding: 15px;[m
+[31m-    border-radius: 8px;[m
+[31m-    border: 1px solid var(--border-color);[m
+[31m-}[m
+[31m-[m
+[31m-.tech-info h3 {[m
+[31m-    margin: 0 0 10px 0;[m
+[31m-    color: var(--text-main);[m
+[31m-}[m
+[31m-[m
+[31m-.badge {[m
+[31m-    font-size: 0.8rem;[m
+[31m-    padding: 3px 8px;[m
+[31m-    border-radius: 4px;[m
+[31m-    font-weight: bold;[m
+[31m-    text-transform: uppercase;[m
+[31m-}[m
+[31m-[m
+[31m-.badge.public {[m
+[31m-    background-color: rgba(16, 185, 129, 0.2);[m
+[31m-    color: var(--accent-green);[m
+[31m-    border: 1px solid var(--accent-green);[m
+[31m-}[m
+[31m-[m
+[31m-.badge.private {[m
+[31m-    background-color: rgba(245, 158, 11, 0.2);[m
+[31m-    color: #f59e0b;[m
+[31m-    border: 1px solid #f59e0b;[m
+[31m-}[m
+[31m-[m
+[31m-.tech-details {[m
+[31m-    margin-top: 10px;[m
+[31m-    padding-left: 20px;[m
+[31m-    color: var(--text-muted);[m
+[31m-    font-size: 0.9rem;[m
+[31m-}[m
+[31m-[m
+[31m-.connection {[m
+[31m-    display: flex;[m
+[31m-    flex-direction: column;[m
+[31m-    align-items: center;[m
+[31m-    margin: 15px 0;[m
+[31m-    color: var(--accent-blue);[m
+[31m-    font-family: monospace;[m
+[31m-}[m
+[31m-[m
+[31m-.connection .line {[m
+[31m-    height: 30px;[m
+[31m-    width: 2px;[m
+[31m-    background-color: var(--accent-blue);[m
+[31m-    margin-bottom: 5px;[m
+[31m-}[m
+[31m-[m
+[31m-.ssh-block {[m
+[31m-    margin-top: 40px;[m
+[31m-    border-color: #f59e0b;[m
+[31m-}[m
+[31m-[m
+[31m-.ssh-block:hover {[m
+[31m-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);[m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m:root{[m
+[32m+[m[32m    --bg:#0a0e13;[m
+[32m+[m[32m    --bg-soft:#0d131a;[m
+[32m+[m[32m    --surface:#121a24;[m
+[32m+[m[32m    --surface-2:#17212d;[m
+[32m+[m[32m    --border:#223042;[m
+[32m+[m[32m    --border-soft:#1a2530;[m
+[32m+[m[32m    --text:#e8eef4;[m
+[32m+[m[32m    --text-dim:#94a5b5;[m
+[32m+[m[32m    --text-faint:#57697a;[m
+[32m+[m[32m    --signal:#49e0c4;[m
+[32m+[m[32m    --signal-dim:rgba(73,224,196,.13);[m
+[32m+[m[32m    --warn:#e8a23d;[m
+[32m+[m[32m    --warn-dim:rgba(232,162,61,.13);[m
+[32m+[m[32m    --bug:#ea6b84;[m
+[32m+[m[32m    --bug-dim:rgba(234,107,132,.13);[m
+[32m+[m[32m    --sans:'IBM Plex Sans',system-ui,sans-serif;[m
+[32m+[m[32m    --display:'Space Grotesk','IBM Plex Sans',sans-serif;[m
+[32m+[m[32m    --mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  *{box-sizing:border-box;}[m
+[32m+[m[32m  html{scroll-behavior:smooth;}[m
+[32m+[m[32m  body{[m
+[32m+[m[32m    margin:0;[m
+[32m+[m[32m    background:var(--bg);[m
+[32m+[m[32m    background-image:[m
+[32m+[m[32m      linear-gradient(var(--border-soft) 1px, transparent 1px),[m
+[32m+[m[32m      linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);[m
+[32m+[m[32m    background-size:44px 44px;[m
+[32m+[m[32m    background-attachment:fixed;[m
+[32m+[m[32m    color:var(--text);[m
+[32m+[m[32m    font-family:var(--sans);[m
+[32m+[m[32m    line-height:1.55;[m
+[32m+[m[32m    -webkit-font-smoothing:antialiased;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  a{color:inherit;}[m
+[32m+[m[32m  ::selection{background:var(--signal-dim);color:var(--text);}[m
+[32m+[m
+[32m+[m[32m  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}[m
+[32m+[m[32m  section{padding:96px 0;}[m
+[32m+[m[32m  @media (max-width:640px){ section{padding:56px 0;} }[m
+[32m+[m
+[32m+[m[32m  h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;letter-spacing:-.01em;}[m
+[32m+[m[32m  p{color:var(--text-dim);max-width:62ch;}[m
+[32m+[m[32m  .lede{font-size:1.1rem;max-width:56ch;}[m
+[32m+[m
+[32m+[m[32m  code, .mono{font-family:var(--mono);}[m
+[32m+[m
+[32m+[m[32m  /* ---------- top status bar ---------- */[m
+[32m+[m[32m  .statusbar{[m
+[32m+[m[32m    border-bottom:1px solid var(--border-soft);[m
+[32m+[m[32m    background:rgba(10,14,19,.85);[m
+[32m+[m[32m    backdrop-filter:blur(6px);[m
+[32m+[m[32m    position:sticky;top:0;z-index:40;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .statusbar-inner{[m
+[32m+[m[32m    max-width:1040px;margin:0 auto;padding:12px 24px;[m
+[32m+[m[32m    display:flex;align-items:center;justify-content:space-between;[m
+[32m+[m[32m    font-family:var(--mono);font-size:.78rem;color:var(--text-faint);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .statusbar-left{display:flex;align-items:center;gap:10px;}[m
+[32m+[m[32m  .dot{width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 3px var(--signal-dim);}[m
+[32m+[m[32m  .statusbar-right{display:flex;gap:18px;}[m
+[32m+[m[32m  .statusbar-right span b{color:var(--text-dim);font-weight:500;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- hero ---------- */[m
+[32m+[m[32m  .hero{padding:88px 0 40px;}[m
+[32m+[m[32m  .hero .eyebrow{[m
+[32m+[m[32m    font-family:var(--mono);font-size:.82rem;color:var(--signal);[m
+[32m+[m[32m    display:flex;align-items:center;gap:8px;margin-bottom:22px;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .hero h1{font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.08;max-width:15ch;}[m
+[32m+[m[32m  .hero h1 em{font-style:normal;color:var(--signal);}[m
+[32m+[m[32m  .hero p.lede{margin-top:20px;font-size:1.15rem;}[m
+[32m+[m[32m  .hero-meta{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}[m
+[32m+[m[32m  .hero-meta div{font-family:var(--mono);font-size:.82rem;}[m
+[32m+[m[32m  .hero-meta div span{display:block;color:var(--text-faint);margin-bottom:3px;}[m
+[32m+[m[32m  .hero-meta div b{color:var(--text);font-weight:500;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- diagram (hero network path) ---------- */[m
+[32m+[m[32m  .diagram{[m
+[32m+[m[32m    margin-top:56px;[m
+[32m+[m[32m    border:1px solid var(--border);[m
+[32m+[m[32m    background:var(--surface);[m
+[32m+[m[32m    border-radius:6px;[m
+[32m+[m[32m    padding:30px 24px 26px;[m
+[32m+[m[32m    overflow-x:auto;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .diagram-title{font-family:var(--mono);font-size:.78rem;color:var(--text-faint);margin-bottom:22px;display:flex;justify-content:space-between;}[m
+[32m+[m[32m  .diagram-title .hint{color:var(--text-faint);}[m
+[32m+[m[32m  .path{display:flex;align-items:center;min-width:640px;}[m
+[32m+[m[32m  .node{[m
+[32m+[m[32m    flex:0 0 auto;text-align:center;cursor:pointer;[m
+[32m+[m[32m    background:none;border:none;color:inherit;font-family:var(--sans);[m
+[32m+[m[32m    padding:0;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .node .box{[m
+[32m+[m[32m    width:84px;height:64px;border:1px solid var(--border);border-radius:5px;[m
+[32m+[m[32m    background:var(--surface-2);display:flex;align-items:center;justify-content:center;[m
+[32m+[m[32m    font-size:1.5rem;transition:border-color .15s, transform .15s, background .15s;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .node:hover .box{border-color:var(--signal);background:var(--signal-dim);transform:translateY(-2px);}[m
+[32m+[m[32m  .node .label{display:block;margin-top:9px;font-size:.72rem;color:var(--text-dim);max-width:90px;font-family:var(--mono);}[m
+[32m+[m[32m  .link{[m
+[32m+[m[32m    flex:1 1 auto;height:1px;background:var(--border);position:relative;min-width:26px;margin:0 2px 20px;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .link::after{[m
+[32m+[m[32m    content:'';position:absolute;top:-2px;left:0;width:5px;height:5px;border-radius:50%;[m
+[32m+[m[32m    background:var(--signal);box-shadow:0 0 8px 1px var(--signal);[m
+[32m+[m[32m    animation:travel 3.2s linear infinite;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .link:nth-of-type(2)::after{animation-delay:.4s;}[m
+[32m+[m[32m  @keyframes travel{[m
+[32m+[m[32m    0%{left:0;opacity:0;}[m
+[32m+[m[32m    8%{opacity:1;}[m
+[32m+[m[32m    92%{opacity:1;}[m
+[32m+[m[32m    100%{left:calc(100% - 5px);opacity:0;}[m
+[32m+[m[32m  }[m
+[32m+[m[32m  @media (prefers-reduced-motion: reduce){[m
+[32m+[m[32m    .link::after{animation:none;opacity:.6;left:calc(50% - 2px);}[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  /* ---------- section headers ---------- */[m
+[32m+[m[32m  .section-head{margin-bottom:44px;}[m
+[32m+[m[32m  .section-head .kicker{font-family:var(--mono);font-size:.78rem;color:var(--signal);margin-bottom:10px;}[m
+[32m+[m[32m  .section-head h2{font-size:clamp(1.5rem,3vw,2rem);max-width:20ch;}[m
+[32m+[m[32m  .section-head p{margin-top:14px;}[m
+[32m+[m
+[32m+[m[32m  hr.rule{border:none;border-top:1px solid var(--border-soft);margin:0;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- origin two-col ---------- */[m
+[32m+[m[32m  .origin{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:start;}[m
+[32m+[m[32m  @media (max-width:760px){.origin{grid-template-columns:1fr;}}[m
+[32m+[m[32m  .origin p + p{margin-top:14px;}[m
+[32m+[m[32m  .spec-table{border:1px solid var(--border);border-radius:6px;overflow:hidden;font-family:var(--mono);font-size:.83rem;}[m
+[32m+[m[32m  .spec-table div{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border-soft);}[m
+[32m+[m[32m  .spec-table div:last-child{border-bottom:none;}[m
+[32m+[m[32m  .spec-table span:first-child{color:var(--text-faint);}[m
+[32m+[m[32m  .spec-table span:last-child{color:var(--text);}[m
+[32m+[m[32m  .spec-table div.flag{background:var(--warn-dim);}[m
+[32m+[m[32m  .spec-table div.flag span:last-child{color:var(--warn);}[m
+[32m+[m
+[32m+[m[32m  /* ---------- terminal mockup ---------- */[m
+[32m+[m[32m  .term{[m
+[32m+[m[32m    background:#0d1219;border:1px solid var(--border);border-radius:7px;overflow:hidden;[m
+[32m+[m[32m    box-shadow:0 20px 44px -24px rgba(0,0,0,.7);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .term-bar{[m
+[32m+[m[32m    display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border-soft);[m
+[32m+[m[32m    background:var(--surface);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .term-bar i{width:8px;height:8px;border-radius:50%;display:inline-block;}[m
+[32m+[m[32m  .term-bar i:nth-child(1){background:var(--bug);}[m
+[32m+[m[32m  .term-bar i:nth-child(2){background:var(--warn);}[m
+[32m+[m[32m  .term-bar i:nth-child(3){background:var(--signal);}[m
+[32m+[m[32m  .term-bar span{margin-left:8px;font-family:var(--mono);font-size:.74rem;color:var(--text-faint);}[m
+[32m+[m[32m  .term-body{padding:16px 18px;font-family:var(--mono);font-size:.8rem;color:#c7d3dd;white-space:pre-wrap;line-height:1.65;}[m
+[32m+[m[32m  .term-body .p{color:var(--signal);}[m
+[32m+[m[32m  .term-body .c{color:var(--text-faint);}[m
+[32m+[m[32m  .term-body .ok{color:var(--signal);}[m
+[32m+[m[32m  .term-body .warn2{color:var(--warn);}[m
+[32m+[m
+[32m+[m[32m  /* ---------- timeline ---------- */[m
+[32m+[m[32m  .timeline{position:relative;margin-top:8px;}[m
+[32m+[m[32m  .timeline::before{[m
+[32m+[m[32m    content:'';position:absolute;left:19px;top:6px;bottom:6px;width:1px;background:var(--border);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .tl-item{position:relative;padding:0 0 34px 56px;cursor:pointer;}[m
+[32m+[m[32m  .tl-item:last-child{padding-bottom:0;}[m
+[32m+[m[32m  .tl-num{[m
+[32m+[m[32m    position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;[m
+[32m+[m[32m    border:1px solid var(--border);background:var(--surface);[m
+[32m+[m[32m    display:flex;align-items:center;justify-content:center;[m
+[32m+[m[32m    font-family:var(--mono);font-size:.78rem;color:var(--text-dim);[m
+[32m+[m[32m    transition:border-color .15s, color .15s;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .tl-item:hover .tl-num{border-color:var(--signal);color:var(--signal);}[m
+[32m+[m[32m  .tl-item h3{font-size:1.05rem;font-family:var(--sans);font-weight:600;}[m
+[32m+[m[32m  .tl-item p{margin-top:6px;font-size:.92rem;}[m
+[32m+[m[32m  .tl-item .tag{[m
+[32m+[m[32m    display:inline-block;margin-top:10px;font-family:var(--mono);font-size:.72rem;[m
+[32m+[m[32m    color:var(--text-faint);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .tl-item .tag::before{content:'clique para detalhes →';}[m
+[32m+[m
+[32m+[m[32m  /* ---------- bug cards ---------- */[m
+[32m+[m[32m  .bugs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}[m
+[32m+[m[32m  @media (max-width:820px){.bugs{grid-template-columns:1fr;}}[m
+[32m+[m[32m  .bug-card{border:1px solid var(--border);border-radius:7px;background:var(--surface);overflow:hidden;cursor:pointer;transition:transform .15s, border-color .15s;}[m
+[32m+[m[32m  .bug-card:hover{transform:translateY(-3px);border-color:var(--bug);}[m
+[32m+[m[32m  .bug-head{padding:12px 14px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;gap:8px;}[m
+[32m+[m[32m  .bug-head .flag{width:6px;height:6px;border-radius:50%;background:var(--bug);}[m
+[32m+[m[32m  .bug-head span{font-family:var(--mono);font-size:.72rem;color:var(--text-faint);}[m
+[32m+[m[32m  .bug-card h3{padding:14px 14px 0;font-size:.98rem;}[m
+[32m+[m[32m  .bug-card p{padding:8px 14px 16px;font-size:.86rem;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- architecture nested boxes ---------- */[m
+[32m+[m[32m  .rack{border:1px solid var(--border);border-radius:8px;padding:22px;background:var(--surface);}[m
+[32m+[m[32m  .rack-row{display:flex;justify-content:center;margin-bottom:14px;}[m
+[32m+[m[32m  .rack-row:last-child{margin-bottom:0;}[m
+[32m+[m[32m  .rack-box{[m
+[32m+[m[32m    border:1px solid var(--border);border-radius:6px;padding:14px 18px;text-align:center;[m
+[32m+[m[32m    font-family:var(--mono);font-size:.78rem;color:var(--text-dim);background:var(--surface-2);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .rack-box b{display:block;color:var(--text);font-family:var(--sans);font-size:.92rem;font-weight:600;margin-bottom:3px;}[m
+[32m+[m[32m  .rack-arrow{text-align:center;color:var(--text-faint);font-family:var(--mono);margin:2px 0;}[m
+[32m+[m[32m  .rack-nest{[m
+[32m+[m[32m    border:1px dashed var(--border);border-radius:6px;padding:16px;margin-top:6px;[m
+[32m+[m[32m    display:flex;flex-direction:column;gap:10px;align-items:center;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .rack-inner-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}[m
+[32m+[m[32m  .rack-chip{[m
+[32m+[m[32m    border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-family:var(--mono);[m
+[32m+[m[32m    font-size:.72rem;color:var(--text-dim);background:var(--bg-soft);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  /* ---------- roadmap checklist ---------- */[m
+[32m+[m[32m  .roadmap{display:grid;grid-template-columns:1fr 1fr;gap:40px;}[m
+[32m+[m[32m  @media (max-width:720px){.roadmap{grid-template-columns:1fr;}}[m
+[32m+[m[32m  .roadmap h3{font-size:.95rem;font-family:var(--mono);margin-bottom:16px;display:flex;align-items:center;gap:8px;}[m
+[32m+[m[32m  .roadmap h3::before{content:'';width:8px;height:8px;border-radius:50%;}[m
+[32m+[m[32m  .roadmap .done h3::before{background:var(--signal);}[m
+[32m+[m[32m  .roadmap .pending h3::before{background:var(--warn);}[m
+[32m+[m[32m  .roadmap ul{list-style:none;margin:0;padding:0;}[m
+[32m+[m[32m  .roadmap li{[m
+[32m+[m[32m    display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-soft);[m
+[32m+[m[32m    font-size:.88rem;color:var(--text-dim);font-family:var(--mono);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .roadmap li:last-child{border-bottom:none;}[m
+[32m+[m[32m  .roadmap .done li::before{content:'[x]';color:var(--signal);flex:0 0 auto;}[m
+[32m+[m[32m  .roadmap .pending li::before{content:'[ ]';color:var(--warn);flex:0 0 auto;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- split oficina/servidor ---------- */[m
+[32m+[m[32m  .split{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:8px;overflow:hidden;}[m
+[32m+[m[32m  @media (max-width:720px){.split{grid-template-columns:1fr;}}[m
+[32m+[m[32m  .split > div{padding:28px 26px;}[m
+[32m+[m[32m  .split > div:first-child{border-right:1px solid var(--border);background:var(--surface);}[m
+[32m+[m[32m  @media (max-width:720px){.split > div:first-child{border-right:none;border-bottom:1px solid var(--border);}}[m
+[32m+[m[32m  .split > div:last-child{background:var(--surface-2);}[m
+[32m+[m[32m  .split .tag2{font-family:var(--mono);font-size:.72rem;color:var(--text-faint);margin-bottom:10px;}[m
+[32m+[m[32m  .split h3{font-size:1.15rem;margin-bottom:10px;}[m
+[32m+[m[32m  .split ul{margin:14px 0 0;padding-left:18px;color:var(--text-dim);font-size:.88rem;}[m
+[32m+[m[32m  .split li{margin-bottom:5px;}[m
+[32m+[m[32m  .split-arrow{[m
+[32m+[m[32m    text-align:center;font-family:var(--mono);color:var(--signal);font-size:.85rem;[m
+[32m+[m[32m    padding:12px 0;border-top:1px solid var(--border);background:var(--bg-soft);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  /* ---------- footer ---------- */[m
+[32m+[m[32m  footer{padding:60px 0 80px;border-top:1px solid var(--border-soft);}[m
+[32m+[m[32m  footer .foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}[m
+[32m+[m[32m  footer p{font-size:.85rem;}[m
+[32m+[m[32m  footer .mono{color:var(--text-faint);font-size:.78rem;}[m
+[32m+[m
+[32m+[m[32m  /* ---------- modal ---------- */[m
+[32m+[m[32m  .overlay{[m
+[32m+[m[32m    position:fixed;inset:0;background:rgba(6,9,12,.72);backdrop-filter:blur(2px);[m
+[32m+[m[32m    display:none;align-items:flex-start;justify-content:center;z-index:100;padding:60px 20px;overflow-y:auto;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .overlay.open{display:flex;}[m
+[32m+[m[32m  .modal{[m
+[32m+[m[32m    background:var(--surface);border:1px solid var(--border);border-radius:8px;[m
+[32m+[m[32m    max-width:560px;width:100%;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .modal-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border-soft);}[m
+[32m+[m[32m  .modal-bar span{font-family:var(--mono);font-size:.75rem;color:var(--text-faint);}[m
+[32m+[m[32m  .modal-close{background:none;border:1px solid var(--border);color:var(--text-dim);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:.9rem;line-height:1;}[m
+[32m+[m[32m  .modal-close:hover{border-color:var(--bug);color:var(--bug);}[m
+[32m+[m[32m  .modal-body{padding:22px 22px 26px;}[m
+[32m+[m[32m  .modal-body h3{font-size:1.15rem;margin-bottom:12px;}[m
+[32m+[m[32m  .modal-body p{max-width:none;font-size:.92rem;margin:0 0 12px;}[m
+[32m+[m[32m  .modal-body .kv{display:flex;gap:8px;font-family:var(--mono);font-size:.8rem;margin-bottom:6px;flex-wrap:wrap;}[m
+[32m+[m[32m  .modal-body .kv b{color:var(--signal);font-weight:500;}[m
+[32m+[m[32m  .modal-body .block{[m
+[32m+[m[32m    margin-top:14px;background:var(--bg-soft);border:1px solid var(--border-soft);border-radius:6px;[m
+[32m+[m[32m    padding:12px 14px;font-family:var(--mono);font-size:.78rem;color:var(--text-dim);white-space:pre-wrap;[m
+[32m+[m[32m  }[m
+[32m+[m[32m  .modal-body .block .lab{color:var(--text-faint);display:block;margin-bottom:6px;}[m
+[32m+[m
+[32m+[m[32m  .focus-ring:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}[m

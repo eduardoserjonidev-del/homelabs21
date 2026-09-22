@@ -1,222 +1,1593 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página em Manutenção</title>
-    <style>
-        /* Reset e estilo de fundo */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
 
-        body {
-            background-color: #1a1a24; /* Fundo noturno escuro */
-            color: #d8d8d8;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-        /* Container principal */
-        #maintenance-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
+  <title>Página em desenvolvimento — S21 Home Server</title>
 
-        /* Canvas com borda sutil simulando uma tela */
-        canvas {
-            background-color: #14141d;
-            border: 2px solid #333;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            image-rendering: pixelated; /* Mantém o aspecto retro do canvas */
-            max-width: 100%;
-        }
+  <style>
 
-        /* Estilo da legenda */
-        .caption {
-            font-size: 1.1rem;
-            text-align: center;
-            color: #888;
-            letter-spacing: 1px;
-        }
+    /* ==================================================
+       RESET
+       ================================================== */
 
-        /* Efeito de cursor piscando no final do texto */
-        .caption::after {
-            content: '█';
-            display: inline-block;
-            margin-left: 5px;
-            color: #555;
-            animation: blink 1s infinite;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        @keyframes blink {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0; }
-        }
-    </style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 24px;
+
+      background:
+        linear-gradient(
+          rgba(57, 255, 156, 0.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(57, 255, 156, 0.025) 1px,
+          transparent 1px
+        ),
+        #04090f;
+
+      background-size: 32px 32px;
+
+      color: #effff9;
+
+      font-family:
+        "Courier New",
+        monospace;
+    }
+
+
+    /* ==================================================
+       PÁGINA
+       ================================================== */
+
+    .page {
+      width: min(900px, 100%);
+
+      overflow: hidden;
+
+      border: 1px solid rgba(57, 255, 156, 0.30);
+
+      background: #07100f;
+
+      box-shadow:
+        0 0 45px rgba(57, 255, 156, 0.07),
+        7px 7px 0 #020504;
+    }
+
+
+    /* ==================================================
+       CABEÇALHO
+       ================================================== */
+
+    .topbar {
+      min-height: 44px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+
+      padding: 0 16px;
+
+      border-bottom:
+        1px solid rgba(57, 255, 156, 0.18);
+
+      background: #091713;
+
+      color: #67e8c2;
+
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+    }
+
+    .online {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+
+      background: #39ff9c;
+
+      box-shadow:
+        0 0 4px #39ff9c,
+        0 0 10px rgba(57, 255, 156, 0.8);
+
+      animation:
+        status-blink 1.2s steps(2) infinite;
+    }
+
+
+    /* ==================================================
+       ÁREA DA CENA
+       ================================================== */
+
+    .scene-wrapper {
+      padding: 28px;
+
+      display: flex;
+      justify-content: center;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(25, 60, 83, 0.27),
+          transparent 72%
+        );
+    }
+
+    .scene {
+      position: relative;
+
+      width: min(680px, 100%);
+      aspect-ratio: 16 / 9;
+
+      overflow: hidden;
+
+      border: 3px solid #183e34;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #071124 0%,
+          #0a1728 58%,
+          #171815 58%,
+          #171815 100%
+        );
+
+      box-shadow:
+        5px 5px 0 #020504;
+
+      image-rendering: pixelated;
+    }
+
+
+    /* ==================================================
+       LUZ NOTURNA
+       ================================================== */
+
+    .night-glow {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 18% 24%,
+          rgba(87, 133, 255, 0.12),
+          transparent 28%
+        );
+
+      pointer-events: none;
+    }
+
+
+    /* ==================================================
+       JANELA
+       ================================================== */
+
+    .room-window {
+      position: absolute;
+
+      left: 6%;
+      top: 8%;
+
+      width: 24%;
+      height: 38%;
+
+      overflow: hidden;
+
+      border: 5px solid #1a2f3f;
+
+      background: #08192f;
+
+      box-shadow:
+        inset 0 0 20px rgba(95, 140, 255, 0.12);
+    }
+
+    .window-line-v {
+      position: absolute;
+
+      left: 50%;
+      top: 0;
+
+      width: 4px;
+      height: 100%;
+
+      background: #1a2f3f;
+    }
+
+    .window-line-h {
+      position: absolute;
+
+      left: 0;
+      top: 52%;
+
+      width: 100%;
+      height: 4px;
+
+      background: #1a2f3f;
+    }
+
+
+    /* Lua */
+
+    .moon {
+      position: absolute;
+
+      right: 14%;
+      top: 12%;
+
+      width: 24px;
+      height: 24px;
+
+      background: #d5e4ff;
+
+      box-shadow:
+        0 0 12px rgba(177, 209, 255, 0.7),
+        0 0 24px rgba(100, 150, 255, 0.20);
+    }
+
+
+    /* ==================================================
+       CIDADE
+       ================================================== */
+
+    .city {
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 46%;
+    }
+
+    .building {
+      position: absolute;
+
+      bottom: 0;
+
+      background: #070e1c;
+    }
+
+    .building-1 {
+      left: 2%;
+      width: 17px;
+      height: 36px;
+    }
+
+    .building-2 {
+      left: 17%;
+      width: 23px;
+      height: 53px;
+    }
+
+    .building-3 {
+      left: 35%;
+      width: 16px;
+      height: 31px;
+    }
+
+    .building-4 {
+      left: 55%;
+      width: 25px;
+      height: 60px;
+    }
+
+    .building-5 {
+      left: 76%;
+      width: 19px;
+      height: 43px;
+    }
+
+    .building-6 {
+      right: 1%;
+      width: 27px;
+      height: 67px;
+    }
+
+
+    /* Janelinhas dos prédios */
+
+    .building::before,
+    .building::after {
+      content: "";
+
+      position: absolute;
+
+      width: 4px;
+      height: 4px;
+
+      background: #d99546;
+
+      box-shadow:
+        8px 12px 0 #c97f39,
+        0 24px 0 #d99546;
+    }
+
+    .building::before {
+      left: 5px;
+      top: 8px;
+    }
+
+    .building::after {
+      right: 5px;
+      top: 17px;
+
+      opacity: 0.55;
+    }
+
+
+    /* ==================================================
+       MONITOR
+       ================================================== */
+
+    .monitor {
+      position: absolute;
+
+      left: 34%;
+      top: 20%;
+
+      width: 25%;
+      height: 31%;
+
+      border: 5px solid #1b3a34;
+
+      background: #020907;
+
+      box-shadow:
+        5px 5px 0 #020403;
+    }
+
+    .monitor-screen {
+      position: absolute;
+
+      inset: 7px;
+
+      padding: 9px;
+
+      overflow: hidden;
+
+      background: #03130e;
+
+      color: #39ff9c;
+
+      font-size:
+        clamp(
+          0.43rem,
+          1.05vw,
+          0.72rem
+        );
+
+      line-height: 1.65;
+    }
+
+    .cursor {
+      display: inline-block;
+
+      width: 6px;
+      height: 9px;
+
+      margin-left: 2px;
+
+      vertical-align: middle;
+
+      background: #39ff9c;
+
+      animation:
+        cursor-blink 0.8s steps(1) infinite;
+    }
+
+
+    /* suporte do monitor */
+
+    .monitor-neck {
+      position: absolute;
+
+      left: 44.5%;
+      top: 51%;
+
+      width: 5%;
+      height: 7%;
+
+      background: #23302d;
+    }
+
+    .monitor-foot {
+      position: absolute;
+
+      left: 41.5%;
+      top: 57%;
+
+      width: 11%;
+      height: 3%;
+
+      background: #18231f;
+    }
+
+
+    /* ==================================================
+       BRILHO DO MONITOR
+       ================================================== */
+
+    .monitor-glow {
+      position: absolute;
+
+      left: 27%;
+      top: 12%;
+
+      width: 45%;
+      height: 55%;
+
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(57, 255, 156, 0.08),
+          transparent 68%
+        );
+
+      animation:
+        monitor-pulse 4s steps(3) infinite;
+    }
+
+
+    /* ==================================================
+       PRATELEIRA
+       ================================================== */
+
+    .shelf {
+      position: absolute;
+
+      right: 8%;
+      top: 15%;
+
+      width: 20%;
+      height: 7px;
+
+      background: #402b20;
+
+      box-shadow:
+        0 5px 0 #17100c;
+    }
+
+
+    /* livros */
+
+    .book {
+      position: absolute;
+
+      bottom: 7px;
+
+      width: 12px;
+
+      background: #183b32;
+
+      border: 2px solid #0d1f1a;
+    }
+
+    .book-1 {
+      left: 10%;
+      height: 37px;
+    }
+
+    .book-2 {
+      left: 30%;
+      height: 29px;
+
+      background: #243047;
+    }
+
+    .book-3 {
+      left: 50%;
+      height: 42px;
+
+      background: #4b3027;
+    }
+
+
+    /* ==================================================
+       PLANTA
+       ================================================== */
+
+    .plant-pot {
+      position: absolute;
+
+      right: 12%;
+      top: 7%;
+
+      width: 24px;
+      height: 20px;
+
+      background: #4b3023;
+
+      border-top: 4px solid #714830;
+    }
+
+    .leaf {
+      position: absolute;
+
+      width: 9px;
+      height: 16px;
+
+      background: #237047;
+    }
+
+    .leaf-1 {
+      left: 0;
+      top: -13px;
+
+      transform: rotate(-30deg);
+    }
+
+    .leaf-2 {
+      left: 8px;
+      top: -19px;
+    }
+
+    .leaf-3 {
+      right: 0;
+      top: -13px;
+
+      transform: rotate(30deg);
+    }
+
+
+    /* ==================================================
+       MESA
+       ================================================== */
+
+    .desk {
+      position: absolute;
+
+      left: 22%;
+      right: 7%;
+      bottom: 18%;
+
+      height: 18px;
+
+      background: #4d3325;
+
+      border-top: 5px solid #765039;
+
+      box-shadow:
+        0 8px 0 #18100c;
+    }
+
+    .desk-leg-left,
+    .desk-leg-right {
+      position: absolute;
+
+      top: 18px;
+
+      width: 16px;
+      height: 100px;
+
+      background: #211611;
+    }
+
+    .desk-leg-left {
+      left: 6%;
+    }
+
+    .desk-leg-right {
+      right: 6%;
+    }
+
+
+    /* ==================================================
+       TECLADO
+       ================================================== */
+
+    .keyboard {
+      position: absolute;
+
+      left: 48%;
+      bottom: 22%;
+
+      width: 19%;
+      height: 16px;
+
+      border: 2px solid #263b36;
+
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #1a2924 0 7px,
+          #0a1411 7px 9px
+        );
+
+      transform: skewX(-12deg);
+
+      box-shadow:
+        3px 3px 0 #090d0c;
+    }
+
+
+    /* ==================================================
+       MOUSE
+       ================================================== */
+
+    .mouse {
+      position: absolute;
+
+      left: 69%;
+      bottom: 21.5%;
+
+      width: 18px;
+      height: 25px;
+
+      border: 3px solid #253b35;
+
+      border-radius: 50% 50% 45% 45%;
+
+      background: #101916;
+    }
+
+
+    /* ==================================================
+       CANECA
+       ================================================== */
+
+    .mug {
+      position: absolute;
+
+      left: 31%;
+      bottom: 21%;
+
+      width: 27px;
+      height: 26px;
+
+      border: 3px solid #1c4439;
+
+      background: #0c201b;
+    }
+
+    .mug::after {
+      content: "";
+
+      position: absolute;
+
+      right: -10px;
+      top: 5px;
+
+      width: 8px;
+      height: 11px;
+
+      border: 3px solid #1c4439;
+      border-left: none;
+    }
+
+
+    /* vapor da caneca */
+
+    .steam {
+      position: absolute;
+
+      left: 8px;
+      top: -15px;
+
+      width: 4px;
+      height: 11px;
+
+      background: #78998e;
+
+      opacity: 0.5;
+
+      animation:
+        steam-rise 2s steps(4) infinite;
+    }
+
+
+    /* ==================================================
+       GATO PRETO
+       ================================================== */
+
+    .cat {
+      position: absolute;
+
+      right: 15%;
+      bottom: 22%;
+
+      width: 135px;
+      height: 70px;
+
+      animation:
+        cat-breathe 3.4s steps(3) infinite;
+    }
+
+
+    /* corpo */
+
+    .cat-body {
+      position: absolute;
+
+      left: 30px;
+      bottom: 8px;
+
+      width: 76px;
+      height: 31px;
+
+      background: #030404;
+
+      border:
+        3px solid #171b1a;
+
+      box-shadow:
+        inset -8px -5px 0 #070909;
+    }
+
+
+    /* parte traseira arredondada */
+
+    .cat-back {
+      position: absolute;
+
+      left: 65px;
+      bottom: 8px;
+
+      width: 46px;
+      height: 40px;
+
+      background: #030404;
+
+      border:
+        3px solid #171b1a;
+    }
+
+
+    /* cabeça */
+
+    .cat-head {
+      position: absolute;
+
+      left: 8px;
+      bottom: 11px;
+
+      width: 38px;
+      height: 34px;
+
+      background: #030404;
+
+      border:
+        3px solid #171b1a;
+    }
+
+
+    /* orelhas */
+
+    .ear-left,
+    .ear-right {
+      position: absolute;
+
+      top: -12px;
+
+      width: 0;
+      height: 0;
+
+      border-left:
+        8px solid transparent;
+
+      border-right:
+        8px solid transparent;
+
+      border-bottom:
+        15px solid #030404;
+    }
+
+    .ear-left {
+      left: 0;
+    }
+
+    .ear-right {
+      right: 0;
+    }
+
+
+    /* olho fechado */
+
+    .cat-eye {
+      position: absolute;
+
+      left: 12px;
+      top: 16px;
+
+      width: 12px;
+      height: 2px;
+
+      background: #84c867;
+
+      box-shadow:
+        0 0 4px rgba(132, 200, 103, 0.35);
+    }
+
+
+    /* focinho */
+
+    .cat-nose {
+      position: absolute;
+
+      left: 26px;
+      top: 20px;
+
+      width: 3px;
+      height: 3px;
+
+      background: #80575e;
+    }
+
+
+    /* patinhas */
+
+    .cat-paw-1,
+    .cat-paw-2 {
+      position: absolute;
+
+      bottom: 4px;
+
+      width: 20px;
+      height: 7px;
+
+      background: #030404;
+    }
+
+    .cat-paw-1 {
+      left: 37px;
+    }
+
+    .cat-paw-2 {
+      left: 53px;
+    }
+
+
+    /* rabo */
+
+    .cat-tail {
+      position: absolute;
+
+      right: 0;
+      bottom: 28px;
+
+      width: 40px;
+      height: 9px;
+
+      background: #030404;
+
+      transform-origin: left center;
+
+      animation:
+        tail-move 3.4s steps(3) infinite;
+    }
+
+
+    /* ==================================================
+       ZZZ
+       ================================================== */
+
+    .sleep {
+      position: absolute;
+
+      right: 9%;
+      bottom: 42%;
+
+      color: #39ff9c;
+
+      font-size: 15px;
+      font-weight: bold;
+
+      animation:
+        sleep-z 2.7s steps(5) infinite;
+    }
+
+
+    /* ==================================================
+       CHÃO / CABOS
+       ================================================== */
+
+    .cable {
+      position: absolute;
+
+      left: 39%;
+      bottom: 9%;
+
+      width: 38%;
+      height: 5px;
+
+      border-bottom:
+        3px solid #17251f;
+
+      transform:
+        rotate(3deg);
+    }
+
+
+    /* ==================================================
+       TEXTO DA PÁGINA
+       ================================================== */
+
+    .content {
+      padding:
+        10px
+        28px
+        31px;
+
+      text-align: center;
+    }
+
+    .status-label {
+      margin-bottom: 13px;
+
+      color: #67e8c2;
+
+      font-size: 0.70rem;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      max-width: 760px;
+
+      margin: auto;
+
+      color: #effff9;
+
+      font-size:
+        clamp(
+          1.35rem,
+          4vw,
+          2.25rem
+        );
+
+      line-height: 1.35;
+      letter-spacing: -1px;
+    }
+
+    h1 span {
+      color: #39ff9c;
+    }
+
+    .subtitle {
+      margin-top: 14px;
+
+      color: #718d84;
+
+      font-size: 0.80rem;
+    }
+
+
+    /* ==================================================
+       TERMINAL DE STATUS
+       ================================================== */
+
+    .status-terminal {
+      max-width: 590px;
+
+      margin:
+        23px auto 0;
+
+      padding:
+        12px 15px;
+
+      text-align: left;
+
+      border:
+        1px solid rgba(57, 255, 156, 0.14);
+
+      background:
+        rgba(0, 0, 0, 0.18);
+
+      color: #72978b;
+
+      font-size: 0.74rem;
+      line-height: 1.8;
+    }
+
+    .status-terminal strong {
+      color: #39ff9c;
+      font-weight: normal;
+    }
+
+
+    /* ==================================================
+       BOTÃO VOLTAR
+       ================================================== */
+
+    .back {
+      display: inline-block;
+
+      margin-top: 23px;
+
+      padding:
+        10px
+        15px;
+
+      border:
+        1px solid rgba(57, 255, 156, 0.35);
+
+      background:
+        rgba(57, 255, 156, 0.035);
+
+      color: #39ff9c;
+
+      text-decoration: none;
+
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .back:hover {
+      border-color: #39ff9c;
+
+      background:
+        rgba(57, 255, 156, 0.10);
+
+      box-shadow:
+        0 0 12px rgba(57, 255, 156, 0.16);
+    }
+
+
+    /* ==================================================
+       ANIMAÇÕES
+       ================================================== */
+
+    @keyframes status-blink {
+
+      0%,
+      49% {
+        opacity: 1;
+      }
+
+      50%,
+      100% {
+        opacity: 0.25;
+      }
+
+    }
+
+
+    @keyframes cursor-blink {
+
+      0%,
+      49% {
+        opacity: 1;
+      }
+
+      50%,
+      100% {
+        opacity: 0;
+      }
+
+    }
+
+
+    @keyframes monitor-pulse {
+
+      0%,
+      100% {
+        opacity: 0.65;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+    }
+
+
+    /* respiração bem discreta do gato */
+
+    @keyframes cat-breathe {
+
+      0%,
+      100% {
+        transform:
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          translateY(-2px);
+      }
+
+    }
+
+
+    /* rabo mexendo lentamente */
+
+    @keyframes tail-move {
+
+      0%,
+      100% {
+        transform:
+          rotate(8deg);
+      }
+
+      50% {
+        transform:
+          rotate(-6deg);
+      }
+
+    }
+
+
+    /* ZZZ subindo */
+
+    @keyframes sleep-z {
+
+      0% {
+        opacity: 0;
+
+        transform:
+          translate(
+            0,
+            8px
+          );
+      }
+
+      25% {
+        opacity: 1;
+      }
+
+      65% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+
+        transform:
+          translate(
+            12px,
+            -28px
+          );
+      }
+
+    }
+
+
+    /* vapor da caneca */
+
+    @keyframes steam-rise {
+
+      0% {
+        opacity: 0;
+
+        transform:
+          translateY(5px);
+      }
+
+      40% {
+        opacity: 0.55;
+      }
+
+      100% {
+        opacity: 0;
+
+        transform:
+          translateY(-10px);
+      }
+
+    }
+
+
+    /* ==================================================
+       CELULAR
+       ================================================== */
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 8px;
+      }
+
+      .scene-wrapper {
+        padding: 12px;
+      }
+
+      .scene {
+        aspect-ratio: 4 / 3;
+      }
+
+      .room-window {
+        width: 31%;
+        height: 35%;
+      }
+
+      .monitor {
+        left: 33%;
+        width: 29%;
+      }
+
+      .cat {
+        right: 6%;
+
+        transform:
+          scale(0.82);
+
+        transform-origin:
+          right bottom;
+      }
+
+      .sleep {
+        right: 3%;
+      }
+
+      .keyboard {
+        left: 47%;
+        width: 23%;
+      }
+
+      .topbar {
+        font-size: 0.61rem;
+      }
+
+      .content {
+        padding:
+          8px
+          15px
+          24px;
+      }
+
+    }
+
+
+    /* ==================================================
+       REDUÇÃO DE MOVIMENTO
+       ================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation:
+          none !important;
+      }
+
+    }
+
+  </style>
 </head>
+
+
 <body>
 
-    <div id="maintenance-box">
-        <canvas id="catCanvas" width="500" height="250"></canvas>
-        <p class="caption">esta pagina ainda não está pronta, o desenvolvedor está dormindo</p>
-    </div>
+  <main class="page">
 
-    <script>
-        const canvas = document.getElementById('catCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Tamanho de cada "pixel" do nosso desenho
-        const PIXEL_SIZE = 8;
-        
-        // Posição inicial do gato (fora da tela à esquerda)
-        let catX = -150; 
-        const catY = 120; // Posição vertical fixa
-        
-        let frameCount = 0;
-        let isSleeping = false;
-        let zzzParticles = []; // Array para guardar as partículas de sono
 
-        // Mapeamento de cores do Sprite
-        // ' ' = transparente, '#' = pelo preto, 'Y' = olho aberto, 'P' = focinho, '-' = olho fechado
-        const colorMap = {
-            '#': '#0f0f0f',
-            'Y': '#ffcc00',
-            'P': '#ff7777',
-            '-': '#333333'
-        };
+    <!-- =================================================
+         CABEÇALHO
+         ================================================= -->
 
-        // Matrizes desenhando o gato quadro a quadro (16x11)
-        const sprites = {
-            walk1: [
-                "           #  # ",
-                "           ## ##",
-                "           #####",
-                "     ###########",
-                "   #########Y#Y#",
-                "  ##############",
-                "  ##########P## ",
-                "   ###########  ",
-                "    ##     ##   ",
-                "    ##     ##   ",
-                "    #      #    "
-            ],
-            walk2: [
-                "           #  # ",
-                "           ## ##",
-                "           #####",
-                "     ###########",
-                "   #########Y#Y#",
-                "  ##############",
-                "  ##########P## ",
-                "   ###########  ",
-                "     ##     ##  ",
-                "    ##     ##   ",
-                "    ##     ##   "
-            ],
-            sleep: [
-                "                ",
-                "                ",
-                "                ",
-                "                ",
-                "                ",
-                "           #  # ",
-                "          ######",
-                "    #######-##-#",
-                "   #########P## ",
-                "  ############  ",
-                "  ###########   "
-            ]
-        };
+    <header class="topbar">
 
-        // Função para desenhar a matriz de texto no Canvas
-        function drawSprite(spriteArray, x, y) {
-            for (let row = 0; row < spriteArray.length; row++) {
-                for (let col = 0; col < spriteArray[row].length; col++) {
-                    const char = spriteArray[row][col];
-                    if (char !== ' ') {
-                        ctx.fillStyle = colorMap[char];
-                        ctx.fillRect(
-                            x + (col * PIXEL_SIZE), 
-                            y + (row * PIXEL_SIZE), 
-                            PIXEL_SIZE, 
-                            PIXEL_SIZE
-                        );
-                    }
-                }
-            }
-        }
+      <span>
+        S21+ HOME SERVER
+      </span>
 
-        // Loop principal de animação
-        function animate() {
-            // Limpa o canvas a cada frame
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+      <span class="online">
 
-            // Desenha a linha do chão
-            ctx.fillStyle = '#222';
-            ctx.fillRect(0, catY + (11 * PIXEL_SIZE), canvas.width, 2);
+        <span class="dot"></span>
 
-            if (!isSleeping) {
-                // Lógica de caminhada
-                catX += 1.5; // Velocidade do gato
-                
-                // Se chegou no meio da tela, vai dormir
-                if (catX >= (canvas.width / 2) - ((16 * PIXEL_SIZE) / 2)) {
-                    isSleeping = true;
-                }
+        SERVER ONLINE
 
-                // Alterna entre o passo 1 e passo 2 a cada 10 frames
-                const currentFrame = Math.floor(frameCount / 10) % 2 === 0 ? sprites.walk1 : sprites.walk2;
-                drawSprite(currentFrame, catX, catY);
-                
-            } else {
-                // Lógica de dormir
-                drawSprite(sprites.sleep, catX, catY);
+      </span>
 
-                // Cria uma nova letra "Z" a cada 60 frames
-                if (frameCount % 60 === 0) {
-                    zzzParticles.push({
-                        x: catX + 90, // Posição saindo da cabeça do gato
-                        y: catY + 20,
-                        opacity: 1
-                    });
-                }
+    </header>
 
-                // Atualiza e desenha as partículas "Zzz"
-                for (let i = zzzParticles.length - 1; i >= 0; i--) {
-                    let z = zzzParticles[i];
-                    ctx.fillStyle = `rgba(150, 150, 150, ${z.opacity})`;
-                    ctx.font = 'bold 20px "Courier New"';
-                    ctx.fillText('Z', z.x, z.y);
-                    
-                    // Movimento do Z (sobe e faz curva senoidal leve)
-                    z.y -= 0.6;
-                    z.x += Math.sin(z.y / 10) * 0.5; 
-                    z.opacity -= 0.008; // Vai sumindo aos poucos
 
-                    // Remove do array quando fica invisível para economizar memória
-                    if (z.opacity <= 0) {
-                        zzzParticles.splice(i, 1);
-                    }
-                }
-            }
+    <!-- =================================================
+         CENA PIXEL ART
+         ================================================= -->
 
-            frameCount++;
-            requestAnimationFrame(animate);
-        }
+    <section class="scene-wrapper">
 
-        // Inicia a animação
-        animate();
-    </script>
+      <div
+        class="scene"
+        role="img"
+        aria-label="Gato preto dormindo sozinho em um quarto de programador durante a noite"
+      >
+
+
+        <!-- iluminação -->
+
+        <div class="night-glow"></div>
+
+        <div class="monitor-glow"></div>
+
+
+        <!-- janela -->
+
+        <div class="room-window">
+
+          <div class="moon"></div>
+
+          <div class="window-line-v"></div>
+
+          <div class="window-line-h"></div>
+
+
+          <div class="city">
+
+            <div class="building building-1"></div>
+
+            <div class="building building-2"></div>
+
+            <div class="building building-3"></div>
+
+            <div class="building building-4"></div>
+
+            <div class="building building-5"></div>
+
+            <div class="building building-6"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- prateleira -->
+
+        <div class="shelf">
+
+          <span class="book book-1"></span>
+
+          <span class="book book-2"></span>
+
+          <span class="book book-3"></span>
+
+        </div>
+
+
+        <!-- planta -->
+
+        <div class="plant-pot">
+
+          <span class="leaf leaf-1"></span>
+
+          <span class="leaf leaf-2"></span>
+
+          <span class="leaf leaf-3"></span>
+
+        </div>
+
+
+        <!-- monitor -->
+
+        <div class="monitor">
+
+          <div class="monitor-screen">
+
+            &gt; ssh home-server<br>
+
+            &gt; conectado...<br>
+
+            &gt; nginx online ✓<br>
+
+            &gt; sistemas ok ✓<br>
+
+            &gt; trabalhando
+
+            <span class="cursor"></span>
+
+          </div>
+
+        </div>
+
+
+        <div class="monitor-neck"></div>
+
+        <div class="monitor-foot"></div>
+
+
+        <!-- mesa -->
+
+        <div class="desk">
+
+          <div class="desk-leg-left"></div>
+
+          <div class="desk-leg-right"></div>
+
+        </div>
+
+
+        <!-- teclado -->
+
+        <div class="keyboard"></div>
+
+
+        <!-- mouse -->
+
+        <div class="mouse"></div>
+
+
+        <!-- caneca -->
+
+        <div class="mug">
+
+          <span class="steam"></span>
+
+        </div>
+
+
+        <!-- cabo -->
+
+        <div class="cable"></div>
+
+
+        <!-- =================================================
+             GATO PRETO DORMINDO
+             ================================================= -->
+
+        <div class="cat">
+
+          <div class="cat-tail"></div>
+
+          <div class="cat-back"></div>
+
+          <div class="cat-body"></div>
+
+
+          <div class="cat-paw-1"></div>
+
+          <div class="cat-paw-2"></div>
+
+
+          <div class="cat-head">
+
+            <span class="ear-left"></span>
+
+            <span class="ear-right"></span>
+
+            <span class="cat-eye"></span>
+
+            <span class="cat-nose"></span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ZZZ -->
+
+        <div class="sleep">
+
+          Z<br>
+
+          &nbsp;z<br>
+
+          &nbsp;&nbsp;z
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         TEXTO
+         ================================================= -->
+
+    <section class="content">
+
+
+      <div class="status-label">
+        // DEVELOPMENT MODE
+      </div>
+
+
+      <h1>
+
+        Esta página ainda não está pronta,<br>
+
+        o desenvolvedor está
+
+        <span>dormindo.</span>
+
+      </h1>
+
+
+      <p class="subtitle">
+
+        Enquanto isso, o S21 Home Server
+        continua trabalhando.
+
+      </p>
+
+
+      <!-- status -->
+
+      <div class="status-terminal">
+
+        <div>
+
+          <strong>&gt;</strong>
+
+          nginx ............. online
+
+        </div>
+
+
+        <div>
+
+          <strong>&gt;</strong>
+
+          home server ....... online
+
+        </div>
+
+
+        <div>
+
+          <strong>&gt;</strong>
+
+          gato .............. dormindo
+
+        </div>
+
+
+        <div>
+
+          <strong>&gt;</strong>
+
+          desenvolvedor ..... ausente
+
+          <span class="cursor"></span>
+
+        </div>
+
+      </div>
+
+
+      <!-- voltar -->
+
+      <a
+        href="index.html"
+        class="back"
+      >
+
+        &lt; VOLTAR AO SITE
+
+      </a>
+
+
+    </section>
+
+
+  </main>
+
 </body>
+
 </html>
