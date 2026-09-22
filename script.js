@@ -166,3 +166,40 @@ if (devMessage) {
         devMessage.textContent = devMessages[devMessageIndex];
     }, 2500);
 }
+
+// ========================================
+// NAVEGAÇÃO — DESTACA A SEÇÃO ATUAL
+// ========================================
+
+const navButtons = document.querySelectorAll(".top-btn");
+
+const navSections = [
+    document.getElementById("inicio"),
+    document.getElementById("arquitetura"),
+    document.getElementById("monitor"),
+    document.getElementById("roadmap")
+].filter(Boolean);
+
+function updateActiveNav() {
+    let currentSection = navSections[0];
+
+    navSections.forEach((section) => {
+        const sectionTop = section.getBoundingClientRect().top;
+
+        if (sectionTop <= 180) {
+            currentSection = section;
+        }
+    });
+
+    navButtons.forEach((button) => {
+        button.classList.remove("active");
+
+        if (button.getAttribute("href") === `#${currentSection.id}`) {
+            button.classList.add("active");
+        }
+    });
+}
+
+window.addEventListener("scroll", updateActiveNav);
+
+updateActiveNav();

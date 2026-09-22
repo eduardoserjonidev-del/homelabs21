@@ -447,3 +447,13 @@
 .top-panel {
     gap: 40px;
 }
+
+.top-btn.active {
+    color: #ffffff;
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.16);
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, 0.20),
+        inset 0 0 8px rgba(34, 197, 94, 0.06);
+}
