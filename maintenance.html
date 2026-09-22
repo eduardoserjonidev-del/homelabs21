@@ -1,315 +1,222 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página em Manutenção</title>
+    <style>
+        /* Reset e estilo de fundo */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <title>S21+ Home Server — Em desenvolvimento</title>
+        body {
+            background-color: #1a1a24; /* Fundo noturno escuro */
+            color: #d8d8d8;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        /* Container principal */
+        #maintenance-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+        /* Canvas com borda sutil simulando uma tela */
+        canvas {
+            background-color: #14141d;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            image-rendering: pixelated; /* Mantém o aspecto retro do canvas */
+            max-width: 100%;
+        }
 
-      background:
-        linear-gradient(rgba(0, 255, 170, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 170, 0.025) 1px, transparent 1px),
-        #07110f;
+        /* Estilo da legenda */
+        .caption {
+            font-size: 1.1rem;
+            text-align: center;
+            color: #888;
+            letter-spacing: 1px;
+        }
 
-      background-size: 32px 32px;
+        /* Efeito de cursor piscando no final do texto */
+        .caption::after {
+            content: '█';
+            display: inline-block;
+            margin-left: 5px;
+            color: #555;
+            animation: blink 1s infinite;
+        }
 
-      color: #d7fff2;
-
-      font-family:
-        "Courier New",
-        monospace;
-
-      overflow: hidden;
-    }
-
-    .terminal {
-      position: relative;
-
-      width: min(760px, 100%);
-
-      padding: 32px;
-
-      border: 1px solid rgba(0, 255, 170, 0.35);
-      border-radius: 8px;
-
-      background: rgba(4, 18, 15, 0.92);
-
-      box-shadow:
-        0 0 30px rgba(0, 255, 170, 0.08),
-        inset 0 0 30px rgba(0, 255, 170, 0.025);
-    }
-
-    .terminal::before {
-      content: "";
-
-      position: absolute;
-      inset: 0;
-
-      pointer-events: none;
-
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 3px,
-        rgba(255, 255, 255, 0.018) 4px
-      );
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      margin-bottom: 42px;
-
-      font-size: 0.78rem;
-      letter-spacing: 1px;
-
-      color: #67e8c2;
-    }
-
-    .online {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-
-      border-radius: 50%;
-
-      background: #39ff9c;
-
-      box-shadow: 0 0 10px #39ff9c;
-
-      animation: pulse 1.4s infinite;
-    }
-
-    h1 {
-      margin-bottom: 12px;
-
-      font-size: clamp(2rem, 7vw, 4.5rem);
-      line-height: 0.95;
-
-      letter-spacing: -3px;
-
-      color: #ecfff9;
-    }
-
-    .subtitle {
-      margin-bottom: 36px;
-
-      color: #67e8c2;
-
-      font-size: 0.9rem;
-      letter-spacing: 2px;
-    }
-
-    .progress {
-      height: 4px;
-
-      margin-bottom: 35px;
-
-      overflow: hidden;
-
-      background: rgba(103, 232, 194, 0.1);
-    }
-
-    .progress-bar {
-      width: 35%;
-      height: 100%;
-
-      background: #39ff9c;
-
-      box-shadow: 0 0 12px rgba(57, 255, 156, 0.6);
-
-      animation: loading 2.2s ease-in-out infinite;
-    }
-
-    .log {
-      min-height: 110px;
-
-      font-size: 0.86rem;
-      line-height: 1.9;
-
-      color: #8aa89f;
-    }
-
-    .log strong {
-      color: #39ff9c;
-      font-weight: normal;
-    }
-
-    .cursor {
-      display: inline-block;
-
-      color: #39ff9c;
-
-      animation: blink 0.7s steps(1) infinite;
-    }
-
-    .footer {
-      margin-top: 35px;
-      padding-top: 16px;
-
-      border-top: 1px solid rgba(103, 232, 194, 0.12);
-
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-
-      color: #527168;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.35;
-        transform: scale(1.5);
-      }
-    }
-
-    @keyframes loading {
-      from {
-        transform: translateX(-110%);
-      }
-
-      to {
-        transform: translateX(300%);
-      }
-    }
-
-    @keyframes blink {
-      50% {
-        opacity: 0;
-      }
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 14px;
-      }
-
-      .terminal {
-        padding: 22px;
-      }
-
-      .top {
-        margin-bottom: 32px;
-      }
-
-      h1 {
-        letter-spacing: -2px;
-      }
-    }
-  </style>
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+    </style>
 </head>
-
 <body>
 
-  <main class="terminal">
-
-    <div class="top">
-      <span>S21+ HOME SERVER</span>
-
-      <span class="online">
-        <span class="dot"></span>
-        ONLINE
-      </span>
-    </div>
-<div class="pixel-scene" aria-hidden="true">
-
-  <div class="pixel-server">
-    <div class="server-slot">
-      <span class="pixel-led"></span>
-      <span class="pixel-line"></span>
+    <div id="maintenance-box">
+        <canvas id="catCanvas" width="500" height="250"></canvas>
+        <p class="caption">esta pagina ainda não está pronta, o desenvolvedor está dormindo</p>
     </div>
 
-    <div class="server-slot">
-      <span class="pixel-led"></span>
-      <span class="pixel-line"></span>
-    </div>
+    <script>
+        const canvas = document.getElementById('catCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Tamanho de cada "pixel" do nosso desenho
+        const PIXEL_SIZE = 8;
+        
+        // Posição inicial do gato (fora da tela à esquerda)
+        let catX = -150; 
+        const catY = 120; // Posição vertical fixa
+        
+        let frameCount = 0;
+        let isSleeping = false;
+        let zzzParticles = []; // Array para guardar as partículas de sono
 
-    <div class="server-slot">
-      <span class="pixel-led"></span>
-      <span class="pixel-line"></span>
-    </div>
-  </div>
+        // Mapeamento de cores do Sprite
+        // ' ' = transparente, '#' = pelo preto, 'Y' = olho aberto, 'P' = focinho, '-' = olho fechado
+        const colorMap = {
+            '#': '#0f0f0f',
+            'Y': '#ffcc00',
+            'P': '#ff7777',
+            '-': '#333333'
+        };
 
-  <div class="pixel-signal">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+        // Matrizes desenhando o gato quadro a quadro (16x11)
+        const sprites = {
+            walk1: [
+                "           #  # ",
+                "           ## ##",
+                "           #####",
+                "     ###########",
+                "   #########Y#Y#",
+                "  ##############",
+                "  ##########P## ",
+                "   ###########  ",
+                "    ##     ##   ",
+                "    ##     ##   ",
+                "    #      #    "
+            ],
+            walk2: [
+                "           #  # ",
+                "           ## ##",
+                "           #####",
+                "     ###########",
+                "   #########Y#Y#",
+                "  ##############",
+                "  ##########P## ",
+                "   ###########  ",
+                "     ##     ##  ",
+                "    ##     ##   ",
+                "    ##     ##   "
+            ],
+            sleep: [
+                "                ",
+                "                ",
+                "                ",
+                "                ",
+                "                ",
+                "           #  # ",
+                "          ######",
+                "    #######-##-#",
+                "   #########P## ",
+                "  ############  ",
+                "  ###########   "
+            ]
+        };
 
-</div>
-    <h1>SYSTEM<br>BOOTING...</h1>
+        // Função para desenhar a matriz de texto no Canvas
+        function drawSprite(spriteArray, x, y) {
+            for (let row = 0; row < spriteArray.length; row++) {
+                for (let col = 0; col < spriteArray[row].length; col++) {
+                    const char = spriteArray[row][col];
+                    if (char !== ' ') {
+                        ctx.fillStyle = colorMap[char];
+                        ctx.fillRect(
+                            x + (col * PIXEL_SIZE), 
+                            y + (row * PIXEL_SIZE), 
+                            PIXEL_SIZE, 
+                            PIXEL_SIZE
+                        );
+                    }
+                }
+            }
+        }
 
-    <div class="subtitle">
-      SITE EM DESENVOLVIMENTO
-    </div>
+        // Loop principal de animação
+        function animate() {
+            // Limpa o canvas a cada frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    <div class="progress">
-      <div class="progress-bar"></div>
-    </div>
+            // Desenha a linha do chão
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, catY + (11 * PIXEL_SIZE), canvas.width, 2);
 
-    <div class="log">
-      <div><strong>&gt;</strong> servidor S21 ativo</div>
-      <div><strong>&gt;</strong> serviços essenciais carregados</div>
+            if (!isSleeping) {
+                // Lógica de caminhada
+                catX += 1.5; // Velocidade do gato
+                
+                // Se chegou no meio da tela, vai dormir
+                if (catX >= (canvas.width / 2) - ((16 * PIXEL_SIZE) / 2)) {
+                    isSleeping = true;
+                }
 
-      <div>
-        <strong>&gt;</strong>
-        <span id="message">construindo nova interface...</span>
-        <span class="cursor">_</span>
-      </div>
-    </div>
+                // Alterna entre o passo 1 e passo 2 a cada 10 frames
+                const currentFrame = Math.floor(frameCount / 10) % 2 === 0 ? sprites.walk1 : sprites.walk2;
+                drawSprite(currentFrame, catX, catY);
+                
+            } else {
+                // Lógica de dormir
+                drawSprite(sprites.sleep, catX, catY);
 
-    <div class="footer">
-      MAINTENANCE MODE // S21 HOMELAB
-    </div>
+                // Cria uma nova letra "Z" a cada 60 frames
+                if (frameCount % 60 === 0) {
+                    zzzParticles.push({
+                        x: catX + 90, // Posição saindo da cabeça do gato
+                        y: catY + 20,
+                        opacity: 1
+                    });
+                }
 
-  </main>
+                // Atualiza e desenha as partículas "Zzz"
+                for (let i = zzzParticles.length - 1; i >= 0; i--) {
+                    let z = zzzParticles[i];
+                    ctx.fillStyle = `rgba(150, 150, 150, ${z.opacity})`;
+                    ctx.font = 'bold 20px "Courier New"';
+                    ctx.fillText('Z', z.x, z.y);
+                    
+                    // Movimento do Z (sobe e faz curva senoidal leve)
+                    z.y -= 0.6;
+                    z.x += Math.sin(z.y / 10) * 0.5; 
+                    z.opacity -= 0.008; // Vai sumindo aos poucos
 
-  <script>
-    const messages = [
-      "construindo nova interface...",
-      "configurando serviços...",
-      "testando componentes...",
-      "implementando automações...",
-      "monitorando infraestrutura...",
-      "preparando próxima versão..."
-    ];
+                    // Remove do array quando fica invisível para economizar memória
+                    if (z.opacity <= 0) {
+                        zzzParticles.splice(i, 1);
+                    }
+                }
+            }
 
-    const message = document.getElementById("message");
+            frameCount++;
+            requestAnimationFrame(animate);
+        }
 
-    let index = 0;
-
-    setInterval(() => {
-      index = (index + 1) % messages.length;
-      message.textContent = messages[index];
-    }, 2200);
-  </script>
-
+        // Inicia a animação
+        animate();
+    </script>
 </body>
-
 </html>

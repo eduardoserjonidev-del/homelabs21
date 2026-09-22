@@ -203,3 +203,10 @@ function updateActiveNav() {
 window.addEventListener("scroll", updateActiveNav);
 
 updateActiveNav();
+
+document.querySelector('.scene-panel')?.addEventListener('click', () => {
+  const walk = document.querySelector('.scene-cat-walk');
+  const sleep = document.querySelector('.scene-cat-sleep');
+  if (!walk || !sleep) return;
+  [walk, sleep].forEach(el => { el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; });
+});
