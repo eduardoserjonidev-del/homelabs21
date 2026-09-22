@@ -457,3 +457,37 @@
         0 0 12px rgba(34, 197, 94, 0.20),
         inset 0 0 8px rgba(34, 197, 94, 0.06);
 }
+
+/* Botão ONLINE do cabeçalho */
+
+.status-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #39ff9c;
+    text-decoration: none;
+
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+
+    padding: 4px 8px;
+
+    border: 1px solid rgba(57, 255, 156, 0.25);
+    border-radius: 4px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.status-online:hover {
+    background: rgba(57, 255, 156, 0.08);
+    border-color: #39ff9c;
+
+    box-shadow:
+        0 0 10px rgba(57, 255, 156, 0.15);
+}
