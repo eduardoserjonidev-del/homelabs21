@@ -137,3 +137,32 @@ function closeModal() { overlay.classList.remove('open'); }
 document.getElementById('modal-close').addEventListener('click', closeModal);
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ========================================
+// PAINEL — SITE EM DESENVOLVIMENTO
+// ========================================
+
+const devMessages = [
+    "Construindo interface...",
+    "Configurando S21 Home Server...",
+    "Testando serviços...",
+    "Implementando automações...",
+    "Monitorando servidor...",
+    "Preparando novas funcionalidades..."
+];
+
+const devMessage = document.getElementById("dev-message");
+
+let devMessageIndex = 0;
+
+if (devMessage) {
+    setInterval(() => {
+        devMessageIndex++;
+
+        if (devMessageIndex >= devMessages.length) {
+            devMessageIndex = 0;
+        }
+
+        devMessage.textContent = devMessages[devMessageIndex];
+    }, 2500);
+}

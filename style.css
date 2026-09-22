@@ -278,3 +278,111 @@
   .modal-body .block .lab{color:var(--text-faint);display:block;margin-bottom:6px;}
 
   .focus-ring:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+
+
+  /* ========================================
+   PAINEL SUPERIOR — SITE EM DESENVOLVIMENTO
+   ======================================== */
+
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+}
+
+.dev-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dev-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+
+    animation: dev-pulse 1.5s infinite;
+}
+
+@keyframes dev-pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.35;
+        transform: scale(1.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Terminal do painel de desenvolvimento */
+
+.dev-status {
+    min-width: 320px;
+}
+
+.dev-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.dev-terminal {
+    margin-top: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.terminal-symbol {
+    margin-right: 6px;
+}
+
+.terminal-cursor {
+    animation: cursor-blink 0.8s infinite;
+}
+
+@keyframes cursor-blink {
+    0%, 50% {
+        opacity: 1;
+    }
+
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+.dev-progress {
+    width: 100%;
+    height: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dev-progress-bar {
+    width: 35%;
+    height: 100%;
+    background: #22c55e;
+    animation: progress-scan 2.5s ease-in-out infinite;
+}
+
+@keyframes progress-scan {
+    0% {
+        transform: translateX(-110%);
+    }
+
+    100% {
+        transform: translateX(300%);
+    }
+}
