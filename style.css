@@ -551,3 +551,266 @@
   background:var(--signal);vertical-align:-2px;animation:blink 1s step-end infinite;
 }
 @keyframes blink{50%{opacity:0;}}
+
+/* ==================================================
+   RESPONSIVIDADE — CELULAR
+   ================================================== */
+
+@media (max-width: 768px) {
+
+    /* Evita estouro horizontal */
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       BARRA SUPERIOR
+       ========================= */
+
+    .statusbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+
+        padding: 10px 14px;
+    }
+
+    .statusbar-left,
+    .statusbar-right {
+        width: 100%;
+    }
+
+    .statusbar-right {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+    }
+
+
+    /* =========================
+       PAINEL DE DESENVOLVIMENTO
+       ========================= */
+
+    .top-panel {
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 18px;
+
+        padding: 18px 14px;
+    }
+
+    .dev-status {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .dev-title {
+        white-space: normal;
+        font-size: 0.82rem;
+    }
+
+    .dev-terminal {
+        width: 100%;
+
+        font-size: 0.74rem;
+
+        overflow-wrap: anywhere;
+    }
+
+    .dev-progress {
+        width: 100%;
+    }
+
+
+    /* =========================
+       BOTÕES
+       ========================= */
+
+    .top-buttons {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+    }
+
+    .top-btn {
+        width: 100%;
+
+        padding: 10px 6px;
+
+        font-size: 0.70rem;
+
+        text-align: center;
+    }
+
+
+    /* =========================
+       CONTEÚDO PRINCIPAL
+       ========================= */
+
+    .wrap {
+        width: 100%;
+
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    section {
+        max-width: 100%;
+    }
+
+
+    /* =========================
+       HERO / TÍTULO PRINCIPAL
+       ========================= */
+
+    .hero {
+        width: 100%;
+    }
+
+    .hero h1 {
+        font-size: clamp(
+            2rem,
+            10vw,
+            3.2rem
+        );
+
+        line-height: 1.02;
+
+        overflow-wrap: break-word;
+    }
+
+    .hero p {
+        max-width: 100%;
+
+        font-size: 0.92rem;
+
+        line-height: 1.6;
+    }
+
+
+    /* =========================
+       INFORMAÇÕES DO HERO
+       ========================= */
+
+    .hero-meta {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        width: 100%;
+    }
+
+    .hero-meta > div {
+        width: 100%;
+    }
+
+
+    /* =========================
+       DIAGRAMAS
+       ========================= */
+
+    .diagram {
+        width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .diagram-title {
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 4px;
+    }
+
+
+    /* =========================
+       TERMINAIS / CÓDIGO
+       ========================= */
+
+    pre,
+    code,
+    .term-body {
+        max-width: 100%;
+    }
+
+    pre,
+    .term-body {
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    /* =========================
+       IMAGENS
+       ========================= */
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+}
+
+
+/* ==================================================
+   CELULARES PEQUENOS
+   ================================================== */
+
+@media (max-width: 480px) {
+
+    .wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .top-panel {
+        padding:
+            16px
+            12px;
+    }
+
+    .top-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .top-btn {
+        font-size: 0.65rem;
+
+        letter-spacing: 0.4px;
+    }
+
+    .hero h1 {
+        font-size: clamp(
+            1.9rem,
+            11vw,
+            2.7rem
+        );
+    }
+
+    .hero p {
+        font-size: 0.86rem;
+    }
+
+    .statusbar-right {
+        font-size: 0.66rem;
+    }
+
+}
