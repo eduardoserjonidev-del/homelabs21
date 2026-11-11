@@ -4,16 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Página em desenvolvimento — S21 Home Server</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
   <style>
     :root {
       --neon: #39ff9c;
       --cyan: #67e8c2;
       --text: #effff9;
-      --cat: #030404;
-      --cat-border: #171b1a;
+      --font-pixel: 'Press Start 2P', monospace;
+      --font-mono: 'VT323', monospace;
+
+      /* Paleta da Cena (SRV-01) */
+      --night-0: oklch(0.07 0.015 260);
+      --night-1: oklch(0.11 0.025 255);
+      --night-2: oklch(0.15 0.03 250);
+      --floor-a: oklch(0.1 0.015 255);
+      --floor-b: oklch(0.13 0.02 255);
+
+      /* Paleta de Pixels do Rack */
+      --pix-outline: oklch(0.06 0.01 260);
+      --pix-frame: oklch(0.2 0.015 255);
+      --pix-frame-hi: oklch(0.3 0.02 250);
+      --pix-panel: oklch(0.25 0.015 255);
+      --pix-seam: oklch(0.16 0.015 255);
+      --pix-vent: oklch(0.1 0.01 260);
+      --pix-bay: oklch(0.18 0.015 255);
+      --pix-bay-hi: oklch(0.34 0.02 250);
+      --pix-lcd: oklch(0.3 0.08 190);
+      --pix-lcd-text: oklch(0.85 0.14 185);
+
+      /* LEDs */
+      --led-green: oklch(0.86 0.24 145);
+      --led-amber: oklch(0.83 0.17 75);
+      --led-blue: oklch(0.72 0.17 245);
+      --led-red: oklch(0.66 0.24 25);
+      --led-off: oklch(0.15 0.01 255);
+
+      --glow-green: oklch(0.86 0.24 145 / 0.18);
+      --glow-blue: oklch(0.72 0.17 245 / 0.14);
+
+      /* Paleta do Técnico de TI */
+      --tech-outline: oklch(0.08 0.01 260);
+      --tech-cap: oklch(0.36 0.1 252);
+      --tech-hair: oklch(0.26 0.04 50);
+      --tech-skin: oklch(0.66 0.08 55);
+      --tech-skin-shade: oklch(0.54 0.08 50);
+      --tech-shirt: oklch(0.48 0.11 250);
+      --tech-shirt-shade: oklch(0.38 0.1 252);
+      --tech-lanyard: oklch(0.78 0.15 85);
+      --tech-badge: oklch(0.92 0.01 240);
+      --tech-pants: oklch(0.26 0.02 255);
+      --tech-pants-shade: oklch(0.2 0.02 255);
+      --tech-shoes: oklch(0.14 0.01 255);
+      --tech-box: oklch(0.55 0.18 28);
+      --tech-metal: oklch(0.8 0.02 240);
+      --tech-spark: oklch(0.95 0.1 200);
+
+      /* Ciclo do técnico: 3s entra, 5s trabalha, 3s sai, 5s sala vazia */
+      --tech-cycle: 16s;
+      --px: clamp(4px, 0.85vw, 7px);
     }
 
     *, *::before, *::after {
@@ -37,7 +89,7 @@
       font-family: "Courier New", monospace;
     }
 
-    /* Estrutura Principal */
+    /* Estrutura Principal da Página */
     .page {
       width: min(900px, 100%);
       overflow: hidden;
@@ -67,10 +119,10 @@
       height: 7px;
       background: var(--neon);
       box-shadow: 0 0 4px var(--neon), 0 0 10px rgba(57, 255, 156, 0.8);
-      animation: blink 1.2s steps(2) infinite;
+      animation: status-blink 1.2s steps(2) infinite;
     }
 
-    /* Cena Pixel Art */
+    /* ================= Moldura e Cena Pixel Art ================= */
     .scene-wrapper {
       padding: 28px;
       display: flex;
@@ -84,228 +136,381 @@
       aspect-ratio: 16 / 9;
       overflow: hidden;
       border: 3px solid #183e34;
-      background: linear-gradient(to bottom, #071124 0%, #0a1728 58%, #171815 58%, #171815 100%);
+      background: var(--night-0);
       box-shadow: 5px 5px 0 #020504;
+      font-family: var(--font-mono);
       image-rendering: pixelated;
     }
 
-    .scene * { position: absolute; }
+    .scene-wall {
+      position: absolute;
+      inset: 0 0 22% 0;
+      background:
+        radial-gradient(ellipse 40% 55% at 50% 60%, var(--night-2), transparent 70%),
+        repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * 15), var(--night-0) calc(var(--px) * 15) calc(var(--px) * 15.5)),
+        linear-gradient(var(--night-0), var(--night-1));
+    }
 
-    .night-glow {
+    .scene-floor {
+      position: absolute;
+      inset: 78% 0 0 0;
+      background:
+        linear-gradient(var(--night-0) 0 var(--px), transparent var(--px)),
+        repeating-linear-gradient(90deg, var(--floor-a) 0 calc(var(--px) * 8), var(--floor-b) calc(var(--px) * 8) calc(var(--px) * 16)),
+        var(--floor-a);
+    }
+
+    .scene-floor::after {
+      content: "";
+      position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 18% 24%, rgba(87, 133, 255, 0.12), transparent 28%);
+      background: linear-gradient(transparent, var(--night-0) 85%);
+    }
+
+    .scene-stage {
+      position: absolute;
+      left: 50%;
+      bottom: 22%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Grid de Pixels */
+    .pixel-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--cols, 28), var(--px));
+      grid-auto-rows: var(--px);
+      image-rendering: pixelated;
+    }
+
+    .pix-K { background: var(--pix-outline); }
+    .pix-F { background: var(--pix-frame); }
+    .pix-f { background: var(--pix-frame-hi); }
+    .pix-P { background: var(--pix-panel); }
+    .pix-p { background: var(--pix-seam); }
+    .pix-V { background: var(--pix-vent); }
+    .pix-D { background: var(--pix-bay); }
+    .pix-d { background: var(--pix-bay-hi); }
+    .pix-S { background: var(--pix-lcd); }
+    .pix-s { background: var(--pix-lcd-text); animation: lcd-flicker 2.6s steps(1, end) infinite; }
+    .pix-G { background: var(--led-green); box-shadow: 0 0 calc(var(--px) * 1.2) var(--led-green); }
+
+    .led {
+      --c: var(--led-green);
+      position: relative;
+      z-index: 1;
+      background: var(--c);
+      box-shadow: 0 0 calc(var(--px) * 0.8) var(--c), 0 0 calc(var(--px) * 2.4) var(--c);
+      animation: led-blink var(--dur, 1s) linear var(--delay, 0s) infinite;
+    }
+    .pix-g { --c: var(--led-green); }
+    .pix-a { --c: var(--led-amber); animation-name: led-blink-slow; }
+    .pix-b { --c: var(--led-blue); animation: led-breathe 3.2s steps(6, end) var(--delay, 0s) infinite; }
+    .pix-r { --c: var(--led-red); animation-name: led-blink-rare; animation-duration: 4.4s; }
+
+    .rack-main { position: relative; z-index: 2; }
+    .rack-main > .pixel-grid { position: relative; z-index: 1; }
+
+    .rack-halo {
+      position: absolute;
+      inset: -40% -90%;
+      background: radial-gradient(ellipse at 50% 50%, var(--glow-green), var(--glow-blue) 35%, transparent 65%);
+      animation: halo-pulse 4s steps(8, end) infinite;
       pointer-events: none;
     }
 
-    .monitor-glow {
-      left: 27%; top: 12%; width: 45%; height: 55%;
-      background: radial-gradient(ellipse at center, rgba(57, 255, 156, 0.08), transparent 68%);
-      animation: pulse 4s steps(3) infinite;
+    .rack-reflection {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      transform: scaleY(-1);
+      opacity: 0.18;
+      filter: blur(1px);
+      mask-image: linear-gradient(to top, black, transparent 35%);
+      -webkit-mask-image: linear-gradient(to top, black, transparent 35%);
+      pointer-events: none;
     }
 
-    /* Janela e Cidade */
-    .room-window {
-      left: 6%; top: 8%; width: 24%; height: 38%;
-      overflow: hidden;
-      border: 5px solid #1a2f3f;
-      background: #08192f;
-      box-shadow: inset 0 0 20px rgba(95, 140, 255, 0.12);
+    .rack-back {
+      position: absolute;
+      bottom: calc(var(--px) * 4);
+      --px: clamp(2.5px, 0.55vw, 4.5px);
+      filter: brightness(0.35) saturate(0.6);
+      z-index: 0;
     }
-    .window-line-v { left: 50%; top: 0; width: 4px; height: 100%; background: #1a2f3f; }
-    .window-line-h { left: 0; top: 52%; width: 100%; height: 4px; background: #1a2f3f; }
-    .moon {
-      right: 14%; top: 12%; width: 24px; height: 24px;
-      background: #d5e4ff;
-      box-shadow: 0 0 12px rgba(177, 209, 255, 0.7), 0 0 24px rgba(100, 150, 255, 0.2);
+    .rack-back-left { right: calc(100% + var(--px) * 10); }
+    .rack-back-right { left: calc(100% + var(--px) * 10); }
+
+    /* ================= Técnico de TI ================= */
+    .tech {
+      position: absolute;
+      z-index: 3;
+      bottom: 0;
+      left: calc(100% - var(--px) * 4);
+      animation: tech-move var(--tech-cycle) linear infinite;
+      filter: brightness(0.9);
+    }
+    @media (max-width: 640px) {
+      .tech { left: calc(100% - var(--px) * 13); }
+    }
+    .tech-body {
+      display: grid;
+      animation: tech-face var(--tech-cycle) steps(1, end) infinite;
+    }
+    .tech-walk,
+    .tech-work {
+      grid-area: 1 / 1;
+      display: grid;
+      align-items: end;
+    }
+    .tech-frame { grid-area: 1 / 1; }
+    .tech-walk { animation: tech-walk-vis var(--tech-cycle) steps(1, end) infinite; }
+    .tech-work { opacity: 0; animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite; }
+    .tech-walk-a, .tech-work-a { animation: frame-a 0.5s steps(1, end) infinite; }
+    .tech-walk-b, .tech-work-b { animation: frame-b 0.5s steps(1, end) infinite; }
+    .tech-work-a, .tech-work-b { animation-duration: 0.9s; }
+
+    .tp-K { background: var(--tech-outline); }
+    .tp-C { background: var(--tech-cap); }
+    .tp-H { background: var(--tech-hair); }
+    .tp-k { background: var(--tech-skin); }
+    .tp-n { background: var(--tech-skin-shade); }
+    .tp-U { background: var(--tech-shirt); }
+    .tp-u { background: var(--tech-shirt-shade); }
+    .tp-L, .tp-Y { background: var(--tech-lanyard); }
+    .tp-I { background: var(--tech-badge); }
+    .tp-T { background: var(--tech-pants); }
+    .tp-t { background: var(--tech-pants-shade); }
+    .tp-O { background: var(--tech-shoes); }
+    .tp-R { background: var(--tech-box); }
+    .tp-W { background: var(--tech-metal); }
+    .tp-Z {
+      position: relative;
+      z-index: 1;
+      background: var(--tech-spark);
+      box-shadow: 0 0 var(--px) var(--tech-spark), 0 0 calc(var(--px) * 3) var(--led-blue);
     }
 
-    .city { inset: auto 0 0 0; height: 46%; }
-    .building { bottom: 0; background: #070e1c; }
-    .building::before, .building::after {
-      content: ""; position: absolute; width: 4px; height: 4px;
-      background: #d99546;
-      box-shadow: 8px 12px 0 #c97f39, 0 24px 0 #d99546;
-    }
-    .building::before { left: 5px; top: 8px; }
-    .building::after { right: 5px; top: 17px; opacity: 0.55; }
-    .b1 { left: 2%; width: 17px; height: 36px; }
-    .b2 { left: 17%; width: 23px; height: 53px; }
-    .b3 { left: 35%; width: 16px; height: 31px; }
-    .b4 { left: 55%; width: 25px; height: 60px; }
-    .b5 { left: 76%; width: 19px; height: 43px; }
-    .b6 { right: 1%; width: 27px; height: 67px; }
-
-    /* Decoração: Prateleira e Planta */
-    .shelf { right: 8%; top: 15%; width: 20%; height: 7px; background: #402b20; box-shadow: 0 5px 0 #17100c; }
-    .book { bottom: 7px; width: 12px; background: #183b32; border: 2px solid #0d1f1a; }
-    .bk1 { left: 10%; height: 37px; }
-    .bk2 { left: 30%; height: 29px; background: #243047; }
-    .bk3 { left: 50%; height: 42px; background: #4b3027; }
-
-    .plant-pot { right: 12%; top: 7%; width: 24px; height: 20px; background: #4b3023; border-top: 4px solid #714830; }
-    .leaf { width: 9px; height: 16px; background: #237047; top: -13px; }
-    .lf1 { left: 0; transform: rotate(-30deg); }
-    .lf2 { left: 8px; top: -19px; }
-    .lf3 { right: 0; transform: rotate(30deg); }
-
-    /* Setup: Monitor, Mesa e Periféricos */
-    .monitor {
-      left: 34%; top: 20%; width: 25%; height: 31%;
-      border: 5px solid #1b3a34; background: #020907; box-shadow: 5px 5px 0 #020403;
-    }
-    .monitor-screen {
-      inset: 7px; padding: 9px; overflow: hidden;
-      background: #03130e; color: var(--neon);
-      font-size: clamp(0.43rem, 1.05vw, 0.72rem); line-height: 1.65;
-    }
-    .cursor {
-      position: static; display: inline-block; width: 6px; height: 9px;
-      margin-left: 2px; vertical-align: middle; background: var(--neon);
-      animation: cursor-blink 0.8s steps(1) infinite;
-    }
-    .monitor-neck { left: 44.5%; top: 51%; width: 5%; height: 7%; background: #23302d; }
-    .monitor-foot { left: 41.5%; top: 57%; width: 11%; height: 3%; background: #18231f; }
-
-    .desk {
-      left: 22%; right: 7%; bottom: 18%; height: 18px;
-      background: #4d3325; border-top: 5px solid #765039; box-shadow: 0 8px 0 #18100c;
-    }
-    .desk-leg { top: 18px; width: 16px; height: 100px; background: #211611; }
-    .leg-l { left: 6%; }
-    .leg-r { right: 6%; }
-
-    .keyboard {
-      left: 48%; bottom: 22%; width: 19%; height: 16px;
-      border: 2px solid #263b36;
-      background: repeating-linear-gradient(90deg, #1a2924 0 7px, #0a1411 7px 9px);
-      transform: skewX(-12deg); box-shadow: 3px 3px 0 #090d0c;
-    }
-    .mouse {
-      left: 69%; bottom: 21.5%; width: 18px; height: 25px;
-      border: 3px solid #253b35; border-radius: 50% 50% 45% 45%; background: #101916;
-    }
-    .mug {
-      left: 31%; bottom: 21%; width: 27px; height: 26px;
-      border: 3px solid #1c4439; background: #0c201b;
-    }
-    .mug::after {
-      content: ""; position: absolute; right: -10px; top: 5px;
-      width: 8px; height: 11px; border: 3px solid #1c4439; border-left: none;
-    }
-    .steam {
-      left: 8px; top: -15px; width: 4px; height: 11px;
-      background: #78998e; opacity: 0.5; animation: steam 2s steps(4) infinite;
-    }
-    .cable {
-      left: 39%; bottom: 9%; width: 38%; height: 5px;
-      border-bottom: 3px solid #17251f; transform: rotate(3deg);
+    /* Partículas de poeira */
+    .dust {
+      position: absolute;
+      z-index: 3;
+      width: calc(var(--px) * 0.5);
+      height: calc(var(--px) * 0.5);
+      background: var(--glow-green);
+      box-shadow: 0 0 var(--px) var(--glow-green);
+      left: calc(38% + mod(var(--i) * 37, 24) * 1%);
+      top: calc(28% + mod(var(--i) * 53, 44) * 1%);
+      animation: dust-drift calc(9s + var(--i) * 0.7s) linear calc(var(--i) * -1.3s) infinite;
+      opacity: 0;
     }
 
-    /* Gato Preto */
-    .cat {
-      right: 15%; bottom: 22%; width: 135px; height: 70px;
-      animation: breathe 3.4s steps(3) infinite;
+    /* HUD interno da cena */
+    .hud {
+      position: absolute;
+      z-index: 5;
+      left: clamp(14px, 3vw, 28px);
+      color: oklch(0.55 0.03 240);
     }
-    .cat-body {
-      left: 30px; bottom: 8px; width: 76px; height: 31px;
-      background: var(--cat); border: 3px solid var(--cat-border);
-      box-shadow: inset -8px -5px 0 #070909;
+    .hud-top { top: clamp(12px, 3vh, 24px); }
+    .hud-bottom { bottom: clamp(10px, 2.5vh, 20px); }
+    .hud-title {
+      margin: 0 0 6px;
+      font-family: var(--font-pixel);
+      font-size: clamp(10px, 1.4vw, 15px);
+      font-weight: 400;
+      color: oklch(0.88 0.03 200);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 12px var(--glow-green);
     }
-    .cat-back {
-      left: 65px; bottom: 8px; width: 46px; height: 40px;
-      background: var(--cat); border: 3px solid var(--cat-border);
+    .hud-line {
+      margin: 0;
+      font-size: clamp(14px, 1.8vw, 19px);
+      letter-spacing: 0.06em;
     }
-    .cat-head {
-      left: 8px; bottom: 11px; width: 38px; height: 34px;
-      background: var(--cat); border: 3px solid var(--cat-border);
+    .hud-dim { opacity: 0.6; }
+    .hud-status { display: inline-grid; }
+    .hud-status > * { grid-area: 1 / 1; }
+    .hud-ok {
+      color: var(--led-green);
+      text-shadow: 0 0 8px var(--led-green);
+      animation: tech-hide var(--tech-cycle) steps(1, end) infinite;
     }
-    .ear {
-      top: -12px; width: 0; height: 0;
-      border-left: 8px solid transparent; border-right: 8px solid transparent;
-      border-bottom: 15px solid var(--cat);
+    .hud-maint {
+      opacity: 0;
+      color: var(--led-amber);
+      text-shadow: 0 0 8px var(--led-amber);
+      animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite;
     }
-    .ear-l { left: 0; }
-    .ear-r { right: 0; }
-    .cat-eye {
-      left: 12px; top: 16px; width: 12px; height: 2px;
-      background: #84c867; box-shadow: 0 0 4px rgba(132, 200, 103, 0.35);
-    }
-    .cat-nose { left: 26px; top: 20px; width: 3px; height: 3px; background: #80575e; }
-    .paw { bottom: 4px; width: 20px; height: 7px; background: var(--cat); }
-    .paw-1 { left: 37px; }
-    .paw-2 { left: 53px; }
-    .cat-tail {
-      right: 0; bottom: 28px; width: 40px; height: 9px;
-      background: var(--cat); transform-origin: left center;
-      animation: tail 3.4s steps(3) infinite;
-    }
-    .sleep {
-      right: 9%; bottom: 42%; color: var(--neon);
-      font-size: 15px; font-weight: bold; animation: sleep-z 2.7s steps(5) infinite;
+    .hud-cursor {
+      display: inline-block;
+      width: 0.55em;
+      height: 0.9em;
+      margin-left: 0.3em;
+      vertical-align: -0.1em;
+      background: var(--led-green);
+      animation: cursor-blink 1s steps(1, end) infinite;
     }
 
-    /* Textos e Status */
+    /* Efeito CRT */
+    .scene-scanlines {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      background: repeating-linear-gradient(transparent 0 2px, oklch(0 0 0 / 0.22) 2px 3px);
+    }
+    .scene-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 7;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 45%, oklch(0 0 0 / 0.75) 100%);
+    }
+
+    /* ================= Legenda e Terminal Sincronizados ================= */
     .content { padding: 10px 28px 31px; text-align: center; }
     .status-label { margin-bottom: 13px; color: var(--cyan); font-size: 0.7rem; letter-spacing: 2px; }
-    h1 {
-      max-width: 760px; margin: auto; color: var(--text);
-      font-size: clamp(1.35rem, 4vw, 2.25rem); line-height: 1.35; letter-spacing: -1px;
+
+    .content h1 {
+      max-width: 760px;
+      margin: auto;
+      color: var(--text);
+      font-size: clamp(1.35rem, 4vw, 2.25rem);
+      line-height: 1.35;
+      letter-spacing: -1px;
     }
-    h1 span { color: var(--neon); }
+    .content h1 span { color: var(--neon); }
     .subtitle { margin-top: 14px; color: #718d84; font-size: 0.8rem; }
 
     .status-terminal {
-      max-width: 590px; margin: 23px auto 0; padding: 12px 15px;
-      text-align: left; border: 1px solid rgba(57, 255, 156, 0.14);
-      background: rgba(0, 0, 0, 0.18); color: #72978b;
-      font-size: 0.74rem; line-height: 1.8;
+      max-width: 590px;
+      margin: 23px auto 0;
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid rgba(57, 255, 156, 0.14);
+      background: rgba(0, 0, 0, 0.18);
+      color: #72978b;
+      font-size: 0.74rem;
+      line-height: 1.8;
     }
     .status-terminal strong { color: var(--neon); font-weight: normal; }
 
+    /* Estados sincronizados com o boneco no terminal */
+    .sync-state {
+      display: inline-grid;
+      vertical-align: bottom;
+    }
+    .sync-state > * { grid-area: 1 / 1; }
+    .state-idle {
+      animation: tech-hide var(--tech-cycle) steps(1, end) infinite;
+    }
+    .state-work {
+      opacity: 0;
+      color: var(--led-amber);
+      text-shadow: 0 0 6px rgba(232, 162, 61, 0.35);
+      animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 6px;
+      height: 9px;
+      margin-left: 4px;
+      vertical-align: middle;
+      background: var(--neon);
+      animation: cursor-blink 0.8s steps(1) infinite;
+    }
+
     .back {
-      display: inline-block; margin-top: 23px; padding: 10px 15px;
-      border: 1px solid rgba(57, 255, 156, 0.35); background: rgba(57, 255, 156, 0.035);
-      color: var(--neon); text-decoration: none; font-size: 0.72rem; letter-spacing: 1px;
+      display: inline-block;
+      margin-top: 23px;
+      padding: 10px 15px;
+      border: 1px solid rgba(57, 255, 156, 0.35);
+      background: rgba(57, 255, 156, 0.035);
+      color: var(--neon);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
       transition: all 0.2s ease;
     }
     .back:hover {
-      border-color: var(--neon); background: rgba(57, 255, 156, 0.1);
+      border-color: var(--neon);
+      background: rgba(57, 255, 156, 0.1);
       box-shadow: 0 0 12px rgba(57, 255, 156, 0.16);
     }
 
-    /* Animações */
-    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.25; } }
+    /* ================= Animações ================= */
+    @keyframes status-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.25; } }
     @keyframes cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-    @keyframes pulse { 0%, 100% { opacity: 0.65; } 50% { opacity: 1; } }
-    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-    @keyframes tail { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-6deg); } }
-    @keyframes sleep-z {
-      0% { opacity: 0; transform: translate(0, 8px); }
-      25%, 65% { opacity: 1; }
-      100% { opacity: 0; transform: translate(12px, -28px); }
+    @keyframes halo-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    @keyframes led-breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+    @keyframes lcd-flicker { 0%, 70%, 75%, 100% { opacity: 1; } 71%, 74% { opacity: 0.2; } }
+    @keyframes led-blink {
+      0%, 38%, 53%, 70% { background: var(--c); box-shadow: 0 0 calc(var(--px) * 0.8) var(--c), 0 0 calc(var(--px) * 2.4) var(--c); }
+      39%, 52%, 71%, 100% { background: var(--led-off); box-shadow: none; }
     }
-    @keyframes steam {
-      0% { opacity: 0; transform: translateY(5px); }
-      40% { opacity: 0.55; }
-      100% { opacity: 0; transform: translateY(-10px); }
+    @keyframes led-blink-slow {
+      0%, 60% { background: var(--c); box-shadow: 0 0 calc(var(--px) * 0.8) var(--c), 0 0 calc(var(--px) * 2.4) var(--c); }
+      61%, 100% { background: var(--led-off); box-shadow: none; }
+    }
+    @keyframes led-blink-rare {
+      0%, 88%, 94%, 96% { background: var(--led-off); box-shadow: none; }
+      89%, 93%, 97%, 100% { background: var(--c); box-shadow: 0 0 calc(var(--px) * 1) var(--c), 0 0 calc(var(--px) * 3) var(--c); }
+    }
+    @keyframes dust-drift {
+      0% { transform: translate(0, 0); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 0.6; }
+      100% { transform: translate(calc(var(--px) * 6), calc(var(--px) * -14)); opacity: 0; }
+    }
+    @keyframes tech-move {
+      0% { transform: translateX(420px); }
+      18.75%, 50% { transform: translateX(0); }
+      68.75%, 100% { transform: translateX(420px); }
+    }
+    @keyframes tech-face {
+      0% { transform: scaleX(-1); }
+      50%, 100% { transform: scaleX(1); }
+    }
+    @keyframes tech-walk-vis {
+      0% { opacity: 1; }
+      18.75% { opacity: 0; }
+      50% { opacity: 1; }
+      68.75%, 100% { opacity: 0; }
+    }
+    @keyframes tech-work-vis {
+      0% { opacity: 0; }
+      18.75% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes tech-hide {
+      0% { opacity: 1; }
+      18.75% { opacity: 0; }
+      50%, 100% { opacity: 1; }
+    }
+    @keyframes frame-a {
+      0% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes frame-b {
+      0% { opacity: 0; }
+      50%, 100% { opacity: 1; }
     }
 
-    /* Responsivo e Acessibilidade */
     @media (max-width: 650px) {
       body { padding: 8px; }
       .scene-wrapper { padding: 12px; }
-      .scene { aspect-ratio: 4 / 3; }
-      .room-window { width: 31%; height: 35%; }
-      .monitor { left: 33%; width: 29%; }
-      .cat { right: 6%; transform: scale(0.82); transform-origin: right bottom; }
-      .sleep { right: 3%; }
-      .keyboard { left: 47%; width: 23%; }
+      .scene { aspect-ratio: 4 / 3; --px: clamp(3.5px, 1.3vw, 5.5px); }
       .topbar { font-size: 0.61rem; }
       .content { padding: 8px 15px 24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; }
+      .led, .pix-s, .rack-halo, .dust, .hud-cursor, .hud-ok, .state-idle, .cursor, .dot { animation: none !important; }
+      .tech, .hud-maint, .state-work { display: none !important; }
     }
   </style>
 </head>
@@ -317,90 +522,278 @@
     </header>
 
     <section class="scene-wrapper">
-      <div class="scene" role="img" aria-label="Gato preto dormindo sozinho em um quarto de programador durante a noite">
-        <div class="night-glow"></div>
-        <div class="monitor-glow"></div>
+      <div class="scene" id="scene" role="img" aria-label="Servidor em pixel art com técnico de TI fazendo manutenção">
+        <div class="scene-wall"></div>
+        <div class="scene-floor"></div>
 
-        <div class="room-window">
-          <div class="moon"></div>
-          <div class="window-line-v"></div>
-          <div class="window-line-h"></div>
-          <div class="city">
-            <div class="building b1"></div>
-            <div class="building b2"></div>
-            <div class="building b3"></div>
-            <div class="building b4"></div>
-            <div class="building b5"></div>
-            <div class="building b6"></div>
+        <div class="scene-stage">
+          <div class="rack-back rack-back-left"><div data-seed="3"></div></div>
+          <div class="rack-back rack-back-right"><div data-seed="7"></div></div>
+
+          <div class="rack-main">
+            <div class="rack-halo"></div>
+            <div data-seed="0"></div>
+            <div class="rack-reflection"><div data-seed="0"></div></div>
+          </div>
+
+          <div class="tech" aria-hidden="true">
+            <div class="tech-body">
+              <div class="tech-walk">
+                <div data-tech="walk-a" class="tech-frame tech-walk-a"></div>
+                <div data-tech="walk-b" class="tech-frame tech-walk-b"></div>
+              </div>
+              <div class="tech-work">
+                <div data-tech="work-a" class="tech-frame tech-work-a"></div>
+                <div data-tech="work-b" class="tech-frame tech-work-b"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="shelf">
-          <span class="book bk1"></span>
-          <span class="book bk2"></span>
-          <span class="book bk3"></span>
+        <div class="hud hud-top">
+          <div class="hud-title">SRV-S21+</div>
+          <p class="hud-line">
+            STATUS: <span class="hud-status"><span class="hud-ok">ONLINE</span><span class="hud-maint">MANUTENÇÃO</span></span><span class="hud-cursor"></span>
+          </p>
+        </div>
+        <div class="hud hud-bottom">
+          <p class="hud-line hud-dim"><span id="live-clock">--:--:--</span> · S21+ · TERMUX</p>
         </div>
 
-        <div class="plant-pot">
-          <span class="leaf lf1"></span>
-          <span class="leaf lf2"></span>
-          <span class="leaf lf3"></span>
-        </div>
-
-        <div class="monitor">
-          <div class="monitor-screen">
-            &gt; ssh home-server<br>
-            &gt; conectado...<br>
-            &gt; nginx online ✓<br>
-            &gt; sistemas ok ✓<br>
-            &gt; trabalhando<span class="cursor"></span>
-          </div>
-        </div>
-        <div class="monitor-neck"></div>
-        <div class="monitor-foot"></div>
-
-        <div class="desk">
-          <div class="desk-leg leg-l"></div>
-          <div class="desk-leg leg-r"></div>
-        </div>
-
-        <div class="keyboard"></div>
-        <div class="mouse"></div>
-        <div class="mug"><span class="steam"></span></div>
-        <div class="cable"></div>
-
-        <div class="cat">
-          <div class="cat-tail"></div>
-          <div class="cat-back"></div>
-          <div class="cat-body"></div>
-          <div class="paw paw-1"></div>
-          <div class="paw paw-2"></div>
-          <div class="cat-head">
-            <span class="ear ear-l"></span>
-            <span class="ear ear-r"></span>
-            <span class="cat-eye"></span>
-            <span class="cat-nose"></span>
-          </div>
-        </div>
-
-        <div class="sleep">Z<br>&nbsp;z<br>&nbsp;&nbsp;z</div>
+        <div class="scene-scanlines"></div>
+        <div class="scene-vignette"></div>
       </div>
     </section>
 
     <section class="content">
       <div class="status-label">// DEVELOPMENT MODE</div>
-      <h1>Esta página ainda não está pronta,<br>o desenvolvedor está <span>dormindo.</span></h1>
-      <p class="subtitle">Enquanto isso, o S21 Home Server continua trabalhando. teste commit via vs code</p>
+      <h1>
+        Esta página ainda não está pronta,<br>o desenvolvedor está
+        <span class="sync-state">
+          <span class="state-idle">dormindo.</span>
+          <span class="state-work">no rack.</span>
+        </span>
+      </h1>
+      <p class="subtitle">Enquanto isso, o S21 Home Server continua trabalhando.</p>
 
       <div class="status-terminal">
         <div><strong>&gt;</strong> nginx ............. online</div>
         <div><strong>&gt;</strong> home server ....... online</div>
         <div><strong>&gt;</strong> gato .............. dormindo</div>
-        <div><strong>&gt;</strong> desenvolvedor ..... ausente<span class="cursor"></span></div>
+        <div>
+          <strong>&gt;</strong> desenvolvedor .....
+          <span class="sync-state">
+            <span class="state-idle">ausente</span>
+            <span class="state-work">em manutenção</span>
+          </span><span class="cursor"></span>
+        </div>
       </div>
 
       <a href="index.html" class="back">&lt; VOLTAR AO SITE</a>
     </section>
   </main>
+
+  <script>
+    // 1. Matriz de 28x39 dos Racks de Servidor
+    const RACK_ROWS = [
+      "KKKKKKKKKKKKKKKKKKKKKKKKKKKK",
+      "KffffffffffffffffffffffffffK",
+      "KFFFFFFFFFFFFFFFFFFFFFFFFFFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPDDDdPDDDdPDDDdPDDDdPGbPFK",
+      "KFPgDDdPaDDdPgDDdPDDDdPPPPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPSsSsSPgPaPgPgPaPgPgPrPPFK",
+      "KFPSSSSSPpKpKpKpKpKpKpKpKPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPVVVVVVVVVVVVVVVVVVVVVVPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPVVVVVVVVVVVVVVVVVVVVVVPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPDDDdPDDDdPDDDdPDDDdPGbPFK",
+      "KFPgDDdPaDDdPgDDdPDDDdPPPPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
+      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
+      "KFppppppppppppppppppppppppFK",
+      "KFFFFFFFFFFFFFFFFFFFFFFFFFFK",
+      "KKKKKKKKKKKKKKKKKKKKKKKKKKKK",
+      ".KKK....................KKK."
+    ];
+
+    const LEDS = new Set(["g", "a", "b", "r"]);
+
+    document.querySelectorAll("[data-seed]").forEach(placeholder => {
+      const seed = Number(placeholder.dataset.seed) || 0;
+      const grid = document.createElement("div");
+      grid.className = "pixel-grid";
+      grid.style.setProperty("--cols", 28);
+      grid.setAttribute("aria-hidden", "true");
+
+      RACK_ROWS.forEach((row, y) => {
+        [...row].forEach((code, x) => {
+          const cell = document.createElement("div");
+          if (code !== ".") {
+            const isLed = LEDS.has(code);
+            cell.className = `pix pix-${code}${isLed ? " led" : ""}`;
+            if (isLed) {
+              const h = (x * 7 + y * 13 + seed * 5) % 17;
+              const delay = ((h * 0.23) % 3.9).toFixed(2);
+              const dur = (0.6 + ((h * 0.21) % 2.3)).toFixed(2);
+              cell.style.setProperty("--delay", `${delay}s`);
+              cell.style.setProperty("--dur", `${dur}s`);
+            }
+          }
+          grid.appendChild(cell);
+        });
+      });
+
+      placeholder.replaceWith(grid);
+    });
+
+    // 2. Matrizes 18x25 dos 4 Quadros do Técnico de TI
+    const TECH_HEAD_TORSO = [
+      "......KKKKK.......",
+      ".....KCCCCCK......",
+      "....KCCCCCCKKK....",
+      "....KHkkkkkK......",
+      "....KHkkkKkK......",
+      "....KHkkkkkK......",
+      ".....KkkknK.......",
+      "......KnnK........",
+      "....KKUUUUKK......"
+    ];
+
+    const TECH_FRAMES = {
+      "walk-a": [
+        ...TECH_HEAD_TORSO,
+        "...KUUUULUUUK.....",
+        "...KUUUULUUUK.....",
+        "...KUuUUIUUuK.....",
+        "...KUuUUUUUuK.....",
+        "...KUuUUUUUuK.....",
+        "...KkKUUUUKkK.....",
+        "....KKTTTTKKKKK...",
+        ".....KTTTTKKRRRRK.",
+        ".....KTTTTKRRYRRK.",
+        ".....KTTtTK.......",
+        ".....KTTtTK.......",
+        ".....KTTtTK.......",
+        ".....KTTtTK.......",
+        "....KOOKOOK.......",
+        "....KOOOOOOK......",
+        "....KKKKKKKK......"
+      ],
+      "walk-b": [
+        ...TECH_HEAD_TORSO,
+        "...KUUUULUUUK.....",
+        "...KUUUULUUUK.....",
+        "...KUuUUIUUuK.....",
+        "...KUuUUUUUuK.....",
+        "...KUuUUUUUuK.....",
+        "...KkKUUUUKkK.....",
+        "....KKTTTTKKKKK...",
+        ".....KTTTTK.......",
+        "....KTTKTTKKRRRRK.",
+        "...KTTKKTTRRYRRK..",
+        "...KTTK.KTTK......",
+        "..KTTK..KTTK......",
+        "..KTTK...KTTK.....",
+        "..KOOK...KOOOK....",
+        ".KOOOK...KOOOOK...",
+        ".KKKKK...KKKKKK..."
+      ],
+      "work-a": [
+        ...TECH_HEAD_TORSO,
+        "...KUUUULUUUKKKK..",
+        "...KUUUULUUUUUUKK.",
+        "...KUuUUIUUKKKkkW.",
+        "...KUuUUUUUK..KKW.",
+        "...KUuUUUUUK......",
+        "...KkKUUUUUK......",
+        "....KKTTTTKK......",
+        ".....KTTTTK.......",
+        ".....KTTTTK.......",
+        ".....KTTtTK.......",
+        ".....KTTtTK......K",
+        "KKKK.KTTtTK......K",
+        "RRRK.KTTtTK......K",
+        "RYRK.KOOKOOK.....K",
+        "RRRK.KOOOOOOK....K",
+        "KKKK.KKKKKKKK....K"
+      ],
+      "work-b": [
+        ...TECH_HEAD_TORSO,
+        "...KUUUULUUUKKKKW.",
+        "...KUUUULUUUUUkkZ.",
+        "...KUuUUIUUKKKKKW.",
+        "...KUuUUUUUK......",
+        "...KUuUUUUUK......",
+        "...KkKUUUUUK......",
+        "....KKTTTTKK......",
+        ".....KTTTTK.......",
+        ".....KTTTTK.......",
+        ".....KTTtTK.......",
+        ".....KTTtTK......K",
+        "KKKK.KTTtTK......K",
+        "RRRK.KTTtTK......K",
+        "RYRK.KOOKOOK.....K",
+        "RRRK.KOOOOOOK....K",
+        "KKKK.KKKKKKKK....K"
+      ]
+    };
+
+    document.querySelectorAll("[data-tech]").forEach(el => {
+      const rows = TECH_FRAMES[el.dataset.tech];
+      el.classList.add("pixel-grid");
+      el.style.setProperty("--cols", 18);
+      rows.forEach(row => {
+        [...row].forEach(code => {
+          const cell = document.createElement("div");
+          if (code !== ".") cell.className = `tp tp-${code}`;
+          el.appendChild(cell);
+        });
+      });
+    });
+
+    // 3. Gera as 14 partículas de poeira
+    const scene = document.getElementById("scene");
+    for (let i = 0; i < 14; i++) {
+      const span = document.createElement("span");
+      span.className = "dust";
+      span.style.setProperty("--i", i);
+      scene.appendChild(span);
+    }
+
+    // 4. Relógio em tempo real (atualiza a cada 1 segundo)
+    const clockEl = document.getElementById("live-clock");
+    function updateClock() {
+      if (!clockEl) return;
+      clockEl.textContent = new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
 </body>
 </html>
