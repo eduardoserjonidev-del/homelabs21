@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Página em desenvolvimento — S21 Home Server</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,61 +17,56 @@
       --font-mono: 'VT323', monospace;
 
       /* Paleta da Cena (SRV-01) */
-      --night-0: oklch(0.07 0.015 260);
-      --night-1: oklch(0.11 0.025 255);
-      --night-2: oklch(0.15 0.03 250);
-      --floor-a: oklch(0.1 0.015 255);
-      --floor-b: oklch(0.13 0.02 255);
+      --night-0: #060913;
+      --night-1: #0b1120;
+      --night-2: #121c32;
+      --floor-a: #0a0e1a;
+      --floor-b: #101726;
 
       /* Paleta de Pixels do Rack */
-      --pix-outline: oklch(0.06 0.01 260);
-      --pix-frame: oklch(0.2 0.015 255);
-      --pix-frame-hi: oklch(0.3 0.02 250);
-      --pix-panel: oklch(0.25 0.015 255);
-      --pix-seam: oklch(0.16 0.015 255);
-      --pix-vent: oklch(0.1 0.01 260);
-      --pix-bay: oklch(0.18 0.015 255);
-      --pix-bay-hi: oklch(0.34 0.02 250);
-      --pix-lcd: oklch(0.3 0.08 190);
-      --pix-lcd-text: oklch(0.85 0.14 185);
+      --pix-outline: #04060c;
+      --pix-frame: #1b2230;
+      --pix-frame-hi: #303a4d;
+      --pix-panel: #252e40;
+      --pix-seam: #141923;
+      --pix-vent: #080b11;
+      --pix-bay: #171d29;
+      --pix-bay-hi: #384359;
+      --pix-lcd: #0f3d3e;
+      --pix-lcd-text: #4deeea;
 
       /* LEDs */
-      --led-green: oklch(0.86 0.24 145);
-      --led-amber: oklch(0.83 0.17 75);
-      --led-blue: oklch(0.72 0.17 245);
-      --led-red: oklch(0.66 0.24 25);
-      --led-off: oklch(0.15 0.01 255);
+      --led-green: #22e568;
+      --led-amber: #f5a623;
+      --led-blue: #2b95ff;
+      --led-red: #f23a3a;
+      --led-off: #121621;
 
-      --glow-green: oklch(0.86 0.24 145 / 0.18);
-      --glow-blue: oklch(0.72 0.17 245 / 0.14);
+      --glow-green: rgba(34, 229, 104, 0.18);
+      --glow-blue: rgba(43, 149, 255, 0.14);
 
       /* Paleta do Técnico de TI */
-      --tech-outline: oklch(0.08 0.01 260);
-      --tech-cap: oklch(0.36 0.1 252);
-      --tech-hair: oklch(0.26 0.04 50);
-      --tech-skin: oklch(0.66 0.08 55);
-      --tech-skin-shade: oklch(0.54 0.08 50);
-      --tech-shirt: oklch(0.48 0.11 250);
-      --tech-shirt-shade: oklch(0.38 0.1 252);
-      --tech-lanyard: oklch(0.78 0.15 85);
-      --tech-badge: oklch(0.92 0.01 240);
-      --tech-pants: oklch(0.26 0.02 255);
-      --tech-pants-shade: oklch(0.2 0.02 255);
-      --tech-shoes: oklch(0.14 0.01 255);
-      --tech-box: oklch(0.55 0.18 28);
-      --tech-metal: oklch(0.8 0.02 240);
-      --tech-spark: oklch(0.95 0.1 200);
+      --tech-outline: #070910;
+      --tech-cap: #1d4ed8;
+      --tech-hair: #382618;
+      --tech-skin: #c88a65;
+      --tech-skin-shade: #9e6545;
+      --tech-shirt: #2b6cb0;
+      --tech-shirt-shade: #1e4e8c;
+      --tech-lanyard: #ecc94b;
+      --tech-badge: #e2e8f0;
+      --tech-pants: #232a38;
+      --tech-pants-shade: #181d27;
+      --tech-shoes: #0d1017;
+      --tech-box: #b83227;
+      --tech-metal: #bcc6d4;
+      --tech-spark: #dbf8ff;
 
-      /* Ciclo do técnico: 3s entra, 5s trabalha, 3s sai, 5s sala vazia */
       --tech-cycle: 16s;
       --px: clamp(4px, 0.85vw, 7px);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
@@ -89,7 +83,6 @@
       font-family: "Courier New", monospace;
     }
 
-    /* Estrutura Principal da Página */
     .page {
       width: min(900px, 100%);
       overflow: hidden;
@@ -111,13 +104,9 @@
       font-size: 0.72rem;
       letter-spacing: 1px;
     }
-
     .online { display: flex; align-items: center; gap: 7px; }
-
     .dot {
-      width: 7px;
-      height: 7px;
-      background: var(--neon);
+      width: 7px; height: 7px; background: var(--neon);
       box-shadow: 0 0 4px var(--neon), 0 0 10px rgba(57, 255, 156, 0.8);
       animation: status-blink 1.2s steps(2) infinite;
     }
@@ -159,11 +148,8 @@
         repeating-linear-gradient(90deg, var(--floor-a) 0 calc(var(--px) * 8), var(--floor-b) calc(var(--px) * 8) calc(var(--px) * 16)),
         var(--floor-a);
     }
-
     .scene-floor::after {
-      content: "";
-      position: absolute;
-      inset: 0;
+      content: ""; position: absolute; inset: 0;
       background: linear-gradient(transparent, var(--night-0) 85%);
     }
 
@@ -177,42 +163,79 @@
       justify-content: center;
     }
 
-    /* Grid de Pixels */
-    .pixel-grid {
-      display: grid;
-      grid-template-columns: repeat(var(--cols, 28), var(--px));
-      grid-auto-rows: var(--px);
-      image-rendering: pixelated;
+    /* Racks desenhados em CSS Puro + HTML (sem depender de JS!) */
+    .rack-unit {
+      width: calc(var(--px) * 28);
+      height: calc(var(--px) * 38);
+      background: var(--pix-panel);
+      border: calc(var(--px) * 1) solid var(--pix-outline);
+      box-shadow:
+        inset 0 calc(var(--px) * 1) 0 var(--pix-frame-hi),
+        inset 0 0 0 calc(var(--px) * 2) var(--pix-frame);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: calc(var(--px) * 2.5) calc(var(--px) * 3);
     }
+    .rack-unit::before, .rack-unit::after {
+      content: "";
+      position: absolute;
+      bottom: calc(var(--px) * -2);
+      width: calc(var(--px) * 3);
+      height: calc(var(--px) * 2);
+      background: var(--pix-outline);
+    }
+    .rack-unit::before { left: calc(var(--px) * 1); }
+    .rack-unit::after { right: calc(var(--px) * 1); }
 
-    .pix-K { background: var(--pix-outline); }
-    .pix-F { background: var(--pix-frame); }
-    .pix-f { background: var(--pix-frame-hi); }
-    .pix-P { background: var(--pix-panel); }
-    .pix-p { background: var(--pix-seam); }
-    .pix-V { background: var(--pix-vent); }
-    .pix-D { background: var(--pix-bay); }
-    .pix-d { background: var(--pix-bay-hi); }
-    .pix-S { background: var(--pix-lcd); }
-    .pix-s { background: var(--pix-lcd-text); animation: lcd-flicker 2.6s steps(1, end) infinite; }
-    .pix-G { background: var(--led-green); box-shadow: 0 0 calc(var(--px) * 1.2) var(--led-green); }
+    .blade {
+      height: calc(var(--px) * 4);
+      background: var(--pix-bay);
+      border-top: calc(var(--px) * 0.8) solid var(--pix-seam);
+      border-bottom: calc(var(--px) * 0.8) solid var(--pix-bay-hi);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 calc(var(--px) * 1.2);
+    }
+    .blade-vent {
+      height: calc(var(--px) * 3.5);
+      background: repeating-linear-gradient(
+        90deg,
+        var(--pix-vent) 0 calc(var(--px) * 1.2),
+        var(--pix-panel) calc(var(--px) * 1.2) calc(var(--px) * 2)
+      );
+      border: calc(var(--px) * 0.6) solid var(--pix-seam);
+    }
+    .blade-lcd {
+      width: calc(var(--px) * 6);
+      height: calc(var(--px) * 2);
+      background: var(--pix-lcd);
+      box-shadow: inset 0 0 0 calc(var(--px) * 0.4) var(--pix-lcd-text);
+      animation: lcd-flicker 2.6s steps(1, end) infinite;
+    }
+    .blade-leds {
+      display: flex;
+      gap: calc(var(--px) * 1);
+      align-items: center;
+    }
 
     .led {
       --c: var(--led-green);
-      position: relative;
-      z-index: 1;
+      width: var(--px);
+      height: var(--px);
+      display: inline-block;
       background: var(--c);
       box-shadow: 0 0 calc(var(--px) * 0.8) var(--c), 0 0 calc(var(--px) * 2.4) var(--c);
-      animation: led-blink var(--dur, 1s) linear var(--delay, 0s) infinite;
+      animation: led-blink var(--dur, 1.2s) linear var(--delay, 0s) infinite;
     }
-    .pix-g { --c: var(--led-green); }
-    .pix-a { --c: var(--led-amber); animation-name: led-blink-slow; }
-    .pix-b { --c: var(--led-blue); animation: led-breathe 3.2s steps(6, end) var(--delay, 0s) infinite; }
-    .pix-r { --c: var(--led-red); animation-name: led-blink-rare; animation-duration: 4.4s; }
+    .led-g { --c: var(--led-green); }
+    .led-a { --c: var(--led-amber); animation-name: led-blink-slow; }
+    .led-b { --c: var(--led-blue); animation: led-breathe 3.2s steps(6, end) infinite; }
+    .led-r { --c: var(--led-red); animation-name: led-blink-rare; animation-duration: 4.4s; }
 
     .rack-main { position: relative; z-index: 2; }
-    .rack-main > .pixel-grid { position: relative; z-index: 1; }
-
     .rack-halo {
       position: absolute;
       inset: -40% -90%;
@@ -220,11 +243,9 @@
       animation: halo-pulse 4s steps(8, end) infinite;
       pointer-events: none;
     }
-
     .rack-reflection {
       position: absolute;
-      top: 100%;
-      left: 0;
+      top: 100%; left: 0;
       transform: scaleY(-1);
       opacity: 0.18;
       filter: blur(1px);
@@ -243,14 +264,20 @@
     .rack-back-left { right: calc(100% + var(--px) * 10); }
     .rack-back-right { left: calc(100% + var(--px) * 10); }
 
-    /* ================= Técnico de TI ================= */
+    /* ================= Técnico de TI (Quadros 18x25 no HTML) ================= */
+    .pixel-grid {
+      display: grid;
+      grid-template-columns: repeat(18, var(--px));
+      grid-auto-rows: var(--px);
+      image-rendering: pixelated;
+    }
     .tech {
       position: absolute;
       z-index: 3;
       bottom: 0;
       left: calc(100% - var(--px) * 4);
       animation: tech-move var(--tech-cycle) linear infinite;
-      filter: brightness(0.9);
+      filter: brightness(0.92);
     }
     @media (max-width: 640px) {
       .tech { left: calc(100% - var(--px) * 13); }
@@ -259,8 +286,7 @@
       display: grid;
       animation: tech-face var(--tech-cycle) steps(1, end) infinite;
     }
-    .tech-walk,
-    .tech-work {
+    .tech-walk, .tech-work {
       grid-area: 1 / 1;
       display: grid;
       align-items: end;
@@ -287,13 +313,12 @@
     .tp-R { background: var(--tech-box); }
     .tp-W { background: var(--tech-metal); }
     .tp-Z {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       background: var(--tech-spark);
       box-shadow: 0 0 var(--px) var(--tech-spark), 0 0 calc(var(--px) * 3) var(--led-blue);
     }
 
-    /* Partículas de poeira */
+    /* Partículas de poeira compatíveis com todos os navegadores */
     .dust {
       position: absolute;
       z-index: 3;
@@ -301,8 +326,8 @@
       height: calc(var(--px) * 0.5);
       background: var(--glow-green);
       box-shadow: 0 0 var(--px) var(--glow-green);
-      left: calc(38% + mod(var(--i) * 37, 24) * 1%);
-      top: calc(28% + mod(var(--i) * 53, 44) * 1%);
+      left: var(--x, 45%);
+      top: var(--y, 40%);
       animation: dust-drift calc(9s + var(--i) * 0.7s) linear calc(var(--i) * -1.3s) infinite;
       opacity: 0;
     }
@@ -312,7 +337,7 @@
       position: absolute;
       z-index: 5;
       left: clamp(14px, 3vw, 28px);
-      color: oklch(0.55 0.03 240);
+      color: #7b899e;
     }
     .hud-top { top: clamp(12px, 3vh, 24px); }
     .hud-bottom { bottom: clamp(10px, 2.5vh, 20px); }
@@ -321,7 +346,7 @@
       font-family: var(--font-pixel);
       font-size: clamp(10px, 1.4vw, 15px);
       font-weight: 400;
-      color: oklch(0.88 0.03 200);
+      color: #d8e6ec;
       letter-spacing: 0.08em;
       text-shadow: 0 0 12px var(--glow-green);
     }
@@ -330,7 +355,7 @@
       font-size: clamp(14px, 1.8vw, 19px);
       letter-spacing: 0.06em;
     }
-    .hud-dim { opacity: 0.6; }
+    .hud-dim { opacity: 0.7; }
     .hud-status { display: inline-grid; }
     .hud-status > * { grid-area: 1 / 1; }
     .hud-ok {
@@ -346,99 +371,63 @@
     }
     .hud-cursor {
       display: inline-block;
-      width: 0.55em;
-      height: 0.9em;
-      margin-left: 0.3em;
-      vertical-align: -0.1em;
+      width: 0.55em; height: 0.9em;
+      margin-left: 0.3em; vertical-align: -0.1em;
       background: var(--led-green);
       animation: cursor-blink 1s steps(1, end) infinite;
     }
 
-    /* Efeito CRT */
     .scene-scanlines {
-      position: absolute;
-      inset: 0;
-      z-index: 6;
-      pointer-events: none;
-      background: repeating-linear-gradient(transparent 0 2px, oklch(0 0 0 / 0.22) 2px 3px);
+      position: absolute; inset: 0; z-index: 6; pointer-events: none;
+      background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, 0.22) 2px 3px);
     }
     .scene-vignette {
-      position: absolute;
-      inset: 0;
-      z-index: 7;
-      pointer-events: none;
-      background: radial-gradient(ellipse at 50% 50%, transparent 45%, oklch(0 0 0 / 0.75) 100%);
+      position: absolute; inset: 0; z-index: 7; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
     }
 
     /* ================= Legenda e Terminal Sincronizados ================= */
     .content { padding: 10px 28px 31px; text-align: center; }
     .status-label { margin-bottom: 13px; color: var(--cyan); font-size: 0.7rem; letter-spacing: 2px; }
-
     .content h1 {
-      max-width: 760px;
-      margin: auto;
-      color: var(--text);
-      font-size: clamp(1.35rem, 4vw, 2.25rem);
-      line-height: 1.35;
-      letter-spacing: -1px;
+      max-width: 760px; margin: auto; color: var(--text);
+      font-size: clamp(1.35rem, 4vw, 2.25rem); line-height: 1.35; letter-spacing: -1px;
     }
     .content h1 span { color: var(--neon); }
     .subtitle { margin-top: 14px; color: #718d84; font-size: 0.8rem; }
 
     .status-terminal {
-      max-width: 590px;
-      margin: 23px auto 0;
-      padding: 12px 15px;
-      text-align: left;
-      border: 1px solid rgba(57, 255, 156, 0.14);
-      background: rgba(0, 0, 0, 0.18);
-      color: #72978b;
-      font-size: 0.74rem;
-      line-height: 1.8;
+      max-width: 590px; margin: 23px auto 0; padding: 12px 15px;
+      text-align: left; border: 1px solid rgba(57, 255, 156, 0.14);
+      background: rgba(0, 0, 0, 0.18); color: #72978b;
+      font-size: 0.74rem; line-height: 1.8;
     }
     .status-terminal strong { color: var(--neon); font-weight: normal; }
 
-    /* Estados sincronizados com o boneco no terminal */
-    .sync-state {
-      display: inline-grid;
-      vertical-align: bottom;
-    }
+    .sync-state { display: inline-grid; vertical-align: bottom; text-align: left; }
     .sync-state > * { grid-area: 1 / 1; }
-    .state-idle {
-      animation: tech-hide var(--tech-cycle) steps(1, end) infinite;
-    }
+    .state-idle { animation: tech-hide var(--tech-cycle) steps(1, end) infinite; }
     .state-work {
       opacity: 0;
-      color: var(--led-amber);
-      text-shadow: 0 0 6px rgba(232, 162, 61, 0.35);
+      color: var(--led-amber) !important;
+      text-shadow: 0 0 6px rgba(245, 166, 35, 0.35);
       animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite;
     }
 
     .cursor {
-      display: inline-block;
-      width: 6px;
-      height: 9px;
-      margin-left: 4px;
-      vertical-align: middle;
-      background: var(--neon);
+      display: inline-block; width: 6px; height: 9px; margin-left: 4px;
+      vertical-align: middle; background: var(--neon);
       animation: cursor-blink 0.8s steps(1) infinite;
     }
 
     .back {
-      display: inline-block;
-      margin-top: 23px;
-      padding: 10px 15px;
-      border: 1px solid rgba(57, 255, 156, 0.35);
-      background: rgba(57, 255, 156, 0.035);
-      color: var(--neon);
-      text-decoration: none;
-      font-size: 0.72rem;
-      letter-spacing: 1px;
+      display: inline-block; margin-top: 23px; padding: 10px 15px;
+      border: 1px solid rgba(57, 255, 156, 0.35); background: rgba(57, 255, 156, 0.035);
+      color: var(--neon); text-decoration: none; font-size: 0.72rem; letter-spacing: 1px;
       transition: all 0.2s ease;
     }
     .back:hover {
-      border-color: var(--neon);
-      background: rgba(57, 255, 156, 0.1);
+      border-color: var(--neon); background: rgba(57, 255, 156, 0.1);
       box-shadow: 0 0 12px rgba(57, 255, 156, 0.16);
     }
 
@@ -467,9 +456,9 @@
       100% { transform: translate(calc(var(--px) * 6), calc(var(--px) * -14)); opacity: 0; }
     }
     @keyframes tech-move {
-      0% { transform: translateX(420px); }
+      0% { transform: translateX(380px); }
       18.75%, 50% { transform: translateX(0); }
-      68.75%, 100% { transform: translateX(420px); }
+      68.75%, 100% { transform: translateX(380px); }
     }
     @keyframes tech-face {
       0% { transform: scaleX(-1); }
@@ -491,14 +480,8 @@
       18.75% { opacity: 0; }
       50%, 100% { opacity: 1; }
     }
-    @keyframes frame-a {
-      0% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-    @keyframes frame-b {
-      0% { opacity: 0; }
-      50%, 100% { opacity: 1; }
-    }
+    @keyframes frame-a { 0% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes frame-b { 0% { opacity: 0; } 50%, 100% { opacity: 1; } }
 
     @media (max-width: 650px) {
       body { padding: 8px; }
@@ -506,11 +489,6 @@
       .scene { aspect-ratio: 4 / 3; --px: clamp(3.5px, 1.3vw, 5.5px); }
       .topbar { font-size: 0.61rem; }
       .content { padding: 8px 15px 24px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .led, .pix-s, .rack-halo, .dust, .hud-cursor, .hud-ok, .state-idle, .cursor, .dot { animation: none !important; }
-      .tech, .hud-maint, .state-work { display: none !important; }
     }
   </style>
 </head>
@@ -522,33 +500,192 @@
     </header>
 
     <section class="scene-wrapper">
-      <div class="scene" id="scene" role="img" aria-label="Servidor em pixel art com técnico de TI fazendo manutenção">
+      <div class="scene" role="img" aria-label="Servidor em pixel art com técnico de TI fazendo manutenção">
         <div class="scene-wall"></div>
         <div class="scene-floor"></div>
 
         <div class="scene-stage">
-          <div class="rack-back rack-back-left"><div data-seed="3"></div></div>
-          <div class="rack-back rack-back-right"><div data-seed="7"></div></div>
-
-          <div class="rack-main">
-            <div class="rack-halo"></div>
-            <div data-seed="0"></div>
-            <div class="rack-reflection"><div data-seed="0"></div></div>
+          <!-- Rack Esquerdo (Fundo) -->
+          <div class="rack-back rack-back-left">
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.4s"></i><i class="led led-a" style="--delay:1.1s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.7s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:0.2s"></i><i class="led led-a" style="--delay:2.1s"></i><i class="led led-r"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.9s"></i><i class="led led-g" style="--delay:1.5s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-a" style="--delay:0.7s"></i><i class="led led-g" style="--delay:2.4s"></i></div></div>
+            </div>
           </div>
 
+          <!-- Rack Direito (Fundo) -->
+          <div class="rack-back rack-back-right">
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.2s"></i><i class="led led-a" style="--delay:0.3s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:2.2s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:1.1s"></i><i class="led led-g" style="--delay:0.5s"></i><i class="led led-r"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.1s"></i><i class="led led-a" style="--delay:1.8s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.4s"></i><i class="led led-g" style="--delay:0.6s"></i></div></div>
+            </div>
+          </div>
+
+          <!-- Rack Principal + Reflexo -->
+          <div class="rack-main">
+            <div class="rack-halo"></div>
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.2s"></i><i class="led led-a" style="--delay:0.8s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.1s"></i><i class="led led-a" style="--delay:1.9s"></i><i class="led led-g" style="--delay:0.5s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:0.3s"></i><i class="led led-a" style="--delay:1.4s"></i><i class="led led-g" style="--delay:2.1s"></i><i class="led led-r"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.6s"></i><i class="led led-a" style="--delay:0.4s"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.7s"></i><i class="led led-a" style="--delay:2.3s"></i><i class="led led-g" style="--delay:1.2s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.8s"></i><i class="led led-a" style="--delay:0.9s"></i></div><div class="blade-lcd"></div></div>
+            </div>
+
+            <div class="rack-reflection" aria-hidden="true">
+              <div class="rack-unit">
+                <div class="blade"><div class="blade-leds"><i class="led led-g"></i><i class="led led-a"></i></div><div class="blade-lcd"></div></div>
+                <div class="blade"><div class="blade-leds"><i class="led led-g"></i><i class="led led-b"></i></div></div>
+                <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g"></i><i class="led led-r"></i></div></div>
+                <div class="blade-vent"></div>
+                <div class="blade"><div class="blade-leds"><i class="led led-g"></i><i class="led led-b"></i></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Técnico de TI (4 Quadros 18x25 em HTML Puro, sem precisar de JS) -->
           <div class="tech" aria-hidden="true">
             <div class="tech-body">
               <div class="tech-walk">
-                <div data-tech="walk-a" class="tech-frame tech-walk-a"></div>
-                <div data-tech="walk-b" class="tech-frame tech-walk-b"></div>
+                <div class="pixel-grid tech-frame tech-walk-a">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+                <div class="pixel-grid tech-frame tech-walk-b">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                </div>
               </div>
               <div class="tech-work">
-                <div data-tech="work-a" class="tech-frame tech-work-a"></div>
-                <div data-tech="work-b" class="tech-frame tech-work-b"></div>
+                <div class="pixel-grid tech-frame tech-work-a">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                </div>
+                <div class="pixel-grid tech-frame tech-work-b">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-Z"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Poeira na luz dos LEDs -->
+        <span class="dust" style="--i:0;--x:38%;--y:28%"></span>
+        <span class="dust" style="--i:1;--x:51%;--y:49%"></span>
+        <span class="dust" style="--i:2;--x:40%;--y:70%"></span>
+        <span class="dust" style="--i:3;--x:53%;--y:35%"></span>
+        <span class="dust" style="--i:4;--x:42%;--y:56%"></span>
+        <span class="dust" style="--i:5;--x:55%;--y:33%"></span>
+        <span class="dust" style="--i:6;--x:44%;--y:54%"></span>
+        <span class="dust" style="--i:7;--x:57%;--y:31%"></span>
+        <span class="dust" style="--i:8;--x:46%;--y:52%"></span>
+        <span class="dust" style="--i:9;--x:59%;--y:29%"></span>
 
         <div class="hud hud-top">
           <div class="hud-title">SRV-S21+</div>
@@ -557,7 +694,7 @@
           </p>
         </div>
         <div class="hud hud-bottom">
-          <p class="hud-line hud-dim"><span id="live-clock">--:--:--</span> · S21+ · TERMUX</p>
+          <p class="hud-line hud-dim"><span id="live-clock">ONLINE 24/7</span> · S21+ · TERMUX</p>
         </div>
 
         <div class="scene-scanlines"></div>
@@ -592,208 +729,5 @@
       <a href="index.html" class="back">&lt; VOLTAR AO SITE</a>
     </section>
   </main>
-
-  <script>
-    // 1. Matriz de 28x39 dos Racks de Servidor
-    const RACK_ROWS = [
-      "KKKKKKKKKKKKKKKKKKKKKKKKKKKK",
-      "KffffffffffffffffffffffffffK",
-      "KFFFFFFFFFFFFFFFFFFFFFFFFFFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPDDDdPDDDdPDDDdPDDDdPGbPFK",
-      "KFPgDDdPaDDdPgDDdPDDDdPPPPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPSsSsSPgPaPgPgPaPgPgPrPPFK",
-      "KFPSSSSSPpKpKpKpKpKpKpKpKPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPVVVVVVVVVVVVVVVVVVVVVVPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPVVVVVVVVVVVVVVVVVVVVVVPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPDDDdPDDDdPDDDdPDDDdPGbPFK",
-      "KFPgDDdPaDDdPgDDdPDDDdPPPPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFPgPaPVVVVVVVVVVVPDdDdDdPFK",
-      "KFPPPPPPPPPPPPPPPPPPPPPPPPFK",
-      "KFppppppppppppppppppppppppFK",
-      "KFFFFFFFFFFFFFFFFFFFFFFFFFFK",
-      "KKKKKKKKKKKKKKKKKKKKKKKKKKKK",
-      ".KKK....................KKK."
-    ];
-
-    const LEDS = new Set(["g", "a", "b", "r"]);
-
-    document.querySelectorAll("[data-seed]").forEach(placeholder => {
-      const seed = Number(placeholder.dataset.seed) || 0;
-      const grid = document.createElement("div");
-      grid.className = "pixel-grid";
-      grid.style.setProperty("--cols", 28);
-      grid.setAttribute("aria-hidden", "true");
-
-      RACK_ROWS.forEach((row, y) => {
-        [...row].forEach((code, x) => {
-          const cell = document.createElement("div");
-          if (code !== ".") {
-            const isLed = LEDS.has(code);
-            cell.className = `pix pix-${code}${isLed ? " led" : ""}`;
-            if (isLed) {
-              const h = (x * 7 + y * 13 + seed * 5) % 17;
-              const delay = ((h * 0.23) % 3.9).toFixed(2);
-              const dur = (0.6 + ((h * 0.21) % 2.3)).toFixed(2);
-              cell.style.setProperty("--delay", `${delay}s`);
-              cell.style.setProperty("--dur", `${dur}s`);
-            }
-          }
-          grid.appendChild(cell);
-        });
-      });
-
-      placeholder.replaceWith(grid);
-    });
-
-    // 2. Matrizes 18x25 dos 4 Quadros do Técnico de TI
-    const TECH_HEAD_TORSO = [
-      "......KKKKK.......",
-      ".....KCCCCCK......",
-      "....KCCCCCCKKK....",
-      "....KHkkkkkK......",
-      "....KHkkkKkK......",
-      "....KHkkkkkK......",
-      ".....KkkknK.......",
-      "......KnnK........",
-      "....KKUUUUKK......"
-    ];
-
-    const TECH_FRAMES = {
-      "walk-a": [
-        ...TECH_HEAD_TORSO,
-        "...KUUUULUUUK.....",
-        "...KUUUULUUUK.....",
-        "...KUuUUIUUuK.....",
-        "...KUuUUUUUuK.....",
-        "...KUuUUUUUuK.....",
-        "...KkKUUUUKkK.....",
-        "....KKTTTTKKKKK...",
-        ".....KTTTTKKRRRRK.",
-        ".....KTTTTKRRYRRK.",
-        ".....KTTtTK.......",
-        ".....KTTtTK.......",
-        ".....KTTtTK.......",
-        ".....KTTtTK.......",
-        "....KOOKOOK.......",
-        "....KOOOOOOK......",
-        "....KKKKKKKK......"
-      ],
-      "walk-b": [
-        ...TECH_HEAD_TORSO,
-        "...KUUUULUUUK.....",
-        "...KUUUULUUUK.....",
-        "...KUuUUIUUuK.....",
-        "...KUuUUUUUuK.....",
-        "...KUuUUUUUuK.....",
-        "...KkKUUUUKkK.....",
-        "....KKTTTTKKKKK...",
-        ".....KTTTTK.......",
-        "....KTTKTTKKRRRRK.",
-        "...KTTKKTTRRYRRK..",
-        "...KTTK.KTTK......",
-        "..KTTK..KTTK......",
-        "..KTTK...KTTK.....",
-        "..KOOK...KOOOK....",
-        ".KOOOK...KOOOOK...",
-        ".KKKKK...KKKKKK..."
-      ],
-      "work-a": [
-        ...TECH_HEAD_TORSO,
-        "...KUUUULUUUKKKK..",
-        "...KUUUULUUUUUUKK.",
-        "...KUuUUIUUKKKkkW.",
-        "...KUuUUUUUK..KKW.",
-        "...KUuUUUUUK......",
-        "...KkKUUUUUK......",
-        "....KKTTTTKK......",
-        ".....KTTTTK.......",
-        ".....KTTTTK.......",
-        ".....KTTtTK.......",
-        ".....KTTtTK......K",
-        "KKKK.KTTtTK......K",
-        "RRRK.KTTtTK......K",
-        "RYRK.KOOKOOK.....K",
-        "RRRK.KOOOOOOK....K",
-        "KKKK.KKKKKKKK....K"
-      ],
-      "work-b": [
-        ...TECH_HEAD_TORSO,
-        "...KUUUULUUUKKKKW.",
-        "...KUUUULUUUUUkkZ.",
-        "...KUuUUIUUKKKKKW.",
-        "...KUuUUUUUK......",
-        "...KUuUUUUUK......",
-        "...KkKUUUUUK......",
-        "....KKTTTTKK......",
-        ".....KTTTTK.......",
-        ".....KTTTTK.......",
-        ".....KTTtTK.......",
-        ".....KTTtTK......K",
-        "KKKK.KTTtTK......K",
-        "RRRK.KTTtTK......K",
-        "RYRK.KOOKOOK.....K",
-        "RRRK.KOOOOOOK....K",
-        "KKKK.KKKKKKKK....K"
-      ]
-    };
-
-    document.querySelectorAll("[data-tech]").forEach(el => {
-      const rows = TECH_FRAMES[el.dataset.tech];
-      el.classList.add("pixel-grid");
-      el.style.setProperty("--cols", 18);
-      rows.forEach(row => {
-        [...row].forEach(code => {
-          const cell = document.createElement("div");
-          if (code !== ".") cell.className = `tp tp-${code}`;
-          el.appendChild(cell);
-        });
-      });
-    });
-
-    // 3. Gera as 14 partículas de poeira
-    const scene = document.getElementById("scene");
-    for (let i = 0; i < 14; i++) {
-      const span = document.createElement("span");
-      span.className = "dust";
-      span.style.setProperty("--i", i);
-      scene.appendChild(span);
-    }
-
-    // 4. Relógio em tempo real (atualiza a cada 1 segundo)
-    const clockEl = document.getElementById("live-clock");
-    function updateClock() {
-      if (!clockEl) return;
-      clockEl.textContent = new Date().toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      });
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-  </script>
 </body>
 </html>
