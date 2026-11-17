@@ -490,3 +490,10 @@ footer .mono { color: var(--text-faint); font-size: 0.78rem; }
   .hero p { font-size: 0.86rem; }
   .statusbar-right { font-size: 0.66rem; }
 }
+
+css
+
+abbr {
+  color: #00ff00;
+  text-decoration: underline wavy #00ff00;
+}
