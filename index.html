@@ -257,6 +257,34 @@
       </div>
       <div class="split-arrow">Fedora → git commit → deploy → S21+</div>
     </section>
+    
+    <section id="chat" class="chat-section">
+      <div class="tag2">assistente</div>
+      <h2>Bot de Estudos (SQLite + Express)</h2>
+      <p>Pergunte sobre os temas estudados no homelab (ex: <code>SQLite</code>, <code>Express</code>). Dúvidas novas são salvas automaticamente no banco para estudo futuro.</p>
+
+      <div class="chat-box">
+        <div class="term-bar"><i></i><i></i><i></i><span>POST /api/chat</span></div>
+
+        <div class="chat-messages" id="chat-messages" aria-live="polite">
+          <div class="chat-msg bot">
+            <span class="chat-sender mono">s21-bot:</span>
+            <span class="chat-text">Olá! Pode perguntar sobre o que já estudei aqui no S21+.</span>
+          </div>
+        </div>
+
+        <form class="chat-form" id="chat-form" autocomplete="off">
+          <input
+            type="text"
+            id="chat-input"
+            class="chat-input focus-ring"
+            placeholder="Digite sua pergunta (ex: O que é SQLite?)"
+            required
+          />
+          <button type="submit" id="chat-submit" class="chat-btn focus-ring">Enviar</button>
+        </form>
+      </div>
+    </section>
 
   </main>
 

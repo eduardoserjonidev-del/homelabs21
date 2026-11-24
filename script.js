@@ -288,3 +288,61 @@ function updateActiveNav() {
 
 window.addEventListener('scroll', updateActiveNav, { passive: true });
 updateActiveNav();
+
+// ---------- chatbot (/api/chat) ----------
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+const chatSubmit = document.getElementById('chat-submit');
+
+function appendChatMessage(sender, text, type) {
+  const msgEl = document.createElement('div');
+  msgEl.className = `chat-msg ${type}`;
+
+  const senderEl = document.createElement('span');
+  senderEl.className = 'chat-sender mono';
+  senderEl.textContent = sender;
+
+  const textEl = document.createElement('span');
+  textEl.className = 'chat-text';
+  textEl.textContent = text;
+
+  msgEl.appendChild(senderEl);
+  msgEl.appendChild(textEl);
+  chatMessages.appendChild(msgEl);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+if (chatForm && chatInput && chatMessages) {
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const mensagem = chatInput.value.trim();
+    if (!mensagem) return;
+
+    appendChatMessage('você:', mensagem, 'user');
+    chatInput.value = '';
+    chatSubmit.disabled = true;
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensagem })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        appendChatMessage('erro:', data.erro || 'Falha ao consultar a API.', 'bot');
+      } else {
+        const prefixo = data.assunto ? `s21-bot [${data.assunto}]:` : 's21-bot:';
+        appendChatMessage(prefixo, data.resposta, 'bot');
+      }
+    } catch {
+      appendChatMessage('erro:', 'Não foi possível conectar ao servidor.', 'bot');
+    } finally {
+      chatSubmit.disabled = false;
+      chatInput.focus();
+    }
+  });
+}
