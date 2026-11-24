@@ -347,48 +347,72 @@ if (chatForm && chatInput && chatMessages) {
   });
 }
 
-async function atualizarTudo() {
+const CIRCUNFERENCIA = 2 * Math.PI * 52;
+
+function atualizarGauge(id, percentual) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const valor = Math.max(0, Math.min(100, Number(percentual) || 0));
+  const arco = el.querySelector('.arco');
+  const txt = el.querySelector('.g-txt strong');
+
+  if (arco) arco.style.strokeDashoffset = CIRCUNFERENCIA * (1 - valor / 100);
+  if (txt) txt.textContent = `${valor.toFixed(1)}%`;
+}
+
+function atualizarRelogioMonitor() {
+  const agora = new Date();
+  const horaEl = document.getElementById('mon-hora');
+  const dataEl = document.getElementById('mon-data');
+  if (horaEl) {
+    horaEl.textContent = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+  if (dataEl) {
+    dataEl.textContent = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  }
+}
+
+async function atualizarMonitorS21() {
   const statusEl = document.getElementById('mon-status');
   const upEl = document.getElementById('mon-up');
   const srvEl = document.getElementById('mon-servicos');
-  const termEl = document.getElementById('api-status-output');
 
   try {
     const res = await fetch('/api/status', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const d = await res.json();
 
-    // 1. Atualiza o painel visual
     if (statusEl) {
       statusEl.textContent = d.status || 'online';
       statusEl.className = 'mon-status on';
     }
+
     atualizarGauge('g-ram', d.ram);
     atualizarGauge('g-sto', d.storage);
+
     if (upEl) upEl.textContent = `Online há ${d.uptime}`;
+
     if (srvEl && d.services) {
       srvEl.innerHTML = Object.entries(d.services)
-        .map(([n, ok]) => `<span class="srv-pill"><i class="srv-dot ${ok ? 'on' : 'off'}"></i>${n}</span>`)
+        .map(([nome, ativo]) => `
+          <span class="srv-pill">
+            <i class="srv-dot ${ativo ? 'on' : 'off'}"></i>${nome}
+          </span>
+        `)
         .join('');
     }
-
-    // 2. Atualiza o terminal (só se você decidir manter ele no HTML)
-    if (termEl) {
-      const boolSpan = (v) => v ? `<span class="ok">true</span>` : `<span class="warn2">false</span>`;
-      const servicesHtml = Object.entries(d.services || {})
-        .map(([n, ok]) => `    <span class="p">"${n}"</span>: ${boolSpan(ok)}`)
-        .join(',\n');
-
-      termEl.innerHTML = `{\n  <span class="p">"status"</span>: <span class="ok">"${d.status}"</span>,\n  <span class="p">"cpu"</span>: <span class="warn2">${d.cpu ?? 'null'}</span>,<span class="c">  // não medível com segurança no Android</span>\n  <span class="p">"ram"</span>: ${d.ram},\n  <span class="p">"storage"</span>: ${d.storage},\n  <span class="p">"uptime"</span>: <span class="ok">"${d.uptime}"</span>,\n  <span class="p">"services"</span>: {\n${servicesHtml}\n  }\n}`;
-    }
   } catch {
-    if (statusEl) { statusEl.textContent = 'offline'; statusEl.className = 'mon-status off'; }
+    if (statusEl) {
+      statusEl.textContent = 'offline';
+      statusEl.className = 'mon-status off';
+    }
     if (upEl) upEl.textContent = 'Sem resposta de /api/status';
-    if (termEl) termEl.innerHTML = `{ <span class="p">"status"</span>: <span class="warn2">"offline"</span> }`;
   }
 }
 
 atualizarRelogioMonitor();
 setInterval(atualizarRelogioMonitor, 10000);
-atualizarTudo();
-setInterval(atualizarTudo, 30000);
+
+atualizarMonitorS21();
+setInterval(atualizarMonitorS21, 30000);
