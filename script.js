@@ -346,3 +346,40 @@ if (chatForm && chatInput && chatMessages) {
     }
   });
 }
+
+async function carregarStatusApi() {
+  const el = document.getElementById('api-status-output');
+  if (!el) return;
+
+  try {
+    const res = await fetch('/api/status', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const d = await res.json();
+    const boolSpan = (v) =>
+      v ? `<span class="ok">true</span>` : `<span class="warn2">false</span>`;
+
+    const servicesHtml = Object.entries(d.services || {})
+      .map(([nome, ativo]) => `    <span class="p">"${nome}"</span>: ${boolSpan(ativo)}`)
+      .join(',\n');
+
+    el.innerHTML = `{
+  <span class="p">"status"</span>: <span class="ok">"${d.status}"</span>,
+  <span class="p">"cpu"</span>: <span class="warn2">${d.cpu === null ? 'null' : d.cpu}</span>,<span class="c">  // não medível com segurança no Android</span>
+  <span class="p">"ram"</span>: ${d.ram},
+  <span class="p">"storage"</span>: ${d.storage},
+  <span class="p">"uptime"</span>: <span class="ok">"${d.uptime}"</span>,
+  <span class="p">"services"</span>: {
+${servicesHtml}
+  }
+}`;
+  } catch (err) {
+    el.innerHTML = `{
+  <span class="p">"status"</span>: <span class="warn2">"offline"</span>,
+  <span class="p">"erro"</span>: <span class="c">"não foi possível consultar /api/status"</span>
+}`;
+  }
+}
+
+carregarStatusApi();
+setInterval(carregarStatusApi, 30000);

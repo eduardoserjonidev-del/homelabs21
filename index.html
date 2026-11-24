@@ -164,22 +164,12 @@
     <section id="monitor">
       <div class="section-head">
         <div class="kicker">o painel de status</div>
-        <h2>Uma API que prefere dizer "não sei" a inventar um número</h2>
+<h2>Uma API que prefere dizer "não sei" a inventar um número</h2>
         <p>O Android 15 restringe o acesso a partes do <code>/proc</code>. Quando a API não consegue medir algo com confiança — como o uso de CPU — ela retorna <code>null</code> em vez de simular um valor.</p>
       </div>
       <div class="term">
         <div class="term-bar"><i></i><i></i><i></i><span>GET /api/status</span></div>
-        <div class="term-body">{
-  <span class="p">"status"</span>: <span class="ok">"online"</span>,
-  <span class="p">"cpu"</span>: <span class="warn2">null</span>,<span class="c">  // não medível com segurança no Android</span>
-  <span class="p">"ram"</span>: 63.2,
-  <span class="p">"storage"</span>: 20.2,
-  <span class="p">"uptime"</span>: <span class="ok">"13m"</span>,
-  <span class="p">"services"</span>: {
-    <span class="p">"nginx"</span>: <span class="ok">true</span>,
-    <span class="p">"python"</span>: <span class="ok">true</span>
-  }
-}</div>
+        <div class="term-body" id="api-status-output">carregando /api/status...</div>
       </div>
     </section>
 
