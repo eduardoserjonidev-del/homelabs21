@@ -167,11 +167,54 @@
 <h2>Uma API que prefere dizer "não sei" a inventar um número</h2>
         <p>O Android 15 restringe o acesso a partes do <code>/proc</code>. Quando a API não consegue medir algo com confiança — como o uso de CPU — ela retorna <code>null</code> em vez de simular um valor.</p>
       </div>
-      <div class="term">
-        <div class="term-bar"><i></i><i></i><i></i><span>GET /api/status</span></div>
-        <div class="term-body" id="api-status-output">carregando /api/status...</div>
+      <div class="mon">
+    <header class="mon-head">
+      <svg viewBox="0 0 24 24" class="ico"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      <div>
+        <h3>Samsung Galaxy S21+</h3>
+        <p class="mon-sub">Dados em tempo real via /api/status</p>
       </div>
-    </section>
+      <span id="mon-status" class="mon-status off">offline</span>
+    </header>
+
+    <div class="mon-top">
+      <div class="gauge" id="g-ram">
+        <svg viewBox="0 0 120 120">
+          <circle class="trilho" cx="60" cy="60" r="52"/>
+          <circle class="arco" cx="60" cy="60" r="52"/>
+        </svg>
+        <div class="g-txt"><strong>—</strong><span>RAM</span></div>
+        <p class="g-det">Em uso no momento</p>
+      </div>
+
+      <div class="phone">
+        <div class="tela">
+          <div id="mon-hora">--:--</div>
+          <div id="mon-data" class="mon-sub"></div>
+        </div>
+      </div>
+
+      <div class="gauge" id="g-sto">
+        <svg viewBox="0 0 120 120">
+          <circle class="trilho" cx="60" cy="60" r="52"/>
+          <circle class="arco" cx="60" cy="60" r="52"/>
+        </svg>
+        <div class="g-txt"><strong>—</strong><span>Armazenamento</span></div>
+        <p class="g-det">Espaço utilizado</p>
+      </div>
+    </div>
+
+    <div class="mon-uptime">
+      <svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <div>
+        <strong id="mon-up">Aguardando dados…</strong>
+        <p class="mon-sub" id="mon-up-det">Tempo contínuo da API s21monitor</p>
+      </div>
+    </div>
+
+    <div class="mon-servicos" id="mon-servicos"></div>
+  </div>
+</section>
 
     <hr class="rule">
 
