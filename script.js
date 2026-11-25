@@ -313,6 +313,44 @@ function appendChatMessage(sender, text, type) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+function mostrarDigitando() {
+  const msgEl = document.createElement('div');
+  msgEl.className = 'chat-msg bot chat-typing';
+  msgEl.innerHTML = `
+    <span class="chat-sender mono">s21-bot:</span>
+    <span class="chat-text bot-digitando">
+      respondendo <span class="dots"><i></i><i></i><i></i></span>
+    </span>
+  `;
+  chatMessages.appendChild(msgEl);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return msgEl;
+}
+
+function mostrarAvisoIA() {
+  const container = chatMessages.parentElement;
+  if (!container || container.querySelector('.chat-aviso-ia')) return;
+
+  if (getComputedStyle(container).position === 'static') {
+    container.style.position = 'relative';
+  }
+
+  const aviso = document.createElement('div');
+  aviso.className = 'chat-aviso-ia';
+  aviso.innerHTML = `
+    <span>
+      <strong>Atenção:</strong> esta mensagem foi gerada por IA com base no conteúdo do site e do sistema. Este chat não responde perguntas gerais!
+    </span>
+    <button type="button" class="chat-aviso-fechar" aria-label="Fechar aviso">&times;</button>
+  `;
+
+  aviso.querySelector('.chat-aviso-fechar').addEventListener('click', () => {
+    aviso.remove();
+  });
+
+  container.appendChild(aviso);
+}
+
 if (chatForm && chatInput && chatMessages) {
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -323,6 +361,8 @@ if (chatForm && chatInput && chatMessages) {
     chatInput.value = '';
     chatSubmit.disabled = true;
 
+    const digitandoEl = mostrarDigitando();
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -331,16 +371,20 @@ if (chatForm && chatInput && chatMessages) {
       });
 
       const data = await res.json();
+      digitandoEl.remove();
 
       if (!res.ok) {
         appendChatMessage('erro:', data.erro || 'Falha ao consultar a API.', 'bot');
       } else {
         const prefixo = data.assunto ? `s21-bot [${data.assunto}]:` : 's21-bot:';
         appendChatMessage(prefixo, data.resposta, 'bot');
+        mostrarAvisoIA();
       }
     } catch {
+      digitandoEl.remove();
       appendChatMessage('erro:', 'Não foi possível conectar ao servidor.', 'bot');
     } finally {
+      digitandoEl.remove();
       chatSubmit.disabled = false;
       chatInput.focus();
     }

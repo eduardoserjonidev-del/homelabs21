@@ -793,3 +793,191 @@ abbr {
     height: 90px;
   }
 }
+
+/* Garante referência de posicionamento para o pop-up no topo do chat */
+.chat-box, #chat-box {
+  position: relative;
+}
+
+/* 1. Animação de "bot respondendo" */
+.bot-digitando {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  width: fit-content;
+}
+
+.bot-digitando .dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.bot-digitando .dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  animation: bot-pulso 1.2s infinite ease-in-out;
+}
+
+.bot-digitando .dots i:nth-child(2) { animation-delay: 0.2s; }
+.bot-digitando .dots i:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bot-pulso {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* Animação de "respondendo" no chat */
+.bot-digitando {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.bot-digitando .dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.bot-digitando .dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  animation: bot-pulso 1.2s infinite ease-in-out;
+}
+
+.bot-digitando .dots i:nth-child(2) { animation-delay: 0.2s; }
+.bot-digitando .dots i:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bot-pulso {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* Pop-up de aviso de IA no topo do chat */
+.chat-aviso-ia {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--warn);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 0 0 999px var(--warn-dim);
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  animation: aviso-subir 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.chat-aviso-ia strong {
+  color: var(--warn);
+  font-family: var(--mono);
+}
+
+.chat-aviso-fechar {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.chat-aviso-fechar:hover {
+  color: var(--text);
+}
+
+@keyframes aviso-subir {
+  from {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. Pop-up que sobe até o topo do chat */
+.chat-aviso-ia {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--warn);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 0 0 999px var(--warn-dim);
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  animation: aviso-subir 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.chat-aviso-ia strong {
+  color: var(--warn);
+  font-family: var(--mono);
+}
+
+.chat-aviso-fechar {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.chat-aviso-fechar:hover {
+  color: var(--text);
+}
+
+@keyframes aviso-subir {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
