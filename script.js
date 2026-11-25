@@ -417,15 +417,25 @@ function atualizarRelogioMonitor() {
   }
 }
 
-async function atualizarMonitorS21() {
+async function atualizarMonitorS21(registrarVisita = false) {
   const statusEl = document.getElementById('mon-status');
   const upEl = document.getElementById('mon-up');
   const srvEl = document.getElementById('mon-servicos');
+  const sinceEl = document.getElementById('mon-since');
+  const daysEl = document.getElementById('mon-since-days');
+  const visitsEl = document.getElementById('mon-visits');
+
+  const contar = registrarVisita && !sessionStorage.getItem('s21_visita_registrada');
+  const url = contar ? '/api/status?visit=1' : '/api/status';
 
   try {
-    const res = await fetch('/api/status', { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const d = await res.json();
+
+    if (contar) {
+      sessionStorage.setItem('s21_visita_registrada', '1');
+    }
 
     if (statusEl) {
       statusEl.textContent = d.status || 'online';
@@ -436,6 +446,17 @@ async function atualizarMonitorS21() {
     atualizarGauge('g-sto', d.storage);
 
     if (upEl) upEl.textContent = `Online há ${d.uptime}`;
+
+    if (d.site) {
+      if (sinceEl) sinceEl.textContent = `No ar desde ${d.site.since}`;
+      if (daysEl) {
+        const dias = d.site.days;
+        daysEl.textContent = `${dias} ${dias === 1 ? 'dia' : 'dias'} no ar`;
+      }
+      if (visitsEl) {
+        visitsEl.textContent = Number(d.site.visits_30d).toLocaleString('pt-BR');
+      }
+    }
 
     if (srvEl && d.services) {
       srvEl.innerHTML = Object.entries(d.services)
@@ -458,5 +479,5 @@ async function atualizarMonitorS21() {
 atualizarRelogioMonitor();
 setInterval(atualizarRelogioMonitor, 10000);
 
-atualizarMonitorS21();
-setInterval(atualizarMonitorS21, 30000);
+atualizarMonitorS21(true);
+setInterval(() => atualizarMonitorS21(false), 30000);
