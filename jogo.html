@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Página em desenvolvimento — S21 Home Server</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+  <style>
+    :root {
+      --neon: #39ff9c;
+      --cyan: #67e8c2;
+      --text: #effff9;
+      --font-pixel: 'Press Start 2P', "Courier New", monospace;
+      --font-mono: 'VT323', "Courier New", monospace;
+
+      /* Paleta Hexadecimal Universal (Compatível com todos os navegadores) */
+      --night-0: #060913;
+      --night-1: #0b1120;
+      --night-2: #121c32;
+      --floor-a: #0a0e1a;
+      --floor-b: #101726;
+
+      /* Paleta do Rack */
+      --pix-outline: #04060c;
+      --pix-frame: #1b2230;
+      --pix-frame-hi: #303a4d;
+      --pix-panel: #252e40;
+      --pix-seam: #141923;
+      --pix-vent: #080b11;
+      --pix-bay: #171d29;
+      --pix-bay-hi: #384359;
+      --pix-lcd: #0f3d3e;
+      --pix-lcd-text: #4deeea;
+
+      /* LEDs */
+      --led-green: #22e568;
+      --led-amber: #f5a623;
+      --led-blue: #2b95ff;
+      --led-red: #f23a3a;
+      --led-off: #121621;
+
+      --glow-green: rgba(34, 229, 104, 0.18);
+      --glow-blue: rgba(43, 149, 255, 0.14);
+
+      /* Paleta do Técnico de TI */
+      --tech-outline: #070910;
+      --tech-cap: #1d4ed8;
+      --tech-hair: #382618;
+      --tech-skin: #c88a65;
+      --tech-skin-shade: #9e6545;
+      --tech-shirt: #2b6cb0;
+      --tech-shirt-shade: #1e4e8c;
+      --tech-lanyard: #ecc94b;
+      --tech-badge: #e2e8f0;
+      --tech-pants: #232a38;
+      --tech-pants-shade: #181d27;
+      --tech-shoes: #0d1017;
+      --tech-box: #b83227;
+      --tech-metal: #bcc6d4;
+      --tech-spark: #dbf8ff;
+
+      --tech-cycle: 16s;
+      --px: 6px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-color: #04090f;
+      background-image:
+        linear-gradient(rgba(57, 255, 156, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 255, 156, 0.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: var(--text);
+      font-family: "Courier New", Courier, monospace;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 880px;
+      overflow: hidden;
+      border: 1px solid rgba(57, 255, 156, 0.3);
+      background: #07100f;
+      box-shadow: 0 0 45px rgba(57, 255, 156, 0.07), 6px 6px 0 #020504;
+    }
+
+    .topbar {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 16px;
+      border-bottom: 1px solid rgba(57, 255, 156, 0.18);
+      background: #091713;
+      color: var(--cyan);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+    }
+
+    .online {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      flex-shrink: 0;
+      background: var(--neon);
+      box-shadow: 0 0 4px var(--neon), 0 0 10px rgba(57, 255, 156, 0.8);
+      animation: status-blink 1.2s steps(2) infinite;
+    }
+
+    /* ================= Moldura e Cena Pixel Art ================= */
+    .scene-wrapper {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      background: radial-gradient(circle at center, rgba(25, 60, 83, 0.27), transparent 72%);
+    }
+
+    .scene {
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      height: 360px;
+      overflow: hidden;
+      border: 3px solid #183e34;
+      background: var(--night-0);
+      box-shadow: 5px 5px 0 #020504;
+      font-family: var(--font-mono);
+      image-rendering: -moz-crisp-edges;
+      image-rendering: pixelated;
+    }
+
+    .scene-wall {
+      position: absolute;
+      top: 0; right: 0; bottom: 22%; left: 0;
+      background:
+        radial-gradient(ellipse 45% 55% at 50% 60%, var(--night-2), transparent 70%),
+        repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * 15), var(--night-0) calc(var(--px) * 15) calc(var(--px) * 15.5)),
+        linear-gradient(var(--night-0), var(--night-1));
+    }
+
+    .scene-floor {
+      position: absolute;
+      top: 78%; right: 0; bottom: 0; left: 0;
+      background:
+        linear-gradient(var(--night-0) 0 var(--px), transparent var(--px)),
+        repeating-linear-gradient(90deg, var(--floor-a) 0 calc(var(--px) * 8), var(--floor-b) calc(var(--px) * 8) calc(var(--px) * 16)),
+        var(--floor-a);
+    }
+
+    .scene-floor::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background: linear-gradient(transparent, var(--night-0) 85%);
+    }
+
+    .scene-stage {
+      position: absolute;
+      left: 50%;
+      bottom: 22%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Racks em CSS Puro */
+    .rack-unit {
+      width: calc(var(--px) * 26);
+      height: calc(var(--px) * 36);
+      background: var(--pix-panel);
+      border: var(--px) solid var(--pix-outline);
+      box-shadow:
+        inset 0 var(--px) 0 var(--pix-frame-hi),
+        inset 0 0 0 calc(var(--px) * 2) var(--pix-frame);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: calc(var(--px) * 2.2) calc(var(--px) * 2.8);
+    }
+
+    .rack-unit::before, .rack-unit::after {
+      content: "";
+      position: absolute;
+      bottom: calc(var(--px) * -2);
+      width: calc(var(--px) * 3);
+      height: calc(var(--px) * 2);
+      background: var(--pix-outline);
+    }
+    .rack-unit::before { left: var(--px); }
+    .rack-unit::after { right: var(--px); }
+
+    .blade {
+      height: calc(var(--px) * 3.8);
+      background: var(--pix-bay);
+      border-top: calc(var(--px) * 0.7) solid var(--pix-seam);
+      border-bottom: calc(var(--px) * 0.7) solid var(--pix-bay-hi);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--px);
+    }
+
+    .blade-vent {
+      height: calc(var(--px) * 3.2);
+      background: repeating-linear-gradient(
+        90deg,
+        var(--pix-vent) 0 var(--px),
+        var(--pix-panel) var(--px) calc(var(--px) * 1.8)
+      );
+      border: calc(var(--px) * 0.5) solid var(--pix-seam);
+    }
+
+    .blade-lcd {
+      width: calc(var(--px) * 5.5);
+      height: calc(var(--px) * 1.8);
+      background: var(--pix-lcd);
+      box-shadow: inset 0 0 0 calc(var(--px) * 0.35) var(--pix-lcd-text);
+      animation: lcd-flicker 2.6s steps(1, end) infinite;
+    }
+
+    .blade-leds {
+      display: flex;
+      gap: var(--px);
+      align-items: center;
+    }
+
+    .led {
+      --c: var(--led-green);
+      width: var(--px);
+      height: var(--px);
+      display: inline-block;
+      background: var(--c);
+      box-shadow: 0 0 calc(var(--px) * 0.8) var(--c), 0 0 calc(var(--px) * 2.2) var(--c);
+      animation: led-blink var(--dur, 1.2s) linear var(--delay, 0s) infinite;
+    }
+    .led-g { --c: var(--led-green); }
+    .led-a { --c: var(--led-amber); animation-name: led-blink-slow; }
+    .led-b { --c: var(--led-blue); animation: led-breathe 3.2s steps(6, end) infinite; }
+    .led-r { --c: var(--led-red); animation-name: led-blink-rare; animation-duration: 4.4s; }
+
+    .rack-main { position: relative; z-index: 2; }
+    .rack-halo {
+      position: absolute;
+      top: -35%; right: -80%; bottom: -35%; left: -80%;
+      background: radial-gradient(ellipse at 50% 50%, var(--glow-green), var(--glow-blue) 35%, transparent 65%);
+      animation: halo-pulse 4s steps(8, end) infinite;
+      pointer-events: none;
+    }
+
+    .rack-reflection {
+      position: absolute;
+      top: 100%; left: 0;
+      transform: scaleY(-1);
+      opacity: 0.14;
+      pointer-events: none;
+      max-height: calc(var(--px) * 10);
+      overflow: hidden;
+    }
+
+    .rack-back {
+      position: absolute;
+      bottom: calc(var(--px) * 3);
+      --px: 3.5px;
+      filter: brightness(0.35) saturate(0.6);
+      z-index: 0;
+    }
+    .rack-back-left { right: calc(100% + var(--px) * 8); }
+    .rack-back-right { left: calc(100% + var(--px) * 8); }
+
+    /* ================= Técnico de TI (18x25) ================= */
+    .pixel-grid {
+      display: grid;
+      grid-template-columns: repeat(18, var(--px));
+      grid-template-rows: repeat(25, var(--px));
+      width: calc(var(--px) * 18);
+      height: calc(var(--px) * 25);
+    }
+    .pixel-grid > div {
+      width: var(--px);
+      height: var(--px);
+    }
+
+    .tech {
+      position: absolute;
+      z-index: 3;
+      bottom: 0;
+      left: calc(100% - var(--px) * 4);
+      animation: tech-move var(--tech-cycle) linear infinite;
+      will-change: transform;
+    }
+
+    .tech-body {
+      display: grid;
+      animation: tech-face var(--tech-cycle) steps(1, end) infinite;
+    }
+    .tech-walk, .tech-work {
+      grid-area: 1 / 1;
+      display: grid;
+      align-items: end;
+    }
+    .tech-frame { grid-area: 1 / 1; }
+    .tech-walk { animation: tech-walk-vis var(--tech-cycle) steps(1, end) infinite; }
+    .tech-work { opacity: 0; animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite; }
+    .tech-walk-a, .tech-work-a { animation: frame-a 0.5s steps(1, end) infinite; }
+    .tech-walk-b, .tech-work-b { animation: frame-b 0.5s steps(1, end) infinite; }
+    .tech-work-a, .tech-work-b { animation-duration: 0.9s; }
+
+    .tp-K { background: var(--tech-outline); }
+    .tp-C { background: var(--tech-cap); }
+    .tp-H { background: var(--tech-hair); }
+    .tp-k { background: var(--tech-skin); }
+    .tp-n { background: var(--tech-skin-shade); }
+    .tp-U { background: var(--tech-shirt); }
+    .tp-u { background: var(--tech-shirt-shade); }
+    .tp-L, .tp-Y { background: var(--tech-lanyard); }
+    .tp-I { background: var(--tech-badge); }
+    .tp-T { background: var(--tech-pants); }
+    .tp-t { background: var(--tech-pants-shade); }
+    .tp-O { background: var(--tech-shoes); }
+    .tp-R { background: var(--tech-box); }
+    .tp-W { background: var(--tech-metal); }
+    .tp-Z {
+      position: relative; z-index: 1;
+      background: var(--tech-spark);
+      box-shadow: 0 0 var(--px) var(--tech-spark), 0 0 calc(var(--px) * 3) var(--led-blue);
+    }
+
+    /* Poeira */
+    .dust {
+      position: absolute;
+      z-index: 3;
+      width: calc(var(--px) * 0.5);
+      height: calc(var(--px) * 0.5);
+      background: var(--glow-green);
+      box-shadow: 0 0 var(--px) var(--glow-green);
+      left: var(--x, 45%);
+      top: var(--y, 40%);
+      animation: dust-drift 10s linear var(--d, 0s) infinite;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* HUD interno da cena */
+    .hud {
+      position: absolute;
+      z-index: 5;
+      left: 16px;
+      right: 16px;
+      color: #8b9bb0;
+      pointer-events: none;
+    }
+    .hud-top { top: 14px; }
+    .hud-bottom { bottom: 10px; }
+    .hud-title {
+      margin: 0 0 4px;
+      font-family: var(--font-pixel);
+      font-size: 13px;
+      font-weight: 400;
+      color: #d8e6ec;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 10px var(--glow-green);
+    }
+    .hud-line {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+    }
+    .hud-dim { opacity: 0.75; font-size: 15px; }
+    .hud-status { display: inline-grid; }
+    .hud-status > * { grid-area: 1 / 1; }
+    .hud-ok {
+      color: var(--led-green);
+      text-shadow: 0 0 8px var(--led-green);
+      animation: tech-hide var(--tech-cycle) steps(1, end) infinite;
+    }
+    .hud-maint {
+      opacity: 0;
+      color: var(--led-amber);
+      text-shadow: 0 0 8px var(--led-amber);
+      animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite;
+    }
+    .hud-cursor {
+      display: inline-block;
+      width: 8px; height: 13px;
+      margin-left: 5px; vertical-align: -1px;
+      background: var(--led-green);
+      animation: cursor-blink 1s steps(1, end) infinite;
+    }
+
+    .scene-scanlines {
+      position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+      z-index: 6; pointer-events: none;
+      background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, 0.22) 2px 3px);
+    }
+    .scene-vignette {
+      position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+      z-index: 7; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
+    }
+
+    /* ================= Legenda e Terminal Sincronizados ================= */
+    .content { padding: 8px 24px 28px; text-align: center; }
+    .status-label { margin-bottom: 12px; color: var(--cyan); font-size: 0.7rem; letter-spacing: 2px; }
+    .content h1 {
+      max-width: 720px; margin: 0 auto; color: var(--text);
+      font-size: clamp(1.2rem, 4.2vw, 2.1rem); line-height: 1.35; letter-spacing: -0.5px;
+    }
+    .content h1 span { color: var(--neon); }
+    .subtitle { margin-top: 12px; color: #718d84; font-size: 0.82rem; line-height: 1.4; }
+
+    .status-terminal {
+      max-width: 540px; margin: 20px auto 0; padding: 12px 14px;
+      text-align: left; border: 1px solid rgba(57, 255, 156, 0.16);
+      background: rgba(0, 0, 0, 0.22); color: #72978b;
+      font-size: 0.74rem; line-height: 1.85;
+      overflow-x: auto;
+    }
+    .status-terminal > div { white-space: nowrap; }
+    .status-terminal strong { color: var(--neon); font-weight: normal; }
+
+    .sync-state { display: inline-grid; vertical-align: bottom; text-align: left; }
+    .sync-state > * { grid-area: 1 / 1; }
+    .state-idle { animation: tech-hide var(--tech-cycle) steps(1, end) infinite; }
+    .state-work {
+      opacity: 0;
+      color: var(--led-amber) !important;
+      text-shadow: 0 0 6px rgba(245, 166, 35, 0.35);
+      animation: tech-work-vis var(--tech-cycle) steps(1, end) infinite;
+    }
+
+    .cursor {
+      display: inline-block; width: 6px; height: 10px; margin-left: 4px;
+      vertical-align: middle; background: var(--neon);
+      animation: cursor-blink 0.8s steps(1) infinite;
+    }
+
+    .back {
+      display: inline-block; margin-top: 22px; padding: 10px 16px;
+      border: 1px solid rgba(57, 255, 156, 0.35); background: rgba(57, 255, 156, 0.04);
+      color: var(--neon); text-decoration: none; font-size: 0.72rem; letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+    .back:hover {
+      border-color: var(--neon); background: rgba(57, 255, 156, 0.12);
+      box-shadow: 0 0 12px rgba(57, 255, 156, 0.18);
+    }
+
+    /* ================= Animações ================= */
+    @keyframes status-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.25; } }
+    @keyframes cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes halo-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    @keyframes led-breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+    @keyframes lcd-flicker { 0%, 70%, 75%, 100% { opacity: 1; } 71%, 74% { opacity: 0.2; } }
+    @keyframes led-blink {
+      0%, 38%, 53%, 70% { background: var(--c); box-shadow: 0 0 calc(var(--px) * 0.8) var(--c); }
+      39%, 52%, 71%, 100% { background: var(--led-off); box-shadow: none; }
+    }
+    @keyframes led-blink-slow {
+      0%, 60% { background: var(--c); box-shadow: 0 0 calc(var(--px) * 0.8) var(--c); }
+      61%, 100% { background: var(--led-off); box-shadow: none; }
+    }
+    @keyframes led-blink-rare {
+      0%, 88%, 94%, 96% { background: var(--led-off); box-shadow: none; }
+      89%, 93%, 97%, 100% { background: var(--c); box-shadow: 0 0 var(--px) var(--c); }
+    }
+    @keyframes dust-drift {
+      0% { transform: translate(0, 0); opacity: 0; }
+      20% { opacity: 0.9; }
+      80% { opacity: 0.5; }
+      100% { transform: translate(20px, -45px); opacity: 0; }
+    }
+    @keyframes tech-move {
+      0% { transform: translateX(calc(var(--px) * 42)); }
+      18.75%, 50% { transform: translateX(0); }
+      68.75%, 100% { transform: translateX(calc(var(--px) * 42)); }
+    }
+    @keyframes tech-face {
+      0% { transform: scaleX(-1); }
+      50%, 100% { transform: scaleX(1); }
+    }
+    @keyframes tech-walk-vis {
+      0% { opacity: 1; }
+      18.75% { opacity: 0; }
+      50% { opacity: 1; }
+      68.75%, 100% { opacity: 0; }
+    }
+    @keyframes tech-work-vis {
+      0% { opacity: 0; }
+      18.75% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes tech-hide {
+      0% { opacity: 1; }
+      18.75% { opacity: 0; }
+      50%, 100% { opacity: 1; }
+    }
+    @keyframes frame-a { 0% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes frame-b { 0% { opacity: 0; } 50%, 100% { opacity: 1; } }
+
+    /* ================= Adaptação Mobile (Tablets e Celulares) ================= */
+    @media (max-width: 720px) {
+      :root { --px: 4.5px; }
+      body { padding: 10px; }
+      .scene-wrapper { padding: 12px; }
+      .scene { height: 270px; }
+      .rack-back { --px: 2.8px; }
+      .rack-back-left { right: calc(100% + var(--px) * 5); }
+      .rack-back-right { left: calc(100% + var(--px) * 5); }
+      .tech { left: calc(100% - var(--px) * 5); }
+      .hud { left: 10px; right: 10px; }
+      .hud-top { top: 10px; }
+      .hud-bottom { bottom: 6px; }
+      .hud-title { font-size: 10px; margin-bottom: 2px; }
+      .hud-line { font-size: 14px; }
+      .hud-dim { font-size: 12px; }
+      .topbar { font-size: 0.62rem; padding: 8px 12px; }
+      .content { padding: 6px 14px 22px; }
+      .status-terminal { font-size: 0.68rem; padding: 10px 12px; }
+    }
+
+    @media (max-width: 420px) {
+      :root { --px: 3.8px; }
+      .scene { height: 235px; }
+      .rack-back { display: none; } /* Em telas muito estreitas, foca no rack principal e no técnico */
+      .tech { left: calc(100% - var(--px) * 4); }
+      .content h1 { font-size: 1.15rem; }
+      .subtitle { font-size: 0.75rem; }
+      .status-terminal { font-size: 0.63rem; padding: 8px 10px; }
+      .back { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <span>S21+ HOME SERVER</span>
+      <span class="online"><span class="dot"></span>SERVER ONLINE</span>
+    </header>
+
+    <section class="scene-wrapper">
+      <div class="scene" role="img" aria-label="Servidor em pixel art com técnico de TI fazendo manutenção">
+        <div class="scene-wall"></div>
+        <div class="scene-floor"></div>
+
+        <div class="scene-stage">
+          <!-- Rack Esquerdo (Fundo) -->
+          <div class="rack-back rack-back-left">
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.4s"></i><i class="led led-a" style="--delay:1.1s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.7s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:0.2s"></i><i class="led led-a" style="--delay:2.1s"></i><i class="led led-r"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.9s"></i><i class="led led-g" style="--delay:1.5s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-a" style="--delay:0.7s"></i><i class="led led-g" style="--delay:2.4s"></i></div></div>
+            </div>
+          </div>
+
+          <!-- Rack Direito (Fundo) -->
+          <div class="rack-back rack-back-right">
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.2s"></i><i class="led led-a" style="--delay:0.3s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:2.2s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:1.1s"></i><i class="led led-g" style="--delay:0.5s"></i><i class="led led-r"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.1s"></i><i class="led led-a" style="--delay:1.8s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.4s"></i><i class="led led-g" style="--delay:0.6s"></i></div></div>
+            </div>
+          </div>
+
+          <!-- Rack Principal + Reflexo -->
+          <div class="rack-main">
+            <div class="rack-halo"></div>
+            <div class="rack-unit">
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.2s"></i><i class="led led-a" style="--delay:0.8s"></i></div><div class="blade-lcd"></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.1s"></i><i class="led led-a" style="--delay:1.9s"></i><i class="led led-g" style="--delay:0.5s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g" style="--delay:0.3s"></i><i class="led led-a" style="--delay:1.4s"></i><i class="led led-g" style="--delay:2.1s"></i><i class="led led-r"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.6s"></i><i class="led led-a" style="--delay:0.4s"></i></div></div>
+              <div class="blade-vent"></div>
+              <div class="blade-vent"></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:0.7s"></i><i class="led led-a" style="--delay:2.3s"></i><i class="led led-g" style="--delay:1.2s"></i><i class="led led-b"></i></div></div>
+              <div class="blade"><div class="blade-leds"><i class="led led-g" style="--delay:1.8s"></i><i class="led led-a" style="--delay:0.9s"></i></div><div class="blade-lcd"></div></div>
+            </div>
+
+            <div class="rack-reflection" aria-hidden="true">
+              <div class="rack-unit">
+                <div class="blade"><div class="blade-leds"><i class="led led-g"></i><i class="led led-a"></i></div><div class="blade-lcd"></div></div>
+                <div class="blade"><div class="blade-leds"><i class="led led-g"></i><i class="led led-b"></i></div></div>
+                <div class="blade"><div class="blade-lcd"></div><div class="blade-leds"><i class="led led-g"></i><i class="led led-r"></i></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Técnico de TI (4 Quadros 18x25 em HTML Puro) -->
+          <div class="tech" aria-hidden="true">
+            <div class="tech-body">
+              <div class="tech-walk">
+                <div class="pixel-grid tech-frame tech-walk-a">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+                <div class="pixel-grid tech-frame tech-walk-b">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                  <div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div>
+                </div>
+              </div>
+              <div class="tech-work">
+                <div class="pixel-grid tech-frame tech-work-a">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                </div>
+                <div class="pixel-grid tech-frame tech-work-b">
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-C"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-H"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-n"></div><div class="tp-n"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-L"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-k"></div><div class="tp-k"></div><div class="tp-Z"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-I"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-W"></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-u"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div class="tp-K"></div><div class="tp-k"></div><div class="tp-K"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-U"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                  <div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-T"></div><div class="tp-T"></div><div class="tp-t"></div><div class="tp-T"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-Y"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-R"></div><div class="tp-R"></div><div class="tp-R"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-O"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                  <div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div class="tp-K"></div><div></div><div></div><div></div><div></div><div class="tp-K"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poeira na luz dos LEDs -->
+        <span class="dust" style="--d:-1s;--x:38%;--y:32%"></span>
+        <span class="dust" style="--d:-3s;--x:52%;--y:50%"></span>
+        <span class="dust" style="--d:-5s;--x:44%;--y:65%"></span>
+        <span class="dust" style="--d:-7s;--x:58%;--y:40%"></span>
+        <span class="dust" style="--d:-2s;--x:48%;--y:58%"></span>
+        <span class="dust" style="--d:-6s;--x:60%;--y:34%"></span>
+
+        <div class="hud hud-top">
+          <div class="hud-title">SRV-S21+</div>
+          <p class="hud-line">
+            STATUS: <span class="hud-status"><span class="hud-ok">ONLINE</span><span class="hud-maint">MANUTENÇÃO</span></span><span class="hud-cursor"></span>
+          </p>
+        </div>
+        <div class="hud hud-bottom">
+          <p class="hud-line hud-dim"><span id="live-clock">ONLINE 24/7</span> · S21+ · TERMUX</p>
+        </div>
+
+        <div class="scene-scanlines"></div>
+        <div class="scene-vignette"></div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="status-label">// DEVELOPMENT MODE</div>
+      <h1>
+        Esta página ainda não está pronta,<br>o desenvolvedor está
+        <span class="sync-state">
+          <span class="state-idle">dormindo.</span>
+          <span class="state-work">no rack.</span>
+        </span>
+      </h1>
+      <p class="subtitle">Enquanto isso, o S21 Home Server continua trabalhando.</p>
+
+      <div class="status-terminal">
+        <div><strong>&gt;</strong> nginx ............. online</div>
+        <div><strong>&gt;</strong> home server ....... online</div>
+        <div><strong>&gt;</strong> gato .............. dormindo</div>
+        <div>
+          <strong>&gt;</strong> desenvolvedor .....
+          <span class="sync-state">
+            <span class="state-idle">ausente</span>
+            <span class="state-work">em manutenção</span>
+          </span><span class="cursor"></span>
+        </div>
+      </div>
+
+      <a href="index.html" class="back">&lt; VOLTAR AO SITE</a>
+    </section>
+  </main>
+  <script src="maintenance.js" defer></script>
+</body>
+</html>
